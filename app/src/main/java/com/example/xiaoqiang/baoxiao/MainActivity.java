@@ -3,11 +3,18 @@ package com.example.xiaoqiang.baoxiao;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity {
+import com.example.xiaoqiang.baoxiao.common.base.MyBaseActivity;
+
+public class MainActivity extends MyBaseActivity {
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    public Integer getViewId() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    public void init() {
+
     }
 }
