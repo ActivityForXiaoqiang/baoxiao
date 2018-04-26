@@ -1,12 +1,12 @@
 package com.example.xiaoqiang.baoxiao;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-
 import com.example.xiaoqiang.baoxiao.common.base.MyBaseActivity;
 
 public class MainActivity extends MyBaseActivity {
-
+    /**
+     *
+     * 小区
+     * */
 
     @Override
     public Integer getViewId() {
