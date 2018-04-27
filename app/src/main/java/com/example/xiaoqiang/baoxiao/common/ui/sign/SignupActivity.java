@@ -6,19 +6,30 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.CardView;
+import android.text.TextUtils;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.animation.AccelerateInterpolator;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.xiaoqiang.baoxiao.R;
 import com.example.xiaoqiang.baoxiao.common.base.MyBaseActivity;
+import com.example.xiaoqiang.baoxiao.common.controller.SignupController;
+import com.example.xiaoqiang.baoxiao.common.view.SignupView;
 
-public class SignupActivity extends MyBaseActivity {
+public class SignupActivity extends MyBaseActivity implements SignupView {
 
     private FloatingActionButton fab;
     private CardView cvAdd;
+    private EditText username, password, repeatpassword;
+    private Button button;
+
+    private SignupController controller;
+
 
     @Override
     public Integer getViewId() {
@@ -39,6 +50,46 @@ public class SignupActivity extends MyBaseActivity {
                 animateRevealClose();
             }
         });
+
+        controller = new SignupController(this);
+
+        username = findViewById(R.id.et_username);
+        password = findViewById(R.id.et_password);
+        repeatpassword = findViewById(R.id.et_repeatpassword);
+        button = findViewById(R.id.bt_go);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signup();
+            }
+        });
+    }
+
+
+    void signup() {
+        username.setError(null);
+        password.setError(null);
+        repeatpassword.setError(null);
+
+        if (TextUtils.isEmpty(username.getText().toString())) {
+            username.setError("未填写");
+            return;
+        }
+        if (TextUtils.isEmpty(password.getText().toString())) {
+            password.setError("未填写");
+            return;
+        }
+        if (TextUtils.isEmpty(repeatpassword.getText().toString())) {
+            repeatpassword.setError("未填写");
+            return;
+        }
+
+        if (!password.getText().toString().equals(repeatpassword.getText().toString())) {
+            Toast.makeText(this, "密码不一致1", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        controller.signup(username.getText().toString(), password.getText().toString());
     }
 
 
@@ -118,5 +169,26 @@ public class SignupActivity extends MyBaseActivity {
             }
         });
         mAnimator.start();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    public void onSuccess() {
+        animateRevealClose();
+    }
+
+    @Override
+    public void showDialog() {
+
+    }
+
+    @Override
+    public void hideDialog() {
+
+    }
+
+    @Override
+    public void showError(Throwable throwable) {
+
     }
 }
