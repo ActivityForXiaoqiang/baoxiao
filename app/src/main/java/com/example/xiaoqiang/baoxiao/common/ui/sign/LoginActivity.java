@@ -17,6 +17,8 @@ import com.example.xiaoqiang.baoxiao.common.been.MyUser;
 import com.example.xiaoqiang.baoxiao.common.controller.LoginController;
 import com.example.xiaoqiang.baoxiao.common.view.LoginView;
 
+import cn.bmob.v3.BmobUser;
+
 public class LoginActivity extends MyBaseActivity implements LoginView {
 
     private FloatingActionButton fab;
@@ -57,6 +59,10 @@ public class LoginActivity extends MyBaseActivity implements LoginView {
                 login();
             }
         });
+
+        if (BmobUser.getCurrentUser() != null) {
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        }
     }
 
 
