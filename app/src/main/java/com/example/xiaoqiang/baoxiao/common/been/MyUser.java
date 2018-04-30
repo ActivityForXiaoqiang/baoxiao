@@ -8,6 +8,7 @@ public class MyUser extends BmobUser {
     private String photoPath;
     private int position; //职位id
     private boolean isSuper;
+    private String companyId;//所属公司
 
     public String getPhotoPath() {
         return photoPath;

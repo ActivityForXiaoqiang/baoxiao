@@ -9,4 +9,6 @@
     <string name="register">注册</string>
     <string name="repeat_password">确认密码</string>
     <string name="next">注册</string>
+
+    <string name="nav_header_desc">Navigation header</string>
 </resources>
