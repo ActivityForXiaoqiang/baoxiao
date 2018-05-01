@@ -9,8 +9,15 @@ public class Company extends BmobObject {
     private String creator;
     private String name;
     private String describe;
+    private String creatorNickName;
 
+    public String getCreatorNickName() {
+        return creatorNickName;
+    }
 
+    public void setCreatorNickName(String creatorNickName) {
+        this.creatorNickName = creatorNickName;
+    }
 
     public String getCreator() {
         return creator;

@@ -2,8 +2,10 @@ package com.example.xiaoqiang.baoxiao.common.ui.info;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.xiaoqiang.baoxiao.R;
@@ -29,12 +31,15 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MineActivity extends MyBaseActivity implements UpdataView {
     private CircleImageView head;
     private RoundTextView roundTextView;
+    private TextView nickname;
 
     private ArrayList<AlbumFile> mAlbumFiles;
 
     private UpdataController controller;
 
     private String url;
+
+    MyUser user;
 
     @Override
     public Integer getViewId() {
@@ -43,6 +48,7 @@ public class MineActivity extends MyBaseActivity implements UpdataView {
 
     @Override
     public void init() {
+        user = BmobUser.getCurrentUser(MyUser.class);
         StatusBarUtil.immersive(this);
         StatusBarUtil.setPaddingSmart(this, toolbar);
         StatusBarUtil.setPaddingSmart(this, findViewById(R.id.profile));
@@ -64,6 +70,14 @@ public class MineActivity extends MyBaseActivity implements UpdataView {
                 startActivity(new Intent(MineActivity.this, EditActivity.class));
             }
         });
+
+        nickname = findViewById(R.id.mine_nickname);
+        if (!TextUtils.isEmpty(user.getPhotoPath())) {
+            Glide.with(this).load(user.getPhotoPath()).centerCrop().into(head);
+        }
+        if (!TextUtils.isEmpty(user.getNickName())) {
+            nickname.setText(user.getNickName());
+        }
     }
 
     void openAlbum() {
@@ -106,6 +120,15 @@ public class MineActivity extends MyBaseActivity implements UpdataView {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (user != null) {
+            user=BmobUser.getCurrentUser(MyUser.class);
+            nickname.setText(user.getNickName());
+        }
     }
 
     @Override

@@ -9,6 +9,15 @@ public class MyUser extends BmobUser {
     private int position; //职位id
     private boolean sex;
     private boolean isSuper;
+    private boolean isJoinCompany;
+
+    public boolean isJoinCompany() {
+        return isJoinCompany;
+    }
+
+    public void setJoinCompany(boolean joinCompany) {
+        isJoinCompany = joinCompany;
+    }
 
     public boolean isSex() {
         return sex;

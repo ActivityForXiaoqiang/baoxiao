@@ -8,16 +8,35 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.xiaoqiang.baoxiao.common.base.MyBaseActivity;
+import com.example.xiaoqiang.baoxiao.common.been.MyUser;
+import com.example.xiaoqiang.baoxiao.common.ui.company.CreateCompanyActivity;
+import com.example.xiaoqiang.baoxiao.common.ui.company.JoinActivity;
 import com.example.xiaoqiang.baoxiao.common.ui.info.MineActivity;
+
+import cn.bmob.v3.BmobUser;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     /**
      * 小区
      */
+
+    CircleImageView head;
+    MyUser user;
+    TextView nickname;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -31,13 +50,83 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, MineActivity.class));
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
             }
         });
+
+        head = headLayout.findViewById(R.id.nav_headImg);
+        nickname = headLayout.findViewById(R.id.nav_username);
+        user = BmobUser.getCurrentUser(MyUser.class);
+        if (!TextUtils.isEmpty(user.getPhotoPath())) {
+            Glide.with(this).load(user.getPhotoPath()).centerCrop().into(head);
+        }
+        if (!TextUtils.isEmpty(user.getNickName())) {
+            nickname.setText(user.getNickName());
+        }
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+
+    }
+
+    private void initCompayView() {
+        RelativeLayout nullView = findViewById(R.id.null_data_view);
+        nullView.setVisibility(View.GONE);
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (user.isSuper()) {
+            initCompayView();
+        } else {
+            if (user.isJoinCompany()) {
+                initCompayView();
+
+            } else {
+                getMenuInflater().inflate(R.menu.main, menu);
+
+            }
+        }
+
+
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        startActivity(new Intent(MainActivity.this, JoinActivity.class));
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        return false;
+        switch (item.getItemId()) {
+            case R.id.nav_company:
+                break;
+            case R.id.nav_create:
+                if (TextUtils.isEmpty(user.getNickName())) {
+                    Toast.makeText(MainActivity.this, "请完善个人信息", Toast.LENGTH_SHORT).show();
+                } else {
+                    startActivity(new Intent(MainActivity.this, CreateCompanyActivity.class));
+                }
+
+                break;
+            case R.id.nav_baoxiao:
+                break;
+            case R.id.nav_shiyi:
+                break;
+            case R.id.nav_logout:
+                BmobUser.logOut();
+                finish();
+                break;
+        }
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 
     @Override
@@ -47,6 +136,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (user != null) {
+            user = BmobUser.getCurrentUser(MyUser.class);
+            nickname.setText(user.getNickName());
+
+            if (!TextUtils.isEmpty(user.getPhotoPath())) {
+                Glide.with(this).load(user.getPhotoPath()).centerCrop().into(head);
+            }
         }
     }
 }
