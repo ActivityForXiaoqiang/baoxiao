@@ -41,4 +41,12 @@ public class MyUser extends BmobUser {
     public void setSuper(boolean aSuper) {
         isSuper = aSuper;
     }
+
+    public String getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(String companyId) {
+        this.companyId = companyId;
+    }
 }

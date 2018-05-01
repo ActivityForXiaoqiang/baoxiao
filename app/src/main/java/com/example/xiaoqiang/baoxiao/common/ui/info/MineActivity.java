@@ -6,6 +6,7 @@ import android.view.View;
 import com.bumptech.glide.Glide;
 import com.example.xiaoqiang.baoxiao.R;
 import com.example.xiaoqiang.baoxiao.common.base.MyBaseActivity;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.manager.GlideManager;
 import com.yanzhenjie.album.Action;
 import com.yanzhenjie.album.Album;
 import com.yanzhenjie.album.AlbumFile;
@@ -46,13 +47,12 @@ public class MineActivity extends MyBaseActivity {
                 .onResult(new Action<ArrayList<AlbumFile>>() {
                     @Override
                     public void onAction(int requestCode, @NonNull ArrayList<AlbumFile> result) {
-                        Glide.with(MineActivity.this).load(result.get(0).getPath()).centerCrop().into(head);
+                        Glide.with(MineActivity.this).load(result.get(0).getPath()).apply(GlideManager.getRequestOptions()).into(head);
                     }
                 })
                 .onCancel(new Action<String>() {
                     @Override
                     public void onAction(int requestCode, @NonNull String result) {
-
                     }
                 })
                 .start();
