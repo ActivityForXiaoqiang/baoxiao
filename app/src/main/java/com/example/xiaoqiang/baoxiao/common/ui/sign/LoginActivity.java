@@ -62,6 +62,7 @@ public class LoginActivity extends MyBaseActivity implements LoginView {
 
         if (BmobUser.getCurrentUser() != null) {
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            finish();
         }
     }
 
@@ -97,6 +98,7 @@ public class LoginActivity extends MyBaseActivity implements LoginView {
     @Override
     public void onSuccess(MyUser user, String accout) {
         startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        finish();
     }
 
     @Override

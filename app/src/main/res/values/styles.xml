@@ -77,6 +77,17 @@
         <item name="android:textSize">@dimen/textsize_content</item>
         <item name="android:singleLine">false</item>
     </style>
+
+    
+    <style name="Theme_Transparenr" parent="@android:style/Theme.DeviceDefault.Light.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">false</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+
+    </style>
     <style name="AlertDialog.AnimationStyle" parent="android:Animation">
         <item name="android:windowEnterAnimation">@anim/dialog_enter</item>
         <item name="android:windowExitAnimation">@anim/dialog_exit</item>

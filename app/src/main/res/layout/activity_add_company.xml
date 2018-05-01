@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorbg"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/company_n"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_big"
+        android:background="@android:color/white"
+        android:hint="公司名称"
+        android:padding="@dimen/space_normal" />
+
+    <EditText
+        android:id="@+id/company_d"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_big"
+        android:layout_weight="1"
+        android:background="@android:color/white"
+        android:gravity="top"
+        android:hint="公司描述"
+        android:padding="@dimen/space_normal" />
+
+    <Button
+        android:id="@+id/btn_create"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/space_large"
+        android:background="@drawable/bt_shape_3"
+        android:text="创建公司"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/textsize_title" />
+
+</LinearLayout>

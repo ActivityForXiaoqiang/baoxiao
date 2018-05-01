@@ -15,7 +15,7 @@ import com.example.xiaoqiang.baoxiao.R;
 public abstract class MyBaseActivity extends AppCompatActivity {
 
     private LinearLayout parentLinearLayout;
-    private Toolbar toolbar;
+    public Toolbar toolbar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,6 +37,13 @@ public abstract class MyBaseActivity extends AppCompatActivity {
 
     private void initToolbar() {
         toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
 
@@ -44,5 +51,9 @@ public abstract class MyBaseActivity extends AppCompatActivity {
 
     public void hideToolbar() {
         toolbar.setVisibility(View.GONE);
+    }
+
+    public void setToolbarTitlte(String titlte) {
+        toolbar.setTitle(titlte);
     }
 }

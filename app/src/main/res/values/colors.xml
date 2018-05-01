@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#2ea67f</color>
     <color name="colorAccent">#2ea67f</color>
 
+    <color name="colorbg">#e6e6e6</color>
 
     <color name="colorTextTitle">#333333</color>
     <color name="colorTextContent">#444444</color>

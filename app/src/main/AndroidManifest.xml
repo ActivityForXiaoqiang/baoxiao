@@ -51,6 +51,21 @@
             android:name=".common.ui.process.ProcessListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".common.ui.info.EditActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".common.ui.company.CreateCompanyActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".common.ui.info.FillActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".common.ui.company.JoinActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
     </application>
 
 </manifest>

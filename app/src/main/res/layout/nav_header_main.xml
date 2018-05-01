@@ -12,20 +12,23 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/nav_headImg"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:contentDescription="@string/nav_header_desc"
+        android:layout_marginTop="@dimen/space_normal"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        app:srcCompat="@mipmap/ic_launcher" />
+        android:src="@mipmap/ic_launcher"
+        app:civ_border_color="@android:color/white"
+        app:civ_border_width="2dp" />
+
 
     <TextView
         android:id="@+id/nav_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="Raymond"
+        android:text="昵称"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
 

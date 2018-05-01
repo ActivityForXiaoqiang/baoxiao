@@ -5,28 +5,28 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
-            android:title="Import" />
+            android:id="@+id/nav_company"
+            android:icon="@mipmap/nav_company"
+            android:title="我的公司" />
         <item
-            android:id="@+id/nav_gallery"
-            android:title="Gallery" />
+            android:id="@+id/nav_create"
+            android:icon="@mipmap/nav_create"
+            android:title="创建公司" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:title="Slideshow" />
+            android:id="@+id/nav_baoxiao"
+            android:icon="@mipmap/nav_baoxiao"
+            android:title="我要报销" />
         <item
-            android:id="@+id/nav_manage"
-            android:title="录入" />
+            android:id="@+id/nav_shiyi"
+            android:icon="@mipmap/nav_shiyi"
+            android:title="审批流程" />
+
     </group>
 
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:title="Share" />
-            <item
-                android:id="@+id/nav_send"
-                android:title="Send" />
-        </menu>
-    </item>
+
+    <item
+        android:id="@+id/nav_logout"
+        android:icon="@mipmap/nav_logout"
+        android:title="注销登录" />
 
 </menu>
