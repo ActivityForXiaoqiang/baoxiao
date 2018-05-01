@@ -7,7 +7,25 @@ public class MyUser extends BmobUser {
     private String nickName;
     private String photoPath;
     private int position; //职位id
+    private boolean sex;
     private boolean isSuper;
+
+    public boolean isSex() {
+        return sex;
+    }
+
+    public void setSex(boolean sex) {
+        this.sex = sex;
+    }
+
+    public String getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(String companyId) {
+        this.companyId = companyId;
+    }
+
     private String companyId;//所属公司
 
     public String getPhotoPath() {

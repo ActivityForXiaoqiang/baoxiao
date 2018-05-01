@@ -17,4 +17,8 @@ public class BmobModel {
         user.setPassword(password);
         return user.signUpObservable(MyUser.class);
     }
+
+    public Observable<Void> updataUser(MyUser user) {
+        return user.updateObservable();
+    }
 }
