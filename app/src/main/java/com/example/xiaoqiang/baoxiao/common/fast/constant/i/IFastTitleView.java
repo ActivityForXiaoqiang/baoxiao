@@ -1,0 +1,47 @@
+package com.example.xiaoqiang.baoxiao.common.fast.constant.i;
+
+import android.support.annotation.DrawableRes;
+import android.view.View;
+
+import com.aries.ui.view.title.TitleBarView;
+
+/**
+ * Function: 包含TitleBarView
+ */
+public interface IFastTitleView {
+    /**
+     * 子类回调setTitleBar之前执行用于app设置全局Base控制统一TitleBarView
+     *
+     * @param titleBar
+     */
+    void beforeSetTitleBar(TitleBarView titleBar);
+
+    /**
+     * 用于子类设置TitleBarView 其它属性
+     *
+     * @param titleBar
+     */
+    void setTitleBar(TitleBarView titleBar);
+
+    /**
+     * 是否浅色状态栏(设置黑色文字--Flyme 4.0 MIUI 6.0及Android 6.0 以上支持)
+     *
+     * @return
+     */
+    boolean isLightStatusBarEnable();
+
+    /**
+     * 设置左边icon
+     *
+     * @return
+     */
+    @DrawableRes
+    int getLeftIcon();
+
+    /**
+     * 设置左边TextView点击事件
+     *
+     * @return
+     */
+    View.OnClickListener getLeftClickListener();
+}
