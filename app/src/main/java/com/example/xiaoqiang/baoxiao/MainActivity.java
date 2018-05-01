@@ -20,13 +20,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.xiaoqiang.baoxiao.common.base.MyBaseActivity;
 import com.example.xiaoqiang.baoxiao.common.been.MyUser;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.manager.GlideManager;
 import com.example.xiaoqiang.baoxiao.common.ui.company.CreateCompanyActivity;
 import com.example.xiaoqiang.baoxiao.common.ui.company.JoinActivity;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.util.FastUtil;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.util.ToastUtil;
 import com.example.xiaoqiang.baoxiao.common.ui.info.MineActivity;
+import com.example.xiaoqiang.baoxiao.common.ui.process.reimbursement.ReimbursementActivity;
+import com.google.gson.Gson;
 
 import cn.bmob.v3.BmobUser;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -59,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         nickname = headLayout.findViewById(R.id.nav_username);
         user = BmobUser.getCurrentUser(MyUser.class);
         if (!TextUtils.isEmpty(user.getPhotoPath())) {
-            Glide.with(this).load(user.getPhotoPath()).centerCrop().into(head);
+            Glide.with(this).load(user.getPhotoPath()).apply(GlideManager.getRequestOptions()).into(head);
         }
         if (!TextUtils.isEmpty(user.getNickName())) {
             nickname.setText(user.getNickName());
@@ -118,6 +123,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_baoxiao:
                 break;
             case R.id.nav_shiyi:
+                toReimbursement();
                 break;
             case R.id.nav_logout:
                 BmobUser.logOut();
@@ -127,6 +133,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void toReimbursement() {
+        Gson gson = new Gson();
+        BmobUser bmobUser = BmobUser.getCurrentUser();
+        if (bmobUser == null) {
+            ToastUtil.show("你还未登陆");
+            return;
+        }
+        MyUser user = gson.fromJson(gson.toJson(bmobUser), MyUser.class);
+
+//        if (TextUtils.isEmpty(user.getCompanyId())) {
+//            ToastUtil.show("您还没有所属公司");
+//            return;
+//        }
+        FastUtil.startActivity(MainActivity.this, ReimbursementActivity.class);
     }
 
     @Override
@@ -147,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             nickname.setText(user.getNickName());
 
             if (!TextUtils.isEmpty(user.getPhotoPath())) {
-                Glide.with(this).load(user.getPhotoPath()).centerCrop().into(head);
+                Glide.with(this).load(user.getPhotoPath()).apply(GlideManager.getRequestOptions()).into(head);
             }
         }
     }

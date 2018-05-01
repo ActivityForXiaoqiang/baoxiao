@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.xiaoqiang.baoxiao.R;
 import com.example.xiaoqiang.baoxiao.common.base.MyBaseActivity;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.manager.GlideManager;
 import com.example.xiaoqiang.baoxiao.common.been.MyUser;
 import com.example.xiaoqiang.baoxiao.common.controller.UpdataController;
 import com.example.xiaoqiang.baoxiao.common.utils.StatusBarUtil;
@@ -73,7 +74,7 @@ public class MineActivity extends MyBaseActivity implements UpdataView {
 
         nickname = findViewById(R.id.mine_nickname);
         if (!TextUtils.isEmpty(user.getPhotoPath())) {
-            Glide.with(this).load(user.getPhotoPath()).centerCrop().into(head);
+            Glide.with(this).load(user.getPhotoPath()).apply(GlideManager.getRequestOptions()).into(head);
         }
         if (!TextUtils.isEmpty(user.getNickName())) {
             nickname.setText(user.getNickName());
@@ -91,6 +92,7 @@ public class MineActivity extends MyBaseActivity implements UpdataView {
                 .onResult(new Action<ArrayList<AlbumFile>>() {
                     @Override
                     public void onAction(int requestCode, @NonNull ArrayList<AlbumFile> result) {
+                        Glide.with(MineActivity.this).load(result.get(0).getPath()).apply(GlideManager.getRequestOptions()).into(head);
 //
                         uploadImg(result.get(0).getPath());
                     }
@@ -98,7 +100,6 @@ public class MineActivity extends MyBaseActivity implements UpdataView {
                 .onCancel(new Action<String>() {
                     @Override
                     public void onAction(int requestCode, @NonNull String result) {
-
                     }
                 })
                 .start();
@@ -133,7 +134,7 @@ public class MineActivity extends MyBaseActivity implements UpdataView {
 
     @Override
     public void onUpdataUserSuccess() {
-        Glide.with(MineActivity.this).load(url).centerCrop().into(head);
+        Glide.with(MineActivity.this).load(url).apply(GlideManager.getRequestOptions()).into(head);
     }
 
     @Override

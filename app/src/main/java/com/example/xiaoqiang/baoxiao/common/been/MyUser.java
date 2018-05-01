@@ -27,13 +27,6 @@ public class MyUser extends BmobUser {
         this.sex = sex;
     }
 
-    public String getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(String companyId) {
-        this.companyId = companyId;
-    }
 
     private String companyId;//所属公司
 
@@ -67,5 +60,13 @@ public class MyUser extends BmobUser {
 
     public void setSuper(boolean aSuper) {
         isSuper = aSuper;
+    }
+
+    public String getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(String companyId) {
+        this.companyId = companyId;
     }
 }

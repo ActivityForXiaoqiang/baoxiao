@@ -9,4 +9,105 @@
     <color name="colorTextTitle">#333333</color>
     <color name="colorTextContent">#444444</color>
     <color name="colorTextAssistant">#888888</color>
+
+    <color name="colorHintText">#BBBBBB</color>
+    <color name="colorInput">#EEEEEE</color>
+    <color name="colorInputCursor">#E35450</color>
+    <color name="colorDarkBlue">#4A90E2</color>
+    <color name="colorGray">#E8E8E8</color>
+
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorPage">#F6F6F6</color>
+    <color name="colorDivider">#1A000000</color>
+    <color name="colorToolbarDivider">#e2e2e2</color>
+    <color name="colorPrimaryTitle">#333333</color>
+    <color name="colorSubtitle">#666666</color>
+    <color name="colorSubtitleLight">#999999</color>
+    <color name="colorRed">#FB4D3A</color>
+    <color name="colorRedLight">#FC8A7E</color>
+
+    <drawable name="transparent_background">#00000000</drawable>
+
+    <color name="holo_blue_light">#ff33b5e5</color>
+    <color name="holo_green_light">#ff99cc00</color>
+    <color name="holo_red_light">#ffff4444</color>
+    <color name="holo_blue_bright">#ff00ddff</color>
+    <color name="holo_orange_light">#ffffbb33</color>
+
+    <color name="txt_black">#333333</color>
+    <color name="txt_black1">#666666</color>
+    <color name="txt_black2">#151515</color>
+    <color name="txt_black3">#AAAAAA</color>
+    <color name="txt_black4">#B3B3B3</color>
+    <color name="txt_gray">#cccccc</color>
+    <color name="txt_red">#FD8375</color>
+    <color name="bg_divider">#F5F5F5</color>
+    <color name="submit_red_bg">#FB4D3A</color>
+    <color name="add_bg">#FEF0EC</color>
+    <color name="web_progress_padding">#FF6A5A</color>
+    <color name="web_progress_bg">#E7E7E7</color>
+
+    <color name="txt_orange">#FFB540</color>
+    <color name="txt_tips">#FF6D00</color>
+    <color name="txt_tips_bg">#FFF7EA</color>
+    <color name="colorTextBlack">#333333</color>
+    <color name="colorTextBlackLight">#636363</color>
+    <color name="colorTextGray">#666666</color>
+    <color name="colorMessageTextGray">#aeaeae</color>
+    <color name="colorWhitePressed">#DCDCDC</color>
+    <!--不设置style里
+<item name="colorAccent">@color/colorAccent</item>
+属性指向可单独设置改颜色用于达到相同效果-->
+    <!--<color name="accent_material_light">#b640ff</color>-->
+
+    <!--普通有灰色背景的用这个-->
+    <color name="colorBackground">#f8f8f8</color>
+    <!--滑动返回windowBackground-->
+    <color name="colorSwipeBackBackground">#0a000000</color>
+
+    <color name="colorMainAli">#1b81d1</color>
+    <color name="colorMainNews">#2B61BF</color>
+
+    <color name="colorQQBackgroundStart">#4e8cfc</color>
+    <color name="colorQQBackgroundEnd">#33bafc</color>
+    <color name="colorQQBackgroundCenter">#34b0fc</color>
+
+    <!--以下属性为lib属性app里设置可以影响lib默认-->
+
+    <!--TitleBarView背景色-->
+    <color name="colorTitleBackground">#ffffff</color>
+    <!--TitleBarView 文字颜色-->
+    <color name="colorTitleText">#393939</color>
+    <!--TitleBarView 下划线颜色-->
+    <color name="colorTitleDivider">#DCDCDC</color>
+
+    <!--主页tab背景色-->
+    <color name="colorTabBackground">#FCFCFC</color>
+    <!--主页上划线颜色-->
+    <color name="colorTabUnderline">#d6d6d6</color>
+    <!--主页tab文字默认颜色-->
+    <color name="colorTabTextUnSelect">#909090</color>
+    <!--主页tab文字选中颜色-->
+    <color name="colorTabTextSelect">#393939</color>
+
+    <!--多状态 loading颜色-->
+    <color name="colorMultiProgress">@color/colorTitleText</color>
+    <!--多状态文字颜色-->
+    <color name="colorMultiText">@color/colorTitleText</color>
+    <!--多状态布局背景色-->
+    <color name="colorMultiBackground">#fafafa</color>
+    <!--多状态布局图片颜色-->
+    <color name="colorMultiImage">@color/colorTitleText</color>
+
+    <!--Glide加载图片默认占位图背景色-->
+    <color name="colorPlaceholder">#bdbdbd</color>
+
+    <!--LoadMoreView 文本颜色-->
+    <color name="colorLoadMoreText">@color/colorTitleText</color>
+    <!--LoadMoreView loading颜色-->
+    <color name="colorLoadMoreProgress">@color/colorTitleText</color>
+
+    <color name="txt_title_blue">#007AFF</color>
+    <color name="btn_blue_bg">#4d96ec</color>
+
 </resources>
