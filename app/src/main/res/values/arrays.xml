@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="arrays_tab_activity">
+        <item>我的请求</item>
+        <item>待办事宜</item>
+        <item>已办事宜</item>
+    </string-array>
+
+</resources>

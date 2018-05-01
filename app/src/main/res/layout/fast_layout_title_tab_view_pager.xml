@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <include layout="@layout/fast_layout_title_bar"/>
+
+    <LinearLayout
+        android:id="@+id/fast_layout_title_tab"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:background="@color/colorWhite"
+        android:orientation="vertical"
+        >
+
+    </LinearLayout>
+
+    <include layout="@layout/fast_layout_view_pager"/>
+</LinearLayout>
