@@ -11,8 +11,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.example.xiaoqiang.baoxiao.common.base.MyBaseActivity;
+import com.example.xiaoqiang.baoxiao.common.been.MyUser;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.util.FastUtil;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.util.ToastUtil;
 import com.example.xiaoqiang.baoxiao.common.ui.info.MineActivity;
+import com.example.xiaoqiang.baoxiao.common.ui.process.reimbursement.ReimbursementActivity;
+import com.google.gson.Gson;
+
+import cn.bmob.v3.BmobUser;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     /**
@@ -37,7 +43,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.nav_manage:
+                toReimbursement();
+                break;
+        }
         return false;
+    }
+
+    private void toReimbursement() {
+        Gson gson = new Gson();
+        BmobUser bmobUser = BmobUser.getCurrentUser();
+        if (bmobUser == null) {
+            ToastUtil.show("你还未登陆");
+            return;
+        }
+        MyUser user = gson.fromJson(gson.toJson(bmobUser), MyUser.class);
+
+//        if (TextUtils.isEmpty(user.getCompanyId())) {
+//            ToastUtil.show("您还没有所属公司");
+//            return;
+//        }
+        FastUtil.startActivity(MainActivity.this, ReimbursementActivity.class);
     }
 
     @Override

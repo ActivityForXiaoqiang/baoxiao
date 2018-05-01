@@ -8,11 +8,15 @@ import android.view.View;
 import com.bumptech.glide.Glide;
 import com.example.xiaoqiang.baoxiao.R;
 import com.example.xiaoqiang.baoxiao.common.base.MyBaseActivity;
+<<<<<<< HEAD
+import com.example.xiaoqiang.baoxiao.common.fast.constant.manager.GlideManager;
+=======
 import com.example.xiaoqiang.baoxiao.common.been.MyUser;
 import com.example.xiaoqiang.baoxiao.common.controller.UpdataController;
 import com.example.xiaoqiang.baoxiao.common.utils.StatusBarUtil;
 import com.example.xiaoqiang.baoxiao.common.view.UpdataView;
 import com.flyco.roundview.RoundTextView;
+>>>>>>> master
 import com.yanzhenjie.album.Action;
 import com.yanzhenjie.album.Album;
 import com.yanzhenjie.album.AlbumFile;
@@ -77,14 +81,17 @@ public class MineActivity extends MyBaseActivity implements UpdataView {
                 .onResult(new Action<ArrayList<AlbumFile>>() {
                     @Override
                     public void onAction(int requestCode, @NonNull ArrayList<AlbumFile> result) {
+<<<<<<< HEAD
+                        Glide.with(MineActivity.this).load(result.get(0).getPath()).apply(GlideManager.getRequestOptions()).into(head);
+=======
 //
                         uploadImg(result.get(0).getPath());
+>>>>>>> master
                     }
                 })
                 .onCancel(new Action<String>() {
                     @Override
                     public void onAction(int requestCode, @NonNull String result) {
-
                     }
                 })
                 .start();
