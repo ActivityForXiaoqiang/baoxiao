@@ -35,9 +35,7 @@ import cn.bmob.v3.BmobUser;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    /**
-     * 小区
-     */
+    
 
     CircleImageView head;
     MyUser user;
