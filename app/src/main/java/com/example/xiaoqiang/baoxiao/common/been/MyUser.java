@@ -10,6 +10,15 @@ public class MyUser extends BmobUser {
     private boolean sex;
     private boolean isSuper;
     private boolean isJoinCompany;
+    private boolean isApplying;
+
+    public boolean isApplying() {
+        return isApplying;
+    }
+
+    public void setApplying(boolean applying) {
+        isApplying = applying;
+    }
 
     public boolean isJoinCompany() {
         return isJoinCompany;

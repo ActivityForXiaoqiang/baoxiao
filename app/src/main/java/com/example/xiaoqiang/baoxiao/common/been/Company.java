@@ -6,24 +6,16 @@ import cn.bmob.v3.BmobObject;
 
 public class Company extends BmobObject {
 
-    private String creator;
+    private MyUser creator;
     private String name;
     private String describe;
-    private String creatorNickName;
 
-    public String getCreatorNickName() {
-        return creatorNickName;
-    }
 
-    public void setCreatorNickName(String creatorNickName) {
-        this.creatorNickName = creatorNickName;
-    }
-
-    public String getCreator() {
+    public MyUser getCreator() {
         return creator;
     }
 
-    public void setCreator(String creator) {
+    public void setCreator(MyUser creator) {
         this.creator = creator;
     }
 

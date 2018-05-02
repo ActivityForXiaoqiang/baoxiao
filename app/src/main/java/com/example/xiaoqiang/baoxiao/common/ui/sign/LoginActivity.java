@@ -15,6 +15,7 @@ import com.example.xiaoqiang.baoxiao.R;
 import com.example.xiaoqiang.baoxiao.common.base.MyBaseActivity;
 import com.example.xiaoqiang.baoxiao.common.been.MyUser;
 import com.example.xiaoqiang.baoxiao.common.controller.LoginController;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.widget.dialog.LoadingDialog;
 import com.example.xiaoqiang.baoxiao.common.view.LoginView;
 
 import cn.bmob.v3.BmobUser;
@@ -27,6 +28,8 @@ public class LoginActivity extends MyBaseActivity implements LoginView {
 
     private LoginController controller;
 
+    private LoadingDialog dialog;
+
     @Override
     public Integer getViewId() {
         return R.layout.activity_login;
@@ -35,6 +38,7 @@ public class LoginActivity extends MyBaseActivity implements LoginView {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void init() {
+        dialog = new LoadingDialog(this);
         hideToolbar();
         fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -103,12 +107,14 @@ public class LoginActivity extends MyBaseActivity implements LoginView {
 
     @Override
     public void showDialog() {
-
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
     }
 
     @Override
     public void hideDialog() {
-
+        dialog.dismiss();
     }
 
     @Override

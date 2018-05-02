@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.example.xiaoqiang.baoxiao.R;
 import com.example.xiaoqiang.baoxiao.common.base.MyBaseActivity;
 import com.example.xiaoqiang.baoxiao.common.been.MyUser;
+import com.example.xiaoqiang.baoxiao.common.controller.QueryController;
 import com.example.xiaoqiang.baoxiao.common.controller.SaveController;
 import com.example.xiaoqiang.baoxiao.common.controller.UpdataController;
 import com.example.xiaoqiang.baoxiao.common.view.SaveView;
@@ -24,6 +25,7 @@ public class CreateCompanyActivity extends MyBaseActivity implements SaveView {
 
     SaveController controller;
     UpdataController updataController;
+    QueryController querycontroller;
 
     @Override
     public Integer getViewId() {
@@ -33,7 +35,6 @@ public class CreateCompanyActivity extends MyBaseActivity implements SaveView {
     @Override
     public void init() {
         controller = new SaveController(this);
-        current = BmobUser.getCurrentUser(MyUser.class);
         name = findViewById(R.id.company_n);
         miaoshu = findViewById(R.id.company_d);
         create = findViewById(R.id.btn_create);
@@ -77,13 +78,21 @@ public class CreateCompanyActivity extends MyBaseActivity implements SaveView {
             return;
         }
 
-        controller.createCompany(name.getText().toString(), miaoshu.getText().toString(), current.getObjectId(), current.getNickName());
+        controller.createCompany(name.getText().toString(), miaoshu.getText().toString());
     }
 
     @Override
     public void onCompanyCreateSuccess(String result) {
+        current = BmobUser.getCurrentUser(MyUser.class);
+        current.setJoinCompany(true);
         current.setSuper(true);
+
         updataController.updataUser(current);
+    }
+
+    @Override
+    public void onRequestCreateSuccess(String result) {
+
     }
 
     @Override
