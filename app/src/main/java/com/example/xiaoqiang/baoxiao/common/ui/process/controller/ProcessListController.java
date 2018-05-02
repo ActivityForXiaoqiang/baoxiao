@@ -1,5 +1,6 @@
 package com.example.xiaoqiang.baoxiao.common.ui.process.controller;
 
+import android.content.Context;
 import android.text.TextUtils;
 
 import com.example.xiaoqiang.baoxiao.common.been.ProcessEntity;
@@ -20,8 +21,15 @@ import cn.bmob.v3.listener.FindListener;
 
 public class ProcessListController extends BaseController<IProcessListView> {
     private int pageSize = 10;
+    private Context mContext;
+
+    public ProcessListController setmContext(Context mContext) {
+        this.mContext = mContext;
+        return this;
+    }
 
     public void queryProcessList(int index, int status, String userId) {
+        showLoadingDialog(mContext);
         //最后组装完整的and条件
         List<BmobQuery<ProcessEntity>> andQuerys = new ArrayList<BmobQuery<ProcessEntity>>();
         if (status != -1) {
@@ -48,9 +56,11 @@ public class ProcessListController extends BaseController<IProcessListView> {
 
             @Override
             public void done(List<ProcessEntity> object, BmobException e) {
+                dissmissLoadingDialog();
                 if (e == null) {
+                    getView().showError(e.getMessage().toString());
                 } else {
-                    getView().onSuccess(object);
+                    getView().onShowList(object);
                 }
             }
 

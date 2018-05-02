@@ -3,7 +3,6 @@ package com.example.xiaoqiang.baoxiao.common.ui.process;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -15,7 +14,6 @@ import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.EventConstant
 import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.SPConstant;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.manager.LoggerManager;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.manager.TabLayoutManager;
-import com.example.xiaoqiang.baoxiao.common.fast.constant.util.DisplayUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SPUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.widget.dialog.LoadingDialog;
 import com.flyco.tablayout.SegmentTabLayout;
@@ -62,37 +60,20 @@ public class ProcessListActivity extends FastTitleActivity {
 
     @Override
     public void setTitleBar(TitleBarView titleBar) {
-        int height = DisplayUtil.dip2px(this, 48);
         isSliding = true;
         if (isSliding && viewSliding == null) {
             viewSliding = View.inflate(mContext, R.layout.fast_layout_activity_sliding, null);
             mSlidingTab = viewSliding.findViewById(R.id.tabLayout_slidingActivity);
-        } else if (!isSliding && viewSegment == null) {
-            viewSegment = View.inflate(mContext, R.layout.fast_layout_activity_segment, null);
-            mSegmentTab = viewSegment.findViewById(R.id.tabLayout_segment);
         }
-        LinearLayout center = titleBar.getLinearLayout(Gravity.CENTER);
         if (isSliding) {
             if (mTabLayout.indexOfChild(viewSliding) == -1) {
                 mTabLayout.addView(viewSliding);
             }
 
-//            if (center.indexOfChild(viewSliding) == -1) {
-//                titleBar.addCenterAction(titleBar.new ViewAction(viewSliding));
-//            }
             viewSliding.setVisibility(View.VISIBLE);
 
             if (viewSegment != null) {
                 viewSegment.setVisibility(View.GONE);
-            }
-        } else {
-            mTabLayout.addView(viewSegment);
-            if (center.indexOfChild(viewSegment) == -1) {
-                titleBar.addCenterAction(titleBar.new ViewAction(viewSegment));
-            }
-            viewSegment.setVisibility(View.VISIBLE);
-            if (viewSliding != null) {
-                viewSliding.setVisibility(View.GONE);
             }
         }
 
@@ -110,7 +91,7 @@ public class ProcessListActivity extends FastTitleActivity {
     @Override
     public void initView(Bundle savedInstanceState) {
 
-        LoadingDialog loadingDialog =new LoadingDialog(this);
+        LoadingDialog loadingDialog = new LoadingDialog(this);
         loadingDialog.show();
 //        setTab();
     }
