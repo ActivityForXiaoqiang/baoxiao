@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.aries.ui.view.title.TitleBarView;
 import com.example.xiaoqiang.baoxiao.R;
@@ -16,13 +15,12 @@ import com.example.xiaoqiang.baoxiao.common.been.MyUser;
 import com.example.xiaoqiang.baoxiao.common.been.ProcessEntity;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.basis.FastTitleActivity;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.FastConstant;
-import com.example.xiaoqiang.baoxiao.common.fast.constant.util.FastUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.NumberFormatterUtil;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SpManager;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.Timber;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.TimeFormatUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.ToastUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.widget.dialog.SelectListDialog;
-import com.example.xiaoqiang.baoxiao.common.ui.process.ProcessListActivity;
 import com.example.xiaoqiang.baoxiao.common.ui.process.controller.IReimbursementView;
 import com.example.xiaoqiang.baoxiao.common.ui.process.controller.ReimbursementController;
 import com.example.xiaoqiang.baoxiao.common.view.NoScollGridView;
@@ -34,6 +32,7 @@ import com.yanzhenjie.album.AlbumFile;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -50,8 +49,6 @@ public class ReimbursementActivity extends FastTitleActivity<ReimbursementContro
     private String[] contents = {"总经理", "财务主管", "部门主管", "财务专员", "出纳", "普通职员"};
     @BindView(R.id.gridView)
     NoScollGridView mGridImgs;
-    private ArrayList<AlbumFile> mAlbumFiles, upDataFiles;
-    private PicturesAdapter mAdapter;
     @BindView(R.id.reimbursement_position_et)
     TextView mEtPosition;//职位
     @BindView(R.id.reimbursement_personnel_et)
@@ -72,8 +69,14 @@ public class ReimbursementActivity extends FastTitleActivity<ReimbursementContro
     TextView mTvStartTime;//开始时间
     @BindView(R.id.reimbursement_end_time)
     TextView mTvEndTime;//结束时间
+    @BindView(R.id.reimbursement_account_type_tv)
+    TextView mTvAccountType;//账号类型
+    private ArrayList<AlbumFile> mAlbumFiles, upDataFiles;
+    private PicturesAdapter mAdapter;
     private long startTime = -1, endTime = -1;
     private boolean isStartTime;
+    private List<MyUser> mUsersList;
+    private MyUser indexUser;
 
     @Override
     public int getContentLayout() {
@@ -85,7 +88,10 @@ public class ReimbursementActivity extends FastTitleActivity<ReimbursementContro
 
     @Override
     public void initView(Bundle savedInstanceState) {
-        Timber.tag(TAG).i(new Gson().toJson(BmobUser.getCurrentUser()));
+        Gson gson = new Gson();
+        Timber.tag(TAG).i(gson.toJson(BmobUser.getCurrentUser()));
+        indexUser = gson.fromJson(gson.toJson(BmobUser.getCurrentUser()), MyUser.class);//默認自己
+        initUserParameters();
         initGridView();
     }
 
@@ -134,6 +140,24 @@ public class ReimbursementActivity extends FastTitleActivity<ReimbursementContro
 
     }
 
+    /**
+     * 公司人员列表获取成功
+     */
+    @Override
+    public void onShowPersonList(List<MyUser> result) {
+        mUsersList = result;
+        showSelectDialog();
+    }
+
+    private void initUserParameters() {
+        if (TextUtils.isEmpty(indexUser.getNickName())) {
+            mEtPersonnel.setText(indexUser.getUsername());
+        } else {
+            mEtPersonnel.setText(indexUser.getNickName());
+        }
+        mEtPosition.setText(SpManager.getInstance().mPositionManager.get(indexUser.getPosition()+""));
+    }
+
     private void initGridView() {
         mAlbumFiles = new ArrayList<>();
         AlbumFile af = new AlbumFile();
@@ -147,7 +171,7 @@ public class ReimbursementActivity extends FastTitleActivity<ReimbursementContro
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String imgs = (String) parent.getItemAtPosition(position);
                 if ("000000".equals(imgs)) {
-                    mController.openAlbum(mContext, mAlbumFiles);
+                    mController.openAlbum(mContext, upDataFiles);
                 } else {
                 }
             }
@@ -155,20 +179,28 @@ public class ReimbursementActivity extends FastTitleActivity<ReimbursementContro
     }
 
     @Override
-    @OnClick({R.id.reimbursement_personnel_search, R.id.reimbursement_submit, R.id.reimbursement_start_time, R.id.reimbursement_end_time})
+    @OnClick({R.id.reimbursement_personnel_search, R.id.reimbursement_vehicle_search, R.id.reimbursement_account_search,
+            R.id.reimbursement_submit, R.id.reimbursement_start_time, R.id.reimbursement_end_time})
     public void onClick(View v) {
         switch (v.getId()) {
-//            //职位搜索
-//            case R.id.reimbursement_position_search:
-//                showPopPosition();
-//                break;
-//            //部门搜索
-//            case R.id.reimbursement_department_search:
-//                showPopDepartment();
-//                break;
-//            //人员搜索
+            //人员搜索
             case R.id.reimbursement_personnel_search:
-                showPopPosition();
+                dialogType = FastConstant.SELECT_DIALOG_USER_MODE;
+                if (mUsersList == null) {
+                    mController.getPersonListByCompanyId(indexUser.getCompanyId());
+                } else {
+                    showSelectDialog();
+                }
+                break;
+            //账号类型选择
+            case R.id.reimbursement_account_search:
+                dialogType = FastConstant.SELECT_DIALOG_RELATION_ACCOUNT_MODE;
+                showSelectDialog();
+                break;
+            //交通工具搜索
+            case R.id.reimbursement_vehicle_search:
+                dialogType = FastConstant.SELECT_DIALOG_VEHICLE_MODE;
+                showSelectDialog();
                 break;
             //选择时间
             case R.id.reimbursement_start_time:
@@ -189,7 +221,7 @@ public class ReimbursementActivity extends FastTitleActivity<ReimbursementContro
     }
 
     private void showTimePickerDialog() {
-        Date minDate = TimeFormatUtil.stringToDate("2010-01-01 00:00:00", FastConstant.TIME_FORMAT_TYPE);
+        Date minDate = TimeFormatUtil.stringToDate("2010-01-01 00:00", FastConstant.TIME_FORMAT_TYPE);
         TimePickerDialog startTimeDialog = new TimePickerDialog.Builder()
                 .setCallBack(new OnDateSetListener() {
                     @Override
@@ -222,22 +254,27 @@ public class ReimbursementActivity extends FastTitleActivity<ReimbursementContro
 
     private void submit() {
         String name = mEtPersonnel.getText().toString();
-        if (TextUtils.isEmpty(mEtPersonnel.getText().toString())) {
+        if (TextUtils.isEmpty(name)) {
             ToastUtil.show("请填写申请人姓名");
             return;
         }
         String account = mEtAccount.getText().toString();
-        if (TextUtils.isEmpty(mEtAccount.getText().toString())) {
+        if (TextUtils.isEmpty(account)) {
             ToastUtil.show("请填写关联账号");
             return;
         }
+        String accountType = mTvAccountType.getText().toString();
+        if (TextUtils.isEmpty(accountType)) {
+            ToastUtil.show("请选择关联账号类型");
+            return;
+        }
         String amount = mEtAmount.getText().toString();
-        if (TextUtils.isEmpty(mEtAmount.getText().toString())) {
+        if (TextUtils.isEmpty(amount)) {
             ToastUtil.show("请填写报销金额");
             return;
         }
         String reason = mEtReason.getText().toString();
-        if (TextUtils.isEmpty(mEtReason.getText().toString())) {
+        if (TextUtils.isEmpty(reason)) {
             ToastUtil.show("请填写报销事由");
             return;
         }
@@ -293,22 +330,55 @@ public class ReimbursementActivity extends FastTitleActivity<ReimbursementContro
     }
 
     private SelectListDialog radioDialog;
+    private int dialogType = 0;
 
-    private void showPopPosition() {
+    private void showSelectDialog() {
+        String title = "请选择人员";
+        if (dialogType == FastConstant.SELECT_DIALOG_USER_MODE) {
+            title = "请选择人员";
+        } else if (dialogType == FastConstant.SELECT_DIALOG_VEHICLE_MODE) {
+            title = "请选择交通工具";
+        } else if (dialogType == FastConstant.SELECT_DIALOG_RELATION_ACCOUNT_MODE) {
+            title = "请选择账号类型";
+        }
         if (radioDialog == null) {
-            ArrayList<String> arr = new ArrayList<>();
-            for (int i = 0; i < contents.length; i++) {
-                arr.add(contents[i]);
+            radioDialog = new SelectListDialog(this, mUsersList,
+                    dialogType, title)
+                    .setItemSelectListener(new SelectListDialog.ItemSelect() {
+                        @Override
+                        public void onItemUserSelect(MyUser user) {
+                            indexUser = user;
+                            initUserParameters();
+                            ToastUtil.show(user.getUsername());
+                        }
+
+                        @Override
+                        public void onItemSelect(String content) {
+                            if (dialogType == FastConstant.SELECT_DIALOG_VEHICLE_MODE) {
+                                initVehicle(content);
+                            } else if (dialogType == FastConstant.SELECT_DIALOG_RELATION_ACCOUNT_MODE) {
+                                initAccountType(content);
+                            }
+                        }
+                    });
+        } else {
+            radioDialog.setTitle(title);
+            if (dialogType == FastConstant.SELECT_DIALOG_USER_MODE) {
+                radioDialog.setDialogType(mUsersList);
+            } else if (dialogType == FastConstant.SELECT_DIALOG_VEHICLE_MODE) {
+                radioDialog.setDialogType(dialogType);
+            } else if (dialogType == FastConstant.SELECT_DIALOG_RELATION_ACCOUNT_MODE) {
+                radioDialog.setDialogType(dialogType);
             }
-            radioDialog = new SelectListDialog(this, arr, "请选择职位").setItemSelectListener(new SelectListDialog.ItemSelect() {
-                @Override
-                public void onItemSelect(String content) {
-                    FastUtil.startActivity(mContext, ProcessListActivity.class);
-                    Toast.makeText(getBaseContext(), content, Toast.LENGTH_SHORT).show();
-                }
-            });
         }
         radioDialog.show();
     }
 
+    private void initVehicle(String content) {
+        mEtVehicle.setText(content);
+    }
+
+    private void initAccountType(String content) {
+        mTvAccountType.setText(content);
+    }
 }

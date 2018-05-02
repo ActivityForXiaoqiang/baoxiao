@@ -19,7 +19,7 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
  * Function: 下拉刷新及上拉加载更多
  */
 public abstract class FastRefreshLoadFragment<T, c extends BaseController>
-        extends BasisFragment implements IFastRefreshLoadView<T> ,IBaseView{
+        extends BasisFragment implements IFastRefreshLoadView<T>, IBaseView {
     protected c mController;
     protected SmartRefreshLayout mRefreshLayout;
     protected RecyclerView mRecyclerView;
@@ -36,6 +36,7 @@ public abstract class FastRefreshLoadFragment<T, c extends BaseController>
         mRecyclerView = mFastRefreshLoadDelegate.mRecyclerView;
         mRefreshLayout = mFastRefreshLoadDelegate.mRefreshLayout;
         mEasyStatusView = mFastRefreshLoadDelegate.mStatusView;
+        mEasyStatusView.content();
         mController = initController();
         attachView();
     }

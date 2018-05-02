@@ -76,7 +76,8 @@ public class FastConfig {
             if (FastUtil.isClassExist("com.aries.ui.view.title.TitleBarView")) {
                 setTitleConfig(new FastTitleConfigEntity()
                         .setTitleBackgroundResource(R.color.colorTitleBackground)
-                        .setLeftTextDrawable(R.drawable.fast_ic_back)
+//                        .setLeftTextDrawable(R.drawable.alert_btn_left_selector)
+                        .setLeftTextDrawable(R.mipmap.icon_left_white_arrow)
                         .setLeftTextFinishEnable(true)
                         .setCenterLayoutPadding(SizeUtil.dp2px(2))
                         .setCenterGravityLeftPadding(SizeUtil.dp2px(24))

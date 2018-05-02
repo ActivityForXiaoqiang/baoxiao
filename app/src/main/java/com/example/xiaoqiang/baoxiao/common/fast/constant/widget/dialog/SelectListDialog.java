@@ -15,9 +15,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.xiaoqiang.baoxiao.R;
+import com.example.xiaoqiang.baoxiao.common.been.MyUser;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.FastConstant;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.DisplayUtil;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SpManager;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,28 +36,56 @@ public class SelectListDialog extends BaseDialog {
     ListView listView;
     @BindView(R.id.dialog_select_list_title)
     TextView mTvTitle;
-    private ArrayList<String> contents;
+    private List<MyUser> contents;
+    private List<String> contents1;
     private boolean mCanBackClose = true;
     private boolean mCancelable = true;
-
     private ItemSelect mItemSelect;
-
+    private int dialogType = FastConstant.SELECT_DIALOG_USER_MODE;//默認人员列表
     private AlertDialog.OnDismissListener mOnDismissListener;
 
     private Context mContext;
     private String title;
-    private String mSelectId;
+
+    public void setTitle(String title) {
+        this.title = title;
+        initTitle();
+    }
+
+    public void setDialogType(List<MyUser> contents) {
+        dialogType = FastConstant.SELECT_DIALOG_USER_MODE;
+        this.contents = contents;
+        contents1 = null;
+        initAdapter();
+    }
+
+    public void setDialogType(int type) {
+        dialogType = type;
+        if (type == FastConstant.SELECT_DIALOG_VEHICLE_MODE) {
+            this.contents1 = SpManager.getInstance().mVehicleData;
+        } else if (type == FastConstant.SELECT_DIALOG_RELATION_ACCOUNT_MODE) {
+            this.contents1 = SpManager.getInstance().mAccountTypeData;
+        }
+        contents = null;
+        initAdapter();
+    }
 
     public SelectListDialog(@NonNull Context context) {
         super(context);
         mContext = context;
     }
 
-    public SelectListDialog(@NonNull Context context, ArrayList<String> contents, String title) {
+    public SelectListDialog(@NonNull Context context, List<MyUser> contents, int dialogType, String title) {
         super(context);
         this.mContext = context;
         this.contents = contents;
+        this.dialogType = dialogType;
         this.title = title;
+        if (dialogType == FastConstant.SELECT_DIALOG_VEHICLE_MODE) {
+            this.contents1 = SpManager.getInstance().mVehicleData;
+        } else if (dialogType == FastConstant.SELECT_DIALOG_RELATION_ACCOUNT_MODE) {
+            this.contents1 = SpManager.getInstance().mAccountTypeData;
+        }
     }
 
     @Override
@@ -78,19 +109,8 @@ public class SelectListDialog extends BaseDialog {
             }
         });
         initHeight(v);
-        if (TextUtils.isEmpty(title)) {
-            mTvTitle.setVisibility(View.GONE);
-        } else {
-            mTvTitle.setText(title);
-        }
-        listView.setAdapter(new SelectListAdapter(mContext, contents));
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                dismiss();
-                mItemSelect.onItemSelect(contents.get(position));
-            }
-        });
+        initTitle();
+        initAdapter();
         setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
@@ -100,6 +120,32 @@ public class SelectListDialog extends BaseDialog {
             }
         });
 
+    }
+
+    private void initTitle() {
+        if (TextUtils.isEmpty(title)) {
+            mTvTitle.setVisibility(View.GONE);
+        } else {
+            mTvTitle.setText(title);
+        }
+    }
+
+    private void initAdapter() {
+        listView.setAdapter(new SelectListAdapter(mContext, contents, contents1));
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                dismiss();
+                if (dialogType == FastConstant.SELECT_DIALOG_USER_MODE) {
+                    mItemSelect.onItemUserSelect(contents.get(position));
+                } else if (dialogType == FastConstant.SELECT_DIALOG_VEHICLE_MODE) {
+                    mItemSelect.onItemSelect(contents1.get(position));
+                } else if (dialogType == FastConstant.SELECT_DIALOG_RELATION_ACCOUNT_MODE) {
+                    mItemSelect.onItemSelect(contents1.get(position));
+                }
+
+            }
+        });
     }
 
     private void initHeight(View view) {
@@ -163,26 +209,30 @@ public class SelectListDialog extends BaseDialog {
     }
 
     public interface ItemSelect {
+        void onItemUserSelect(MyUser user);
+
         void onItemSelect(String content);
     }
 
     public class SelectListAdapter extends BaseAdapter {
         private Context mContext;
-        private ArrayList<String> contents;
+        private List<MyUser> contents;
+        private List<String> contents1;
 
-        public SelectListAdapter(Context mContext, ArrayList<String> contents) {
+        public SelectListAdapter(Context mContext, List<MyUser> contents, List<String> contents1) {
             this.mContext = mContext;
             this.contents = contents;
+            this.contents1 = contents1;
         }
 
         @Override
         public int getCount() {
-            return contents.size();
+            return contents == null ? contents1.size() : contents.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return contents.get(position);
+            return contents == null ? contents1.get(position) : contents.get(position);
         }
 
         @Override
@@ -201,7 +251,15 @@ public class SelectListDialog extends BaseDialog {
             } else {
                 vh = (ViewHolder) convertView.getTag();
             }
-            vh.mTvContent.setText(contents.get(position));
+            if (contents != null) {
+                if (TextUtils.isEmpty(this.contents.get(position).getNickName())) {
+                    vh.mTvContent.setText(this.contents.get(position).getUsername());
+                } else {
+                    vh.mTvContent.setText(this.contents.get(position).getNickName());
+                }
+            } else {
+                vh.mTvContent.setText(this.contents1.get(position));
+            }
             return convertView;
         }
 

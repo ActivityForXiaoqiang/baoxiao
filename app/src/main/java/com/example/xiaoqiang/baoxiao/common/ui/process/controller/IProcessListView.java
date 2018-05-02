@@ -12,5 +12,5 @@ import java.util.List;
  */
 
 public interface IProcessListView extends IBaseView {
-    void onSuccess(List<ProcessEntity> list);
+    void onShowList(List<ProcessEntity> list);
 }
