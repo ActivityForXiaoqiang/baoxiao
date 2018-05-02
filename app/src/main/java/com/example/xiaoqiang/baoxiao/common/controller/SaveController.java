@@ -1,5 +1,6 @@
 package com.example.xiaoqiang.baoxiao.common.controller;
 
+import com.example.xiaoqiang.baoxiao.common.been.Applicant;
 import com.example.xiaoqiang.baoxiao.common.model.BmobModel;
 import com.example.xiaoqiang.baoxiao.common.view.SaveView;
 
@@ -15,13 +16,31 @@ public class SaveController {
     }
 
 
-    public void createCompany(String name, String miaoshu, String creator,String nickname) {
+    public void createCompany(String name, String miaoshu) {
         view.showDialog();
-        model.createCompany(name, miaoshu, creator,nickname).subscribe(new Action1<String>() {
+        model.createCompany(name, miaoshu).subscribe(new Action1<String>() {
             @Override
             public void call(String s) {
                 view.hideDialog();
                 view.onCompanyCreateSuccess(s);
+            }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                view.hideDialog();
+                view.showError(throwable);
+            }
+        });
+    }
+
+    public void createRequest(Applicant applicant) {
+        view.showDialog();
+        model.createRequest(applicant).subscribe(new Action1<String>() {
+            @Override
+            public void call(String s) {
+                view.hideDialog();
+                view.onRequestCreateSuccess(s);
+
             }
         }, new Action1<Throwable>() {
             @Override

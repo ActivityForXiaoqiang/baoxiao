@@ -1,5 +1,6 @@
 package com.example.xiaoqiang.baoxiao.common.controller;
 
+import com.example.xiaoqiang.baoxiao.common.been.Applicant;
 import com.example.xiaoqiang.baoxiao.common.been.Company;
 import com.example.xiaoqiang.baoxiao.common.been.MyUser;
 import com.example.xiaoqiang.baoxiao.common.model.BmobModel;
@@ -36,11 +37,40 @@ public class QueryController {
         });
     }
 
+    public void queryCompany(String userId) {
+        model.queryCompany(userId).subscribe(new Action1<List<Company>>() {
+            @Override
+            public void call(List<Company> companies) {
+                view.onQuerySuccess(companies);
+            }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                view.showError(throwable);
+            }
+        });
+    }
+
     public void queryCompanyCreator(String objId) {
         model.queryCompanyCreator(objId).subscribe(new Action1<MyUser>() {
             @Override
             public void call(MyUser user) {
                 view.onQueryCompayCreator(user);
+            }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                view.showError(throwable);
+            }
+        });
+    }
+
+    public void queryRester(String companyId) {
+        view.showDialog();
+        model.queryRequester(companyId).subscribe(new Action1<List<Applicant>>() {
+            @Override
+            public void call(List<Applicant> applicants) {
+                view.onQueryRequester(applicants);
             }
         }, new Action1<Throwable>() {
             @Override

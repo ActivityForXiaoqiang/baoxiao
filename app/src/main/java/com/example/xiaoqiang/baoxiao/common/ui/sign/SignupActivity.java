@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.example.xiaoqiang.baoxiao.R;
 import com.example.xiaoqiang.baoxiao.common.base.MyBaseActivity;
 import com.example.xiaoqiang.baoxiao.common.controller.SignupController;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.widget.dialog.LoadingDialog;
 import com.example.xiaoqiang.baoxiao.common.view.SignupView;
 
 public class SignupActivity extends MyBaseActivity implements SignupView {
@@ -30,6 +31,7 @@ public class SignupActivity extends MyBaseActivity implements SignupView {
 
     private SignupController controller;
 
+    private LoadingDialog dialog;
 
     @Override
     public Integer getViewId() {
@@ -39,6 +41,8 @@ public class SignupActivity extends MyBaseActivity implements SignupView {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void init() {
+        dialog = new LoadingDialog(this);
+
         hideToolbar();
         ShowEnterAnimation();
         cvAdd = findViewById(R.id.cv_add);
@@ -179,12 +183,14 @@ public class SignupActivity extends MyBaseActivity implements SignupView {
 
     @Override
     public void showDialog() {
-
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
     }
 
     @Override
     public void hideDialog() {
-
+        dialog.dismiss();
     }
 
     @Override

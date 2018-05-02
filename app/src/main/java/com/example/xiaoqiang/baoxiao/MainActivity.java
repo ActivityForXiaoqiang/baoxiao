@@ -26,6 +26,7 @@ import com.example.xiaoqiang.baoxiao.common.ui.company.CreateCompanyActivity;
 import com.example.xiaoqiang.baoxiao.common.ui.company.JoinActivity;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.FastUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.ToastUtil;
+import com.example.xiaoqiang.baoxiao.common.ui.company.RequestActivity;
 import com.example.xiaoqiang.baoxiao.common.ui.info.MineActivity;
 import com.example.xiaoqiang.baoxiao.common.ui.process.reimbursement.ReimbursementActivity;
 import com.google.gson.Gson;
@@ -35,7 +36,7 @@ import cn.bmob.v3.BmobUser;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    
+
 
     CircleImageView head;
     MyUser user;
@@ -118,10 +119,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
 
                 break;
+            case R.id.nav_manager:
+                if (user.isSuper()) {
+                    startActivity(new Intent(MainActivity.this, RequestActivity.class));
+                }
+
+                break;
             case R.id.nav_baoxiao:
+                toReimbursement();
                 break;
             case R.id.nav_shiyi:
-                toReimbursement();
+
                 break;
             case R.id.nav_logout:
                 BmobUser.logOut();

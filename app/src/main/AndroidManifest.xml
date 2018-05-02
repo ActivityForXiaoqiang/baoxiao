@@ -65,6 +65,9 @@
         <activity
             android:name=".common.ui.company.JoinActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".common.ui.company.RequestActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
     </application>
 

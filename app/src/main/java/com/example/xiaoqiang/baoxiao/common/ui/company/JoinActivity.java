@@ -3,6 +3,7 @@ package com.example.xiaoqiang.baoxiao.common.ui.company;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,13 +12,18 @@ import android.widget.TextView;
 
 import com.example.xiaoqiang.baoxiao.R;
 import com.example.xiaoqiang.baoxiao.common.base.MyBaseActivity;
+import com.example.xiaoqiang.baoxiao.common.been.Applicant;
 import com.example.xiaoqiang.baoxiao.common.been.Company;
 import com.example.xiaoqiang.baoxiao.common.been.MyUser;
 import com.example.xiaoqiang.baoxiao.common.controller.QueryController;
+import com.example.xiaoqiang.baoxiao.common.controller.SaveController;
 import com.example.xiaoqiang.baoxiao.common.view.QueryView;
+import com.example.xiaoqiang.baoxiao.common.view.SaveView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.bmob.v3.BmobUser;
 
 public class JoinActivity extends MyBaseActivity implements QueryView {
 
@@ -26,7 +32,7 @@ public class JoinActivity extends MyBaseActivity implements QueryView {
     List<Company> datas;
     QueryController controller;
 
-
+    SaveController saveController;
     jAdapter adapter;
 
     @Override
@@ -44,17 +50,49 @@ public class JoinActivity extends MyBaseActivity implements QueryView {
         recyclerView.setAdapter(adapter);
         controller.queryAllCompany();
 
+        saveController = new SaveController(new SaveView() {
+            @Override
+            public void onCompanyCreateSuccess(String result) {
+
+            }
+
+            @Override
+            public void onRequestCreateSuccess(String result) {
+
+            }
+
+            @Override
+            public void showDialog() {
+
+            }
+
+            @Override
+            public void hideDialog() {
+
+            }
+
+            @Override
+            public void showError(Throwable throwable) {
+
+            }
+        });
     }
 
     @Override
     public void onQuerySuccess(List<Company> result) {
         datas = result;
+        Log.e("xiaoqiang",result.size()+"----"+result.get(0).getCreator().getNickName());
         adapter.notifyDataSetChanged();
 
     }
 
     @Override
     public void onQueryCompayCreator(MyUser name) {
+
+    }
+
+    @Override
+    public void onQueryRequester(List<Applicant> result) {
 
     }
 
@@ -96,14 +134,19 @@ public class JoinActivity extends MyBaseActivity implements QueryView {
         }
 
         @Override
-        public void onBindViewHolder(@NonNull jViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull jViewHolder holder, final int position) {
             holder.name.setText(datas.get(position).getName());
             holder.d.setText(datas.get(position).getDescribe());
-            holder.c.setText("创建者："+datas.get(position).getCreatorNickName());
+
+            holder.c.setText("创建者：" + datas.get(position).getCreator().getNickName());
+
             holder.join.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    Applicant applicant = new Applicant();
+                    applicant.setCompanyId(datas.get(position).getObjectId());
+                    applicant.setUser(BmobUser.getCurrentUser(MyUser.class));
+                    saveController.createRequest(applicant);
                 }
             });
         }
