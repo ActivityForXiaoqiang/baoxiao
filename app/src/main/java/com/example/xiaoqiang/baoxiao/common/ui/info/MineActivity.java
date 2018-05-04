@@ -138,6 +138,11 @@ public class MineActivity extends MyBaseActivity implements UpdataView {
     }
 
     @Override
+    public void onUpdataStateUserSuccess() {
+
+    }
+
+    @Override
     public void showDialog() {
         loadingDialog.show();
     }

@@ -16,15 +16,18 @@ public class DelectController {
     }
 
     public void delete(String id) {
+        view.showDialog();
         model.delectReuest(id).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-
+                view.hideDialog();
+                view.onDeleteSuccess();
             }
         }, new Action1<Throwable>() {
             @Override
             public void call(Throwable throwable) {
-
+                view.hideDialog();
+                view.showError(throwable);
             }
         });
     }

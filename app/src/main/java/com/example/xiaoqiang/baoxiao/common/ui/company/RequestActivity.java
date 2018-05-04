@@ -17,11 +17,14 @@ import com.example.xiaoqiang.baoxiao.common.base.MyBaseActivity;
 import com.example.xiaoqiang.baoxiao.common.been.Applicant;
 import com.example.xiaoqiang.baoxiao.common.been.Company;
 import com.example.xiaoqiang.baoxiao.common.been.MyUser;
+import com.example.xiaoqiang.baoxiao.common.been.StateUser;
+import com.example.xiaoqiang.baoxiao.common.controller.DelectController;
 import com.example.xiaoqiang.baoxiao.common.controller.QueryController;
 import com.example.xiaoqiang.baoxiao.common.controller.UpdataController;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.FastConstant;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SpManager;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.widget.dialog.SelectListDialog;
+import com.example.xiaoqiang.baoxiao.common.view.DelectView;
 import com.example.xiaoqiang.baoxiao.common.view.QueryView;
 import com.example.xiaoqiang.baoxiao.common.view.SaveView;
 import com.example.xiaoqiang.baoxiao.common.view.UpdataView;
@@ -35,7 +38,7 @@ import java.util.List;
 import cn.bmob.v3.BmobUser;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class RequestActivity extends MyBaseActivity implements QueryView {
+public class RequestActivity extends MyBaseActivity implements QueryView, DelectView {
 
     RecyclerView recyclerView;
 
@@ -44,11 +47,14 @@ public class RequestActivity extends MyBaseActivity implements QueryView {
 
     QueryController controller;
     UpdataController updataController;
-    MyUser user, fix_user,chose_user;
+    DelectController delectController;
+    MyUser user;
 
     SelectListDialog dialog;
-
-    String companyId;
+    Company company;
+    String stateId;
+    String deleteId;
+    StateUser stateUser;
     SmartRefreshLayout smartRefreshLayout;
 
     @Override
@@ -58,6 +64,7 @@ public class RequestActivity extends MyBaseActivity implements QueryView {
 
     @Override
     public void init() {
+        stateUser = new StateUser();
         dialog = new SelectListDialog(this, null, FastConstant.SELECT_DIALOG_ZHIWEI, "设置职位");
         dialog.setItemSelectListener(new SelectListDialog.ItemSelect() {
             @Override
@@ -70,20 +77,26 @@ public class RequestActivity extends MyBaseActivity implements QueryView {
                 Log.e("xiaoqiang", "content" + content);
                 for (String key : SpManager.mPositionManager.keySet()) {
                     if (content.equals(SpManager.mPositionManager.get(key))) {
-                        Log.e("xiaoqiang", "content+????"+Integer.valueOf(key));
-                        fix_user.setPosition(Integer.valueOf(key));
-                        fix_user.setJoinCompany(true);
-                        fix_user.setCompanyId(companyId);
-                        updataController.updataUser(fix_user, chose_user.getObjectId());
+                        Log.e("xiaoqiang", "content+????" + Integer.valueOf(key));
+                        stateUser.setPosition(Integer.valueOf(key));
+                        stateUser.setJoinCompay(true);
+                        stateUser.setCompany(company);
+                        updataController.updataStateUser(stateUser, stateId);
                     }
                 }
             }
         });
+        delectController = new DelectController(this);
         updataController = new UpdataController(new UpdataView() {
             @Override
             public void onUpdataUserSuccess() {
 
                 Log.e("xiaoqiang", "?");
+            }
+
+            @Override
+            public void onUpdataStateUserSuccess() {
+                delectController.delete(deleteId);
             }
 
             @Override
@@ -112,11 +125,10 @@ public class RequestActivity extends MyBaseActivity implements QueryView {
         smartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
-                controller.queryRester(companyId);
+                controller.queryRester(company.getObjectId());
             }
         });
         user = BmobUser.getCurrentUser(MyUser.class);
-        fix_user=new MyUser();
         controller.queryCompany(user.getObjectId());
 
 
@@ -124,8 +136,7 @@ public class RequestActivity extends MyBaseActivity implements QueryView {
 
     @Override
     public void onQuerySuccess(List<Company> result) {
-        Log.e("xiaoqiang", result.get(0).getObjectId() + "???/");
-        companyId = result.get(0).getObjectId();
+        company = result.get(0);
         controller.queryRester(result.get(0).getObjectId());
     }
 
@@ -136,11 +147,21 @@ public class RequestActivity extends MyBaseActivity implements QueryView {
 
     @Override
     public void onQueryRequester(List<Applicant> result) {
-        Log.e("xiaoqiang", result.size() + "???22");
         datas = result;
         adapter.notifyDataSetChanged();
         loadingDialog.hide();
         smartRefreshLayout.finishRefresh();
+    }
+
+    @Override
+    public void onQueryStateUser(List<StateUser> result) {
+        stateId = result.get(0).getObjectId();
+        dialog.show();
+    }
+
+    @Override
+    public void onQueryCompanyUser(List<StateUser> result) {
+
     }
 
     @Override
@@ -158,6 +179,11 @@ public class RequestActivity extends MyBaseActivity implements QueryView {
     @Override
     public void showError(Throwable throwable) {
 
+    }
+
+    @Override
+    public void onDeleteSuccess() {
+        smartRefreshLayout.autoRefresh();
     }
 
 
@@ -189,7 +215,7 @@ public class RequestActivity extends MyBaseActivity implements QueryView {
 
         @Override
         public void onBindViewHolder(@NonNull rViewHolder holder, final int position) {
-            chose_user = datas.get(position).getUser();
+
             if (!TextUtils.isEmpty(datas.get(position).getUser().getPhotoPath())) {
                 Glide.with(RequestActivity.this).load(datas.get(position).getUser().getPhotoPath()).into(holder.head);
 
@@ -198,16 +224,18 @@ public class RequestActivity extends MyBaseActivity implements QueryView {
             holder.y.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    controller.queryStatuser(datas.get(position).getUser());
+                    deleteId = datas.get(position).getObjectId();
 
-                    dialog.show();
                 }
             });
             holder.n.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    deleteId = datas.get(position).getObjectId();
+                    stateUser.setAppying(false);
+                    updataController.updataStateUser(stateUser, stateId);
 
-                    fix_user.setApplying(false);
-                    updataController.updataUser(fix_user, chose_user.getObjectId());
                 }
             });
         }
@@ -217,5 +245,6 @@ public class RequestActivity extends MyBaseActivity implements QueryView {
             return datas == null ? 0 : datas.size();
         }
     }
+
 
 }

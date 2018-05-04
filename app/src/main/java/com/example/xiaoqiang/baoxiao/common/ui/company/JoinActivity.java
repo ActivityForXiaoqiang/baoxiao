@@ -16,6 +16,7 @@ import com.example.xiaoqiang.baoxiao.common.base.MyBaseActivity;
 import com.example.xiaoqiang.baoxiao.common.been.Applicant;
 import com.example.xiaoqiang.baoxiao.common.been.Company;
 import com.example.xiaoqiang.baoxiao.common.been.MyUser;
+import com.example.xiaoqiang.baoxiao.common.been.StateUser;
 import com.example.xiaoqiang.baoxiao.common.controller.QueryController;
 import com.example.xiaoqiang.baoxiao.common.controller.SaveController;
 import com.example.xiaoqiang.baoxiao.common.controller.UpdataController;
@@ -35,9 +36,10 @@ public class JoinActivity extends MyBaseActivity implements QueryView, SaveView,
 
     List<Company> datas;
     QueryController controller;
-    UpdataController updataController;
     SaveController saveController;
+    UpdataController updataController;
     jAdapter adapter;
+    String stateId;
 
     @Override
     public Integer getViewId() {
@@ -46,22 +48,25 @@ public class JoinActivity extends MyBaseActivity implements QueryView, SaveView,
 
     @Override
     public void init() {
+        stateId = getIntent().getStringExtra("objId");
         datas = new ArrayList<>();
         controller = new QueryController(this);
-        updataController = new UpdataController(this);
         adapter = new jAdapter();
         recyclerView = findViewById(R.id.join_recycylerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
-        controller.queryAllCompany();
 
         saveController = new SaveController(this);
+        updataController = new UpdataController(this);
+        controller.queryAllCompany();
+
     }
 
     @Override
     public void onQuerySuccess(List<Company> result) {
         datas = result;
         adapter.notifyDataSetChanged();
+
 
     }
 
@@ -72,6 +77,16 @@ public class JoinActivity extends MyBaseActivity implements QueryView, SaveView,
 
     @Override
     public void onQueryRequester(List<Applicant> result) {
+
+    }
+
+    @Override
+    public void onQueryStateUser(List<StateUser> result) {
+
+    }
+
+    @Override
+    public void onQueryCompanyUser(List<StateUser> result) {
 
     }
 
@@ -98,21 +113,28 @@ public class JoinActivity extends MyBaseActivity implements QueryView, SaveView,
     @Override
     public void onRequestCreateSuccess(String result) {
 
-        MyUser user = BmobUser.getCurrentUser(MyUser.class);
-        user.setApplying(true);
-        updataController.updataUser(user);
+        StateUser user = new StateUser();
+        user.setAppying(true);
+        updataController.updataStateUser(user, stateId);
     }
 
     @Override
     public void onStateUserCreateSuccess(String result) {
 
+
     }
 
     @Override
     public void onUpdataUserSuccess() {
-        ToastUtil.show("申请成功");
+
+    }
+
+    @Override
+    public void onUpdataStateUserSuccess() {
+        ToastUtil.show("申请成功！");
         finish();
     }
+
 
     class jViewHolder extends RecyclerView.ViewHolder {
         TextView name, d, c;
