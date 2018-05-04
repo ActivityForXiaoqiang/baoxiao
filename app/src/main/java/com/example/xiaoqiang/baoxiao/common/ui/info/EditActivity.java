@@ -158,12 +158,12 @@ public class EditActivity extends MyBaseActivity implements UpdataView {
 
     @Override
     public void showDialog() {
-
+        loadingDialog.show();
     }
 
     @Override
     public void hideDialog() {
-
+        loadingDialog.hide();
     }
 
     @Override

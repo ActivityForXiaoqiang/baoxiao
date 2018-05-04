@@ -28,7 +28,6 @@ public class LoginActivity extends MyBaseActivity implements LoginView {
 
     private LoginController controller;
 
-    private LoadingDialog dialog;
 
     @Override
     public Integer getViewId() {
@@ -38,7 +37,6 @@ public class LoginActivity extends MyBaseActivity implements LoginView {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void init() {
-        dialog = new LoadingDialog(this);
         hideToolbar();
         fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -107,14 +105,14 @@ public class LoginActivity extends MyBaseActivity implements LoginView {
 
     @Override
     public void showDialog() {
-        if (!dialog.isShowing()) {
-            dialog.show();
+        if (!LoginActivity.this.loadingDialog.isShowing()) {
+            loadingDialog.show();
         }
     }
 
     @Override
     public void hideDialog() {
-        dialog.dismiss();
+        loadingDialog.dismiss();
     }
 
     @Override

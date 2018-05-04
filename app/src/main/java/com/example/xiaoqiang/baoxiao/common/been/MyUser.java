@@ -11,6 +11,7 @@ public class MyUser extends BmobUser {
     private boolean isSuper;
     private boolean isJoinCompany;
     private boolean isApplying;
+    private String companyId;//所属公司
 
     public boolean isApplying() {
         return isApplying;
@@ -36,8 +37,6 @@ public class MyUser extends BmobUser {
         this.sex = sex;
     }
 
-
-    private String companyId;//所属公司
 
     public String getPhotoPath() {
         return photoPath;

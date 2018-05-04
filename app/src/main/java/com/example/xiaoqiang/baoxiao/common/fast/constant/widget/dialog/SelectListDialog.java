@@ -85,6 +85,9 @@ public class SelectListDialog extends BaseDialog {
             this.contents1 = SpManager.getInstance().mVehicleData;
         } else if (dialogType == FastConstant.SELECT_DIALOG_RELATION_ACCOUNT_MODE) {
             this.contents1 = SpManager.getInstance().mAccountTypeData;
+        } else if (dialogType == FastConstant.SELECT_DIALOG_ZHIWEI) {
+            this.contents1 = SpManager.getInstance().mPositionData;
+
         }
     }
 
@@ -142,7 +145,10 @@ public class SelectListDialog extends BaseDialog {
                     mItemSelect.onItemSelect(contents1.get(position));
                 } else if (dialogType == FastConstant.SELECT_DIALOG_RELATION_ACCOUNT_MODE) {
                     mItemSelect.onItemSelect(contents1.get(position));
+                } else if (dialogType == FastConstant.SELECT_DIALOG_ZHIWEI) {
+                    mItemSelect.onItemSelect(contents1.get(position));
                 }
+
 
             }
         });

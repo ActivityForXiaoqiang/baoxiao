@@ -11,19 +11,23 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.example.xiaoqiang.baoxiao.R;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.widget.dialog.LoadingDialog;
 
 public abstract class MyBaseActivity extends AppCompatActivity {
 
     private LinearLayout parentLinearLayout;
     public Toolbar toolbar;
+    public LoadingDialog loadingDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
+        loadingDialog = new LoadingDialog(this);
         initContentView(getViewId());
         initToolbar();
         init();
+
     }
 
     public abstract Integer getViewId();
@@ -56,4 +60,6 @@ public abstract class MyBaseActivity extends AppCompatActivity {
     public void setToolbarTitlte(String titlte) {
         toolbar.setTitle(titlte);
     }
+
+
 }

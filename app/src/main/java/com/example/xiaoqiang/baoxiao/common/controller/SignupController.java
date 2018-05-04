@@ -21,7 +21,7 @@ public class SignupController {
             @Override
             public void call(MyUser user) {
                 signupView.hideDialog();
-                signupView.onSuccess();
+                signupView.onSuccess(user);
             }
         }, new Action1<Throwable>() {
             @Override

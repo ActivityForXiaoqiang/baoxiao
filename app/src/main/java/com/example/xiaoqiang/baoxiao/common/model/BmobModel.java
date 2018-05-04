@@ -3,6 +3,7 @@ package com.example.xiaoqiang.baoxiao.common.model;
 import com.example.xiaoqiang.baoxiao.common.been.Applicant;
 import com.example.xiaoqiang.baoxiao.common.been.Company;
 import com.example.xiaoqiang.baoxiao.common.been.MyUser;
+import com.example.xiaoqiang.baoxiao.common.been.StateUser;
 
 import java.util.List;
 
@@ -21,13 +22,17 @@ public class BmobModel {
         user.setUsername(account);
         user.setPassword(password);
         user.setSex(true);
-        user.setJoinCompany(false);
         user.setSuper(false);
         return user.signUpObservable(MyUser.class);
     }
 
     public Observable<Void> updataUser(MyUser user) {
         return user.updateObservable();
+    }
+
+    public Observable<Void> updataUser(MyUser user, String uerID) {
+
+        return user.updateObservable(uerID);
     }
 
     public Observable<String> createCompany(String name, String miaoshu) {
@@ -68,5 +73,23 @@ public class BmobModel {
     public Observable<String> createRequest(Applicant applicant) {
         return applicant.saveObservable();
     }
+
+
+    public Observable<Void> delectReuest(String objID) {
+        Applicant applicant = new Applicant();
+        return applicant.deleteObservable(objID);
+    }
+
+    public Observable<String> createStateUser(StateUser user) {
+
+        return user.saveObservable();
+    }
+
+    public Observable<List<StateUser>> queryStatuser(MyUser user) {
+        BmobQuery<StateUser> query = new BmobQuery<>();
+        query.addWhereEqualTo("user", user);
+        return query.findObjectsObservable(StateUser.class);
+    }
+
 
 }
