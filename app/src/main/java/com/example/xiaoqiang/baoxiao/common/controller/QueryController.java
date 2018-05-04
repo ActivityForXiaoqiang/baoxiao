@@ -86,13 +86,28 @@ public class QueryController {
         model.queryStatuser(user).subscribe(new Action1<List<StateUser>>() {
             @Override
             public void call(List<StateUser> stateUsers) {
-            view.hideDialog();
-
+                view.hideDialog();
+                view.onQueryStateUser(stateUsers);
             }
         }, new Action1<Throwable>() {
             @Override
             public void call(Throwable throwable) {
+                view.hideDialog();
+                view.showError(throwable);
+            }
+        });
+    }
 
+    public void queryCompanyUser(Company company) {
+        model.queryCompanyUser(company).subscribe(new Action1<List<StateUser>>() {
+            @Override
+            public void call(List<StateUser> stateUsers) {
+                view.onQueryCompanyUser(stateUsers);
+            }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                view.showError(throwable);
             }
         });
     }

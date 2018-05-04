@@ -16,4 +16,6 @@ public interface QueryView extends BmobView {
     void onQueryRequester(List<Applicant> result);
 
     void onQueryStateUser(List<StateUser> result);
+
+    void onQueryCompanyUser(List<StateUser> result);
 }

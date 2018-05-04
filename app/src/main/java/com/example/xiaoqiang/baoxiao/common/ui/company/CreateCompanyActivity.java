@@ -8,14 +8,23 @@ import android.widget.Toast;
 
 import com.example.xiaoqiang.baoxiao.R;
 import com.example.xiaoqiang.baoxiao.common.base.MyBaseActivity;
+import com.example.xiaoqiang.baoxiao.common.been.Company;
 import com.example.xiaoqiang.baoxiao.common.been.MyUser;
+import com.example.xiaoqiang.baoxiao.common.been.StateUser;
 import com.example.xiaoqiang.baoxiao.common.controller.QueryController;
 import com.example.xiaoqiang.baoxiao.common.controller.SaveController;
 import com.example.xiaoqiang.baoxiao.common.controller.UpdataController;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.util.ToastUtil;
+import com.example.xiaoqiang.baoxiao.common.view.QueryView;
 import com.example.xiaoqiang.baoxiao.common.view.SaveView;
 import com.example.xiaoqiang.baoxiao.common.view.UpdataView;
 
+import java.util.List;
+
+import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 
 public class CreateCompanyActivity extends MyBaseActivity implements SaveView {
 
@@ -27,6 +36,8 @@ public class CreateCompanyActivity extends MyBaseActivity implements SaveView {
     UpdataController updataController;
     QueryController querycontroller;
 
+    String stateId;
+
     @Override
     public Integer getViewId() {
         return R.layout.activity_add_company;
@@ -34,6 +45,7 @@ public class CreateCompanyActivity extends MyBaseActivity implements SaveView {
 
     @Override
     public void init() {
+        stateId = getIntent().getStringExtra("objId");
         controller = new SaveController(this);
         name = findViewById(R.id.company_n);
         miaoshu = findViewById(R.id.company_d);
@@ -48,6 +60,13 @@ public class CreateCompanyActivity extends MyBaseActivity implements SaveView {
         updataController = new UpdataController(new UpdataView() {
             @Override
             public void onUpdataUserSuccess() {
+
+                queryCompay(current);
+            }
+
+            @Override
+            public void onUpdataStateUserSuccess() {
+                ToastUtil.show("创建成功");
                 finish();
             }
 
@@ -84,9 +103,7 @@ public class CreateCompanyActivity extends MyBaseActivity implements SaveView {
     @Override
     public void onCompanyCreateSuccess(String result) {
         current = BmobUser.getCurrentUser(MyUser.class);
-        current.setJoinCompany(true);
         current.setSuper(true);
-
         updataController.updataUser(current);
     }
 
@@ -113,5 +130,19 @@ public class CreateCompanyActivity extends MyBaseActivity implements SaveView {
     @Override
     public void showError(Throwable throwable) {
 
+    }
+
+    void queryCompay(MyUser user) {
+        BmobQuery<Company> query = new BmobQuery<>();
+        query.addWhereEqualTo("creator", user);
+        query.findObjects(new FindListener<Company>() {
+            @Override
+            public void done(List<Company> list, BmobException e) {
+                StateUser stateUser = new StateUser();
+                stateUser.setJoinCompay(true);
+                stateUser.setCompany(list.get(0));
+                updataController.updataStateUser(stateUser, stateId);
+            }
+        });
     }
 }

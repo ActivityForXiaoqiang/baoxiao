@@ -35,6 +35,14 @@ public class BmobModel {
         return user.updateObservable(uerID);
     }
 
+    public Observable<List<StateUser>> queryCompanyUser(Company company) {
+        BmobQuery<StateUser> query = new BmobQuery<>();
+        query.addWhereEqualTo("company", company);
+        query.include("user");
+        return query.findObjectsObservable(StateUser.class);
+
+    }
+
     public Observable<String> createCompany(String name, String miaoshu) {
         Company company = new Company();
         company.setName(name);
@@ -88,7 +96,12 @@ public class BmobModel {
     public Observable<List<StateUser>> queryStatuser(MyUser user) {
         BmobQuery<StateUser> query = new BmobQuery<>();
         query.addWhereEqualTo("user", user);
+        query.include("company");
         return query.findObjectsObservable(StateUser.class);
+    }
+
+    public Observable<Void> updataStateUser(StateUser user, String id) {
+        return user.updateObservable(id);
     }
 
 

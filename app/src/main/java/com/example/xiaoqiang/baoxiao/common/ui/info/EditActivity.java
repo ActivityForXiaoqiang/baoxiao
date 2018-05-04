@@ -157,6 +157,11 @@ public class EditActivity extends MyBaseActivity implements UpdataView {
     }
 
     @Override
+    public void onUpdataStateUserSuccess() {
+
+    }
+
+    @Override
     public void showDialog() {
         loadingDialog.show();
     }

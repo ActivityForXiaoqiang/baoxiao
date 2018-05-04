@@ -8,12 +8,16 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,6 +31,7 @@ import com.example.xiaoqiang.baoxiao.common.been.StateUser;
 import com.example.xiaoqiang.baoxiao.common.controller.QueryController;
 import com.example.xiaoqiang.baoxiao.common.controller.UpdataController;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.manager.GlideManager;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.widget.dialog.LoadingDialog;
 import com.example.xiaoqiang.baoxiao.common.ui.company.CreateCompanyActivity;
 import com.example.xiaoqiang.baoxiao.common.ui.company.JoinActivity;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.FastUtil;
@@ -37,7 +42,11 @@ import com.example.xiaoqiang.baoxiao.common.ui.process.reimbursement.Reimburseme
 import com.example.xiaoqiang.baoxiao.common.view.QueryView;
 import com.example.xiaoqiang.baoxiao.common.view.UpdataView;
 import com.google.gson.Gson;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.BmobUser;
@@ -52,11 +61,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     TextView nickname;
     QueryController controller;
 
+    StateUser stateUser;
+
+    LoadingDialog dialog;
+
+    RecyclerView recyclerView;
+    SmartRefreshLayout smartRefreshLayout;
+
+    List<StateUser> companyUsers;
+
+    Company company;
+
+    mAdapter adapter;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        companyUsers = new ArrayList<>();
+        dialog = new LoadingDialog(this);
         controller = new QueryController(this);
+        user = BmobUser.getCurrentUser(MyUser.class);
+        controller.queryStatuser(user);
+
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View headLayout = navigationView.getHeaderView(0);
@@ -71,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         head = headLayout.findViewById(R.id.nav_headImg);
         nickname = headLayout.findViewById(R.id.nav_username);
-        user = BmobUser.getCurrentUser(MyUser.class);
+
         if (!TextUtils.isEmpty(user.getPhotoPath())) {
             Glide.with(this).load(user.getPhotoPath()).apply(GlideManager.getRequestOptions()).into(head);
         }
@@ -81,8 +109,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        controller.queryStatuser(user);
 
+        recyclerView = findViewById(R.id.main_list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new mAdapter();
+        recyclerView.setAdapter(adapter);
+        smartRefreshLayout = findViewById(R.id.main_smart);
+        smartRefreshLayout.setEnableLoadmore(false);
+        smartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(RefreshLayout refreshlayout) {
+                controller.queryCompanyUser(company);
+            }
+        });
     }
 
     private void initCompayView() {
@@ -93,19 +132,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (user.isSuper()) {
-            initCompayView();
-        } else {
-            controller.queryStatuser(user);
-//            if (user.isJoinCompany()) {
-//                initCompayView();
-//
-//            } else {
-                getMenuInflater().inflate(R.menu.main, menu);
-//
-//            }
-        }
 
+        getMenuInflater().inflate(R.menu.main, menu);
 
         return true;
     }
@@ -113,7 +141,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        startActivity(new Intent(MainActivity.this, JoinActivity.class));
+        if (stateUser.isJoinCompay() || stateUser.isAppying()) {
+            ToastUtil.show("已加入公司或正在申请中");
+        } else {
+            Intent it = new Intent(MainActivity.this, JoinActivity.class);
+            it.putExtra("objId", stateUser.getObjectId());
+
+            startActivity(it);
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -126,13 +162,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (TextUtils.isEmpty(user.getNickName())) {
                     Toast.makeText(MainActivity.this, "请完善个人信息", Toast.LENGTH_SHORT).show();
                 } else {
-                    startActivity(new Intent(MainActivity.this, CreateCompanyActivity.class));
+                    Intent it = new Intent(MainActivity.this, CreateCompanyActivity.class);
+                    it.putExtra("objId", stateUser.getObjectId());
+                    startActivity(it);
                 }
 
                 break;
             case R.id.nav_manager:
                 if (user.isSuper()) {
-                    startActivity(new Intent(MainActivity.this, RequestActivity.class));
+                    Intent it = new Intent(MainActivity.this, RequestActivity.class);
+                    it.putExtra("objId", stateUser.getObjectId());
+                    startActivity(it);
                 }
 
                 break;
@@ -188,6 +228,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Glide.with(this).load(user.getPhotoPath()).apply(GlideManager.getRequestOptions()).into(head);
             }
         }
+
+        if (controller != null) {
+            if (user != null) {
+                controller.queryStatuser(user);
+            }
+
+        }
     }
 
 
@@ -208,21 +255,69 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onQueryStateUser(List<StateUser> result) {
-            
+        stateUser = result.get(0);
+        if (stateUser.isJoinCompay()) {
+            initCompayView();
+            company = stateUser.getCompany();
+            smartRefreshLayout.autoRefresh();
+        }
+    }
+
+    @Override
+    public void onQueryCompanyUser(List<StateUser> result) {
+        companyUsers = result;
+        adapter.notifyDataSetChanged();
+        smartRefreshLayout.finishRefresh();
     }
 
     @Override
     public void showDialog() {
-
+        dialog.show();
     }
 
     @Override
     public void hideDialog() {
-
+        dialog.hide();
     }
 
     @Override
     public void showError(Throwable throwable) {
 
     }
+
+
+    class mViewHolder extends RecyclerView.ViewHolder {
+        TextView name;
+        CircleImageView head;
+
+        public mViewHolder(View itemView) {
+            super(itemView);
+            name = itemView.findViewById(R.id.item_main_name);
+            head = itemView.findViewById(R.id.mian_item_head);
+        }
+    }
+
+    class mAdapter extends RecyclerView.Adapter<mViewHolder> {
+
+        @NonNull
+        @Override
+        public mViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.item_main, parent, false);
+
+            return new mViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull mViewHolder holder, int position) {
+            MyUser itemuser = companyUsers.get(position).getUser();
+            holder.name.setText(itemuser.getNickName());
+            Glide.with(MainActivity.this).load(itemuser.getPhotoPath()).into(holder.head);
+        }
+
+        @Override
+        public int getItemCount() {
+            return companyUsers == null ? 0 : companyUsers.size();
+        }
+    }
+
 }
