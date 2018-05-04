@@ -20,6 +20,7 @@ public class SpManager {
     public static Map<String, String> mPositionManager;
     public static List<String> mVehicleData;
     public static List<String> mAccountTypeData;
+    public static List<String> mPositionData;
 
     static {
         mPositionManager = new HashMap<>();
@@ -39,6 +40,14 @@ public class SpManager {
         mAccountTypeData = new ArrayList<>();
         mAccountTypeData.add("支付宝");
         mAccountTypeData.add("微信");
+        mPositionData = new ArrayList<>();
+        mPositionData.add("普通职员");
+        mPositionData.add("财务职员");
+        mPositionData.add("出纳");
+        mPositionData.add("部门主管");
+        mPositionData.add("财务主管");
+        mPositionData.add("总经理");
+
     }
 
     public static SpManager getInstance() {

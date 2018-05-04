@@ -1,5 +1,7 @@
 package com.example.xiaoqiang.baoxiao.common.view;
 
+import com.example.xiaoqiang.baoxiao.common.been.MyUser;
+
 public interface SignupView extends BmobView {
-    void onSuccess();
+    void onSuccess(MyUser user);
 }

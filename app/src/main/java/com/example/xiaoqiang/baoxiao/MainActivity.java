@@ -20,7 +20,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.xiaoqiang.baoxiao.common.been.Applicant;
+import com.example.xiaoqiang.baoxiao.common.been.Company;
 import com.example.xiaoqiang.baoxiao.common.been.MyUser;
+import com.example.xiaoqiang.baoxiao.common.been.StateUser;
+import com.example.xiaoqiang.baoxiao.common.controller.QueryController;
+import com.example.xiaoqiang.baoxiao.common.controller.UpdataController;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.manager.GlideManager;
 import com.example.xiaoqiang.baoxiao.common.ui.company.CreateCompanyActivity;
 import com.example.xiaoqiang.baoxiao.common.ui.company.JoinActivity;
@@ -29,24 +34,29 @@ import com.example.xiaoqiang.baoxiao.common.fast.constant.util.ToastUtil;
 import com.example.xiaoqiang.baoxiao.common.ui.company.RequestActivity;
 import com.example.xiaoqiang.baoxiao.common.ui.info.MineActivity;
 import com.example.xiaoqiang.baoxiao.common.ui.process.reimbursement.ReimbursementActivity;
+import com.example.xiaoqiang.baoxiao.common.view.QueryView;
+import com.example.xiaoqiang.baoxiao.common.view.UpdataView;
 import com.google.gson.Gson;
+
+import java.util.List;
 
 import cn.bmob.v3.BmobUser;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, QueryView {
 
 
     CircleImageView head;
     MyUser user;
     TextView nickname;
+    QueryController controller;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        controller = new QueryController(this);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View headLayout = navigationView.getHeaderView(0);
@@ -71,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        controller.queryStatuser(user);
 
     }
 
@@ -86,13 +96,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (user.isSuper()) {
             initCompayView();
         } else {
-            if (user.isJoinCompany()) {
-                initCompayView();
-
-            } else {
+            controller.queryStatuser(user);
+//            if (user.isJoinCompany()) {
+//                initCompayView();
+//
+//            } else {
                 getMenuInflater().inflate(R.menu.main, menu);
-
-            }
+//
+//            }
         }
 
 
@@ -129,7 +140,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 toReimbursement();
                 break;
             case R.id.nav_shiyi:
-
                 break;
             case R.id.nav_logout:
                 BmobUser.logOut();
@@ -178,5 +188,41 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Glide.with(this).load(user.getPhotoPath()).apply(GlideManager.getRequestOptions()).into(head);
             }
         }
+    }
+
+
+    @Override
+    public void onQuerySuccess(List<Company> result) {
+
+    }
+
+    @Override
+    public void onQueryCompayCreator(MyUser name) {
+
+    }
+
+    @Override
+    public void onQueryRequester(List<Applicant> result) {
+
+    }
+
+    @Override
+    public void onQueryStateUser(List<StateUser> result) {
+            
+    }
+
+    @Override
+    public void showDialog() {
+
+    }
+
+    @Override
+    public void hideDialog() {
+
+    }
+
+    @Override
+    public void showError(Throwable throwable) {
+
     }
 }

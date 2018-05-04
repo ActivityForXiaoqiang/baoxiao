@@ -127,7 +127,7 @@ public class MineActivity extends MyBaseActivity implements UpdataView {
     protected void onResume() {
         super.onResume();
         if (user != null) {
-            user=BmobUser.getCurrentUser(MyUser.class);
+            user = BmobUser.getCurrentUser(MyUser.class);
             nickname.setText(user.getNickName());
         }
     }
@@ -139,12 +139,12 @@ public class MineActivity extends MyBaseActivity implements UpdataView {
 
     @Override
     public void showDialog() {
-
+        loadingDialog.show();
     }
 
     @Override
     public void hideDialog() {
-
+        loadingDialog.hide();
     }
 
     @Override

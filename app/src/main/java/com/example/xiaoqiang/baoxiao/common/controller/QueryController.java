@@ -3,6 +3,7 @@ package com.example.xiaoqiang.baoxiao.common.controller;
 import com.example.xiaoqiang.baoxiao.common.been.Applicant;
 import com.example.xiaoqiang.baoxiao.common.been.Company;
 import com.example.xiaoqiang.baoxiao.common.been.MyUser;
+import com.example.xiaoqiang.baoxiao.common.been.StateUser;
 import com.example.xiaoqiang.baoxiao.common.model.BmobModel;
 import com.example.xiaoqiang.baoxiao.common.view.QueryView;
 
@@ -76,6 +77,22 @@ public class QueryController {
             @Override
             public void call(Throwable throwable) {
                 view.showError(throwable);
+            }
+        });
+    }
+
+    public void queryStatuser(MyUser user) {
+        view.showDialog();
+        model.queryStatuser(user).subscribe(new Action1<List<StateUser>>() {
+            @Override
+            public void call(List<StateUser> stateUsers) {
+            view.hideDialog();
+
+            }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+
             }
         });
     }

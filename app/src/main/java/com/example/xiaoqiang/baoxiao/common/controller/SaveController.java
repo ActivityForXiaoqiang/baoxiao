@@ -1,6 +1,7 @@
 package com.example.xiaoqiang.baoxiao.common.controller;
 
 import com.example.xiaoqiang.baoxiao.common.been.Applicant;
+import com.example.xiaoqiang.baoxiao.common.been.StateUser;
 import com.example.xiaoqiang.baoxiao.common.model.BmobModel;
 import com.example.xiaoqiang.baoxiao.common.view.SaveView;
 
@@ -41,6 +42,23 @@ public class SaveController {
                 view.hideDialog();
                 view.onRequestCreateSuccess(s);
 
+            }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                view.hideDialog();
+                view.showError(throwable);
+            }
+        });
+    }
+
+    public void createStateUser(StateUser user) {
+        view.showDialog();
+        model.createStateUser(user).subscribe(new Action1<String>() {
+            @Override
+            public void call(String s) {
+                view.hideDialog();
+                view.onStateUserCreateSuccess(s);
             }
         }, new Action1<Throwable>() {
             @Override

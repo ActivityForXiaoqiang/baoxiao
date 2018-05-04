@@ -15,4 +15,6 @@ public class FastConstant {
     public final static int SELECT_DIALOG_USER_MODE = 0;//人员列表
     public final static int SELECT_DIALOG_VEHICLE_MODE = 1;//交通工具列表
     public final static int SELECT_DIALOG_RELATION_ACCOUNT_MODE = 2;//关联账号
+    public final static int SELECT_DIALOG_ZHIWEI=3;//职位列表
+
 }

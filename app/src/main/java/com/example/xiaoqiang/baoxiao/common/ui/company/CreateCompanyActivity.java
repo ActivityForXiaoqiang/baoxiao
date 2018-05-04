@@ -53,12 +53,12 @@ public class CreateCompanyActivity extends MyBaseActivity implements SaveView {
 
             @Override
             public void showDialog() {
-
+                loadingDialog.show();
             }
 
             @Override
             public void hideDialog() {
-
+                loadingDialog.hide();
             }
 
             @Override
@@ -92,6 +92,11 @@ public class CreateCompanyActivity extends MyBaseActivity implements SaveView {
 
     @Override
     public void onRequestCreateSuccess(String result) {
+
+    }
+
+    @Override
+    public void onStateUserCreateSuccess(String result) {
 
     }
 

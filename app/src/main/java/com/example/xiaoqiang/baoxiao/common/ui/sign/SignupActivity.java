@@ -18,11 +18,15 @@ import android.widget.Toast;
 
 import com.example.xiaoqiang.baoxiao.R;
 import com.example.xiaoqiang.baoxiao.common.base.MyBaseActivity;
+import com.example.xiaoqiang.baoxiao.common.been.MyUser;
+import com.example.xiaoqiang.baoxiao.common.been.StateUser;
+import com.example.xiaoqiang.baoxiao.common.controller.SaveController;
 import com.example.xiaoqiang.baoxiao.common.controller.SignupController;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.widget.dialog.LoadingDialog;
+import com.example.xiaoqiang.baoxiao.common.view.SaveView;
 import com.example.xiaoqiang.baoxiao.common.view.SignupView;
 
-public class SignupActivity extends MyBaseActivity implements SignupView {
+public class SignupActivity extends MyBaseActivity implements SignupView, SaveView {
 
     private FloatingActionButton fab;
     private CardView cvAdd;
@@ -31,7 +35,7 @@ public class SignupActivity extends MyBaseActivity implements SignupView {
 
     private SignupController controller;
 
-    private LoadingDialog dialog;
+    private SaveController saveController;
 
     @Override
     public Integer getViewId() {
@@ -41,7 +45,6 @@ public class SignupActivity extends MyBaseActivity implements SignupView {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void init() {
-        dialog = new LoadingDialog(this);
 
         hideToolbar();
         ShowEnterAnimation();
@@ -67,6 +70,7 @@ public class SignupActivity extends MyBaseActivity implements SignupView {
                 signup();
             }
         });
+        saveController = new SaveController(this);
     }
 
 
@@ -177,24 +181,47 @@ public class SignupActivity extends MyBaseActivity implements SignupView {
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
-    public void onSuccess() {
-        animateRevealClose();
+    public void onSuccess(MyUser user) {
+        StateUser stateUser = new StateUser();
+        stateUser.setAppying(false);
+        stateUser.setJoinCompay(false);
+        stateUser.setPosition(0);
+        stateUser.setUser(user);
+        stateUser.setCompany(null);
+        saveController.createStateUser(stateUser);
+
     }
 
     @Override
     public void showDialog() {
-        if (!dialog.isShowing()) {
-            dialog.show();
+        if (!loadingDialog.isShowing()) {
+            loadingDialog.show();
         }
     }
 
     @Override
     public void hideDialog() {
-        dialog.dismiss();
+        loadingDialog.dismiss();
     }
 
     @Override
     public void showError(Throwable throwable) {
 
+    }
+
+    @Override
+    public void onCompanyCreateSuccess(String result) {
+
+    }
+
+    @Override
+    public void onRequestCreateSuccess(String result) {
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    public void onStateUserCreateSuccess(String result) {
+        animateRevealClose();
     }
 }
