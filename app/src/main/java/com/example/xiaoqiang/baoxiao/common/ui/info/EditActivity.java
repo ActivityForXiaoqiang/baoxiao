@@ -21,16 +21,26 @@ import com.example.xiaoqiang.baoxiao.R;
 import com.example.xiaoqiang.baoxiao.common.base.MyBaseActivity;
 import com.example.xiaoqiang.baoxiao.common.been.MyUser;
 import com.example.xiaoqiang.baoxiao.common.controller.UpdataController;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.FastConstant;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.util.TimeFormatUtil;
 import com.example.xiaoqiang.baoxiao.common.listener.OnItemClickListener;
 import com.example.xiaoqiang.baoxiao.common.listener.RecyclerItemClickListener;
 import com.example.xiaoqiang.baoxiao.common.view.UpdataView;
+import com.jzxiang.pickerview.TimePickerDialog;
+import com.jzxiang.pickerview.data.Type;
+import com.jzxiang.pickerview.listener.OnDateSetListener;
+
+import java.util.Date;
 
 import cn.bmob.v3.BmobUser;
 
 public class EditActivity extends MyBaseActivity implements UpdataView {
     public static final int NIKE_NAME = 0;
     public static final int SEX = 1;
-    private String[][] items = {{"昵称", "1"}, {"性别", "1"}};
+    public static final int REAL_NAME = 2;
+    public static final int CODE = 3;
+    public static final int BIRTHDAY = 4;
+    private String[][] items = {{"昵称", "1"}, {"性别", "1"}, {"真实姓名", "1"}, {"身份证", "1"}, {"出生日期", "1"}};
 
     private RecyclerView recyclerView;
 
@@ -71,6 +81,15 @@ public class EditActivity extends MyBaseActivity implements UpdataView {
                     case SEX:
                         choseSex();
                         break;
+                    case REAL_NAME:
+                        startActivityForResult(new Intent(EditActivity.this, FillActivity.class), REAL_NAME);
+                        break;
+                    case CODE:
+                        startActivityForResult(new Intent(EditActivity.this, FillActivity.class), CODE);
+                        break;
+                    case BIRTHDAY:
+                        showTimePickerDialog();
+                        break;
                 }
             }
         }));
@@ -81,11 +100,19 @@ public class EditActivity extends MyBaseActivity implements UpdataView {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
-            String text;
+            String text = data.getStringExtra("text");
             switch (requestCode) {
                 case NIKE_NAME:
-                    text = data.getStringExtra("text");
+
                     items[NIKE_NAME][1] = text;
+                    adapter.notifyDataSetChanged();
+                    break;
+                case REAL_NAME:
+                    items[REAL_NAME][1] = text;
+                    adapter.notifyDataSetChanged();
+                    break;
+                case CODE:
+                    items[CODE][1] = text;
                     adapter.notifyDataSetChanged();
                     break;
             }
@@ -128,12 +155,21 @@ public class EditActivity extends MyBaseActivity implements UpdataView {
             return;
         }
         user.setNickName(items[NIKE_NAME][1]);
-        if (!items[SEX][1].equals(1)) {
+        if (!items[SEX][1].equals("1")) {
             if (items[SEX][1].equals("男")) {
                 user.setSex(true);
             } else {
                 user.setSex(false);
             }
+        }
+        if (!items[REAL_NAME][1].equals("1")) {
+            user.setRealname(items[REAL_NAME][1]);
+        }
+        if (!items[CODE][1].equals("1")) {
+            user.setCode(items[CODE][1]);
+        }
+        if (!items[BIRTHDAY][1].equals("1")) {
+            user.setBirthday(items[BIRTHDAY][1]);
         }
 
         controller.updataUser(user);
@@ -174,6 +210,34 @@ public class EditActivity extends MyBaseActivity implements UpdataView {
     @Override
     public void showError(Throwable throwable) {
 
+    }
+
+
+    private void showTimePickerDialog() {
+        Date minDate = TimeFormatUtil.stringToDate("1970-01-01 00:00", FastConstant.TIME_FORMAT_TYPE);
+        TimePickerDialog startTimeDialog = new TimePickerDialog.Builder()
+                .setCallBack(new OnDateSetListener() {
+                    @Override
+                    public void onDateSet(TimePickerDialog timePickerView, long millseconds) {
+                        items[BIRTHDAY][1] = TimeFormatUtil.formatTime(millseconds, FastConstant.TIME_FORMAT_TYPE);
+                        adapter.notifyDataSetChanged();
+                    }
+                })
+                .setCancelStringId("取消")
+                .setSureStringId("确定")
+                .setTitleStringId("选择时间")
+                .setCyclic(false)
+                .setMinMillseconds(minDate.getTime())
+                .setCurrentMillseconds(System.currentTimeMillis())
+//                .setThemeColor(getResources().getColor(R.color.timepicker_dialog_bg))
+                .setThemeColor(getResources().getColor(R.color.colorPrimary))
+                .setType(Type.YEAR_MONTH)
+                .setWheelItemTextNormalColor(getResources().getColor(R.color.timetimepicker_default_text_color))
+//                .setWheelItemTextSelectorColor(getResources().getColor(R.color.timepicker_toolbar_bg))
+                .setWheelItemTextSelectorColor(getResources().getColor(R.color.txt_title_blue))
+                .setWheelItemTextSize(12)
+                .build();
+        startTimeDialog.show(getSupportFragmentManager(), "all");
     }
 
 

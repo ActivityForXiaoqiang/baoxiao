@@ -26,6 +26,8 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/company_title"
+                    android:layout_gravity="center"
                     style="@style/AppTheme.Label.Title.Large"
                     android:padding="@dimen/space_normal"
                     android:text="公司名称" />

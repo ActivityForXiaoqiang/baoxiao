@@ -127,6 +127,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void initCompayView() {
         RelativeLayout nullView = findViewById(R.id.null_data_view);
         nullView.setVisibility(View.GONE);
+        TextView companyTitle = findViewById(R.id.company_title);
+        companyTitle.setText(stateUser.getCompany().getName());
 
     }
 
@@ -159,17 +161,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_company:
                 break;
             case R.id.nav_create:
-                if (TextUtils.isEmpty(user.getNickName())) {
-                    Toast.makeText(MainActivity.this, "请完善个人信息", Toast.LENGTH_SHORT).show();
+                if (stateUser.isJoinCompay()) {
+                    ToastUtil.show("已加入公司！ 不能创建！");
                 } else {
-                    Intent it = new Intent(MainActivity.this, CreateCompanyActivity.class);
-                    it.putExtra("objId", stateUser.getObjectId());
-                    startActivity(it);
+                    if (TextUtils.isEmpty(user.getNickName())) {
+                        Toast.makeText(MainActivity.this, "请完善个人信息", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Intent it = new Intent(MainActivity.this, CreateCompanyActivity.class);
+                        it.putExtra("objId", stateUser.getObjectId());
+                        startActivity(it);
+                    }
                 }
+
 
                 break;
             case R.id.nav_manager:
                 if (user.isSuper()) {
+
                     Intent it = new Intent(MainActivity.this, RequestActivity.class);
                     it.putExtra("objId", stateUser.getObjectId());
                     startActivity(it);
