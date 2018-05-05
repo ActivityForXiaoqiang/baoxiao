@@ -15,7 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.xiaoqiang.baoxiao.R;
-import com.example.xiaoqiang.baoxiao.common.been.MyUser;
+import com.example.xiaoqiang.baoxiao.common.been.StateUser;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.FastConstant;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.DisplayUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SpManager;
@@ -36,7 +36,7 @@ public class SelectListDialog extends BaseDialog {
     ListView listView;
     @BindView(R.id.dialog_select_list_title)
     TextView mTvTitle;
-    private List<MyUser> contents;
+    private List<StateUser> contents;
     private List<String> contents1;
     private boolean mCanBackClose = true;
     private boolean mCancelable = true;
@@ -52,7 +52,7 @@ public class SelectListDialog extends BaseDialog {
         initTitle();
     }
 
-    public void setDialogType(List<MyUser> contents) {
+    public void setDialogType(List<StateUser> contents) {
         dialogType = FastConstant.SELECT_DIALOG_USER_MODE;
         this.contents = contents;
         contents1 = null;
@@ -75,7 +75,7 @@ public class SelectListDialog extends BaseDialog {
         mContext = context;
     }
 
-    public SelectListDialog(@NonNull Context context, List<MyUser> contents, int dialogType, String title) {
+    public SelectListDialog(@NonNull Context context, List<StateUser> contents, int dialogType, String title) {
         super(context);
         this.mContext = context;
         this.contents = contents;
@@ -215,17 +215,17 @@ public class SelectListDialog extends BaseDialog {
     }
 
     public interface ItemSelect {
-        void onItemUserSelect(MyUser user);
+        void onItemUserSelect(StateUser user);
 
         void onItemSelect(String content);
     }
 
     public class SelectListAdapter extends BaseAdapter {
         private Context mContext;
-        private List<MyUser> contents;
+        private List<StateUser> contents;
         private List<String> contents1;
 
-        public SelectListAdapter(Context mContext, List<MyUser> contents, List<String> contents1) {
+        public SelectListAdapter(Context mContext, List<StateUser> contents, List<String> contents1) {
             this.mContext = mContext;
             this.contents = contents;
             this.contents1 = contents1;
@@ -258,10 +258,10 @@ public class SelectListDialog extends BaseDialog {
                 vh = (ViewHolder) convertView.getTag();
             }
             if (contents != null) {
-                if (TextUtils.isEmpty(this.contents.get(position).getNickName())) {
-                    vh.mTvContent.setText(this.contents.get(position).getUsername());
+                if (TextUtils.isEmpty(this.contents.get(position).getUser().getNickName())) {
+                    vh.mTvContent.setText(this.contents.get(position).getUser().getUsername());
                 } else {
-                    vh.mTvContent.setText(this.contents.get(position).getNickName());
+                    vh.mTvContent.setText(this.contents.get(position).getUser().getNickName());
                 }
             } else {
                 vh.mTvContent.setText(this.contents1.get(position));

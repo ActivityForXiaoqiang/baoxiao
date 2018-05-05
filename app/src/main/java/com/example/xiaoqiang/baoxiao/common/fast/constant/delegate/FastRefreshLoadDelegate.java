@@ -55,7 +55,7 @@ public class FastRefreshLoadDelegate<T> {
                 public void onClick(View v) {
                     int currentStatus = mStatusView.getCurrentStatus();
                     if (currentStatus != 2 && currentStatus != 1) {//非loading且非content状态
-                        mStatusView.loading();
+//                        mStatusView.loading();//有自己的loadingdialog 暂不需要布局的加载loading了
                         mIFastRefreshLoadView.onRefresh(mRefreshLayout);
                     }
                 }

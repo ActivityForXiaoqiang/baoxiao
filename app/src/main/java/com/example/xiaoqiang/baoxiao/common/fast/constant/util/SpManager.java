@@ -3,8 +3,14 @@ package com.example.xiaoqiang.baoxiao.common.fast.constant.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.text.TextUtils;
 
+import com.example.xiaoqiang.baoxiao.common.been.MyUser;
+import com.example.xiaoqiang.baoxiao.common.been.StateUser;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.FastConstant;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.SPConstant;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.widget.dialog.LoadingDialog;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,15 +18,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
+
 public class SpManager {
     private static SpManager manager;
     private static SharedPreferences preferences;
-    protected final String userInfo = "UserInfo";
+    protected final String USERINFO = "UserInfo";
     public static final String No_FIRST = "no_first";
     public static Map<String, String> mPositionManager;
     public static List<String> mVehicleData;
     public static List<String> mAccountTypeData;
     public static List<String> mPositionData;
+    private IGetCurrentUser iGetCurrentUser = null;
 
     static {
         mPositionManager = new HashMap<>();
@@ -61,14 +72,23 @@ public class SpManager {
         return manager;
     }
 
-    public void saveInfo(String value) {
-        Editor editor = preferences.edit();
-        editor.putString(userInfo, value);
-        editor.commit();
+    public void saveUserInfo(StateUser user) {
+        if (user == null) {
+            Timber.i("bmob:user is null");
+            return;
+        }
+        String userInfo = new Gson().toJson(user);
+        save(USERINFO, userInfo);
     }
 
-    public String getInfo() {
-        return preferences.getString(userInfo, null);
+    public StateUser getUserInfo() {
+        String userInfo = getString(USERINFO);
+        if (TextUtils.isEmpty(userInfo)) {
+            Timber.i("bmob:user is null");
+            return null;
+        }
+
+        return new Gson().fromJson(userInfo, StateUser.class);
     }
 
     public void initSpManager(Context context) {
@@ -126,6 +146,48 @@ public class SpManager {
     }
 
 
+    public void queryCurrentUser(Context context, MyUser user, IGetCurrentUser iGetCurrentUser) {
+        this.iGetCurrentUser = iGetCurrentUser;
+//        MyUser user = BmobUser.getCurrentUser(MyUser.class);
+        if (user == null) {
+            showUser(null);
+            return;
+        }
+        showLoadingDialog(context);
+        queryUserInfo(user);
+    }
+
+    private void queryUserInfo(MyUser user) {
+        BmobQuery<StateUser> query = new BmobQuery<StateUser>();
+        query.addWhereEqualTo("user", user);
+        query.include("user,company");
+        query.findObjects(new FindListener<StateUser>() {
+            @Override
+            public void done(List<StateUser> list, BmobException e) {
+                dissmissLoadingDialog();
+
+                if (e == null) {
+                    if (list != null && list.size() > 0) {
+                        saveUserInfo(list.get(0));
+                        showUser(list.get(0));
+                        Timber.i("bmob" + new Gson().toJson(list.get(0)));
+                    }
+                } else {
+                    showUser(null);
+                    Timber.e("bmob 失败：" + e.getMessage() + " ---");
+                }
+
+            }
+        });
+    }
+
+    private void showUser(StateUser user) {
+        if (iGetCurrentUser != null) {
+            iGetCurrentUser.showMyUser(user);
+            iGetCurrentUser = null;
+        }
+    }
+
     /**
      * 存放object
      *
@@ -181,5 +243,78 @@ public class SpManager {
             return sp.getStringSet(key, (Set<String>) def);
         }
         return def;
+    }
+
+    /**
+     * 获取下一个节点
+     */
+    public Integer getNextPoint(Integer point, Integer proccesType) {
+        Map<Integer, Integer> nextMap = new HashMap<>();
+        nextMap.put(FastConstant.PROCESS_POINT_ONE, FastConstant.PROCESS_POINT_TWO);
+        nextMap.put(FastConstant.PROCESS_POINT_TWO, FastConstant.PROCESS_POINT_THREE);
+        nextMap.put(FastConstant.PROCESS_POINT_THREE, FastConstant.PROCESS_POINT_FOUR);
+        nextMap.put(FastConstant.PROCESS_POINT_FOUR, FastConstant.PROCESS_POINT_FINISH);
+        Integer nextPoint = nextMap.get(point);
+        if (proccesType == FastConstant.PROCESS_TYPE_TWO || proccesType == FastConstant.PROCESS_TYPE_THREE) {
+            //需要跳过四级
+            if (nextPoint == FastConstant.PROCESS_POINT_FOUR) {
+                nextPoint = FastConstant.PROCESS_POINT_FINISH;
+            }
+        }
+        return nextPoint;
+    }
+
+    /**
+     * 获取当前节点信息
+     */
+    public String getPointInfo(Integer point, Integer proccesType) {
+        String info = null;
+
+        Map<Integer, String> nextMap1 = new HashMap<>();
+        nextMap1.put(FastConstant.PROCESS_POINT_ONE, "自己");
+        nextMap1.put(FastConstant.PROCESS_POINT_TWO, "部门主管");
+        nextMap1.put(FastConstant.PROCESS_POINT_THREE, "总经理");
+        nextMap1.put(FastConstant.PROCESS_POINT_FOUR, "财务结算");
+        nextMap1.put(FastConstant.PROCESS_POINT_FINISH, "归档");
+        Map<Integer, String> nextMap2 = new HashMap<>();
+        nextMap2.put(FastConstant.PROCESS_POINT_ONE, "自己");
+        nextMap2.put(FastConstant.PROCESS_POINT_THREE, "总经理");
+        nextMap2.put(FastConstant.PROCESS_POINT_FOUR, "财务结算");
+        nextMap1.put(FastConstant.PROCESS_POINT_FINISH, "归档");
+        Map<Integer, String> nextMap3 = new HashMap<>();
+        nextMap3.put(FastConstant.PROCESS_POINT_ONE, "自己");
+        nextMap3.put(FastConstant.PROCESS_POINT_TWO, "财务主管");
+        nextMap3.put(FastConstant.PROCESS_POINT_THREE, "财务结算");
+        nextMap3.put(FastConstant.PROCESS_POINT_FINISH, "归档");
+        if (proccesType == FastConstant.PROCESS_TYPE_ONE) {
+            info = nextMap1.get(point);
+        } else if (proccesType == FastConstant.PROCESS_TYPE_TWO) {
+            info = nextMap2.get(point);
+        } else if (proccesType == FastConstant.PROCESS_TYPE_THREE) {
+            info = nextMap3.get(point);
+        }
+        return info;
+    }
+
+    private LoadingDialog loadingDialog;
+
+    public void showLoadingDialog(Context context) {
+        if (loadingDialog == null) {
+            loadingDialog = new LoadingDialog(context);
+        }
+        if (!loadingDialog.isShowing()) {
+            loadingDialog.show();
+        }
+    }
+
+    public void dissmissLoadingDialog() {
+        if (loadingDialog != null && loadingDialog.isShowing()) {
+            loadingDialog.dismiss();
+            loadingDialog = null;
+        }
+    }
+
+    public interface IGetCurrentUser {
+        void showMyUser(StateUser user);
     }
 }

@@ -15,6 +15,7 @@ import com.example.xiaoqiang.baoxiao.common.fast.constant.entity.FastQuitConfigE
 import com.example.xiaoqiang.baoxiao.common.fast.constant.entity.FastTitleConfigEntity;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.manager.LoggerManager;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SizeUtil;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SpManager;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.Timber;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.ToastUtil;
 
@@ -31,6 +32,8 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         Bmob.initialize(this, BMOB_APPID);
+
+        SpManager.getInstance().initSpManager(this);
         //初始化Logger日志打印
         LoggerManager.init(TAG, BuildConfig.DEBUG);
         if (BuildConfig.DEBUG) {

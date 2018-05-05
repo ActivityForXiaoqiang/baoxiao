@@ -3,6 +3,7 @@ package com.example.xiaoqiang.baoxiao.common.fast.constant.widget.dialog;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.ColorInt;
@@ -152,7 +153,8 @@ public class FastMultiStatusView implements IMultiStatusView {
                 .setTextFakeBold(contentView, R.id.tv_emptyMulti, mEmptyTextFakeBold)
                 .setViewMarginTop(contentView, R.id.tv_emptyMulti, mTextMargin)
                 .setViewWidthAndHeight(contentView, R.id.iv_emptyMulti, mImageWidth, mImageHeight)
-                .setImageDrawable(contentView, R.id.iv_emptyMulti, mEmptyImageDrawable);
+//                .setImageDrawable(contentView, R.id.iv_emptyMulti, mEmptyImageDrawable)
+                .setImageResource(contentView, R.id.iv_emptyMulti, R.drawable.fast_img_multi_empty);
         return contentView;
     }
 
@@ -164,7 +166,8 @@ public class FastMultiStatusView implements IMultiStatusView {
                 .setTextFakeBold(contentView, R.id.tv_errorMulti, mErrorTextFakeBold)
                 .setViewMarginTop(contentView, R.id.tv_errorMulti, mTextMargin)
                 .setViewWidthAndHeight(contentView, R.id.iv_errorMulti, mImageWidth, mImageHeight)
-                .setImageDrawable(contentView, R.id.iv_errorMulti, mErrorImageDrawable);
+//                .setImageDrawable(contentView, R.id.iv_errorMulti, mErrorImageDrawable)
+                .setImageResource(contentView, R.id.iv_errorMulti, R.drawable.fast_img_multi_error);
         return contentView;
     }
 
@@ -176,7 +179,8 @@ public class FastMultiStatusView implements IMultiStatusView {
                 .setTextFakeBold(contentView, R.id.tv_networkMulti, mNoNetTextFakeBold)
                 .setViewMarginTop(contentView, R.id.tv_networkMulti, mTextMargin)
                 .setViewWidthAndHeight(contentView, R.id.iv_networkMulti, mImageWidth, mImageHeight)
-                .setImageDrawable(contentView, R.id.iv_networkMulti, mNoNetImageDrawable);
+//                .setImageDrawable(contentView, R.id.iv_networkMulti, mNoNetImageDrawable)
+                .setImageResource(contentView, R.id.iv_networkMulti, R.drawable.fast_img_multi_network);
         return contentView;
     }
 
@@ -201,6 +205,12 @@ public class FastMultiStatusView implements IMultiStatusView {
     private FastMultiStatusView setTextFakeBold(View contentView, int id, boolean fakeBold) {
         TextView txt = findViewById(contentView, id);
         txt.getPaint().setFakeBoldText(fakeBold);
+        return this;
+    }
+
+    private FastMultiStatusView setImageResource(View contentView, int id, int res) {
+        ImageView img = findViewById(contentView, id);
+        img.setImageResource(res);
         return this;
     }
 
@@ -255,6 +265,7 @@ public class FastMultiStatusView implements IMultiStatusView {
         boolean mEmptyTextFakeBold;
         int mEmptyImageColor;
         Drawable mEmptyImageDrawable;
+        Bitmap mEmptyImageBitmap;
 
         CharSequence mErrorText;
         @ColorInt
@@ -279,7 +290,7 @@ public class FastMultiStatusView implements IMultiStatusView {
 
         public Builder(@Nullable Context context) {
             mContext = context;
-            setTextColorResource(R.color.colorMultiText);
+            setTextColorResource(R.color.colorMultiProgress);
             setTextSizeResource(R.dimen.dp_multi_text_size);
             setTextFakeBold(false);
             setLoadingProgressColorResource(R.color.colorMultiProgress);
@@ -287,9 +298,9 @@ public class FastMultiStatusView implements IMultiStatusView {
             setEmptyText(R.string.fast_multi_empty);
             setErrorText(R.string.fast_multi_error);
             setNoNetText(R.string.fast_multi_network);
-            setEmptyImageDrawable(R.drawable.fast_img_multi_empty);
-            setErrorImageDrawable(R.drawable.fast_img_multi_error);
-            setNoNetImageDrawable(R.drawable.fast_img_multi_network);
+//            setEmptyImageDrawable(R.drawable.fast_img_multi_empty);
+//            setErrorImageDrawable(R.drawable.fast_img_multi_error);
+//            setNoNetImageDrawable(R.drawable.fast_img_multi_network);
             setLoadingSizeResource(R.dimen.dp_multi_loading_size);
             setImageWidthHeightResource(R.dimen.dp_multi_image_size);
             setTextMarginResource(R.dimen.dp_multi_margin);
@@ -844,6 +855,7 @@ public class FastMultiStatusView implements IMultiStatusView {
         private Drawable getDrawable(@DrawableRes int res) {
             return getResources().getDrawable(res);
         }
+
 
         public FastMultiStatusView build() {
             return new FastMultiStatusView(this);

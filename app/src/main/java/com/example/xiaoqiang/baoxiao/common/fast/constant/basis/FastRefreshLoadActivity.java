@@ -18,8 +18,9 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 /**
  * Function: 下拉刷新及上拉加载更多
  */
-public abstract class FastRefreshLoadActivity<T>
-        extends FastTitleActivity implements IFastRefreshLoadView<T> {
+public abstract class FastRefreshLoadActivity<T, c extends BaseController>
+        extends FastTitleRefreshLoadBaseActivity implements IFastRefreshLoadView<T> {
+    protected c mController;
     protected SmartRefreshLayout mRefreshLayout;
     protected RecyclerView mRecyclerView;
     protected EasyStatusView mEasyStatusView;
@@ -35,7 +36,14 @@ public abstract class FastRefreshLoadActivity<T>
         mRecyclerView = mFastRefreshLoadDelegate.mRecyclerView;
         mRefreshLayout = mFastRefreshLoadDelegate.mRefreshLayout;
         mEasyStatusView = mFastRefreshLoadDelegate.mStatusView;
+        mController = initController();
+        attachView();
     }
+
+
+    protected abstract c initController();
+
+    protected abstract void attachView();
 
     @Override
     public RefreshHeader getRefreshHeader() {
@@ -92,5 +100,13 @@ public abstract class FastRefreshLoadActivity<T>
     @Override
     public void loadData() {
         loadData(DEFAULT_PAGE);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mController != null) {
+            mController.detachView();
+        }
     }
 }

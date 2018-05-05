@@ -13,7 +13,7 @@ import com.example.xiaoqiang.baoxiao.common.fast.constant.widget.dialog.LoadingD
 public class BaseController<V extends IBaseView> {
     private LoadingDialog loadingDialog;
 
-    public void showLoadingDialog(Context context) {
+    public  void showLoadingDialog(Context context) {
         if (loadingDialog == null) {
             loadingDialog = new LoadingDialog(context);
         }

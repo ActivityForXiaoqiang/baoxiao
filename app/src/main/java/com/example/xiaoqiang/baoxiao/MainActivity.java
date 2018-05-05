@@ -12,13 +12,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,19 +27,18 @@ import com.example.xiaoqiang.baoxiao.common.been.Company;
 import com.example.xiaoqiang.baoxiao.common.been.MyUser;
 import com.example.xiaoqiang.baoxiao.common.been.StateUser;
 import com.example.xiaoqiang.baoxiao.common.controller.QueryController;
-import com.example.xiaoqiang.baoxiao.common.controller.UpdataController;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.manager.GlideManager;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.util.FastUtil;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SpManager;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.util.ToastUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.widget.dialog.LoadingDialog;
 import com.example.xiaoqiang.baoxiao.common.ui.company.CreateCompanyActivity;
 import com.example.xiaoqiang.baoxiao.common.ui.company.JoinActivity;
-import com.example.xiaoqiang.baoxiao.common.fast.constant.util.FastUtil;
-import com.example.xiaoqiang.baoxiao.common.fast.constant.util.ToastUtil;
 import com.example.xiaoqiang.baoxiao.common.ui.company.RequestActivity;
 import com.example.xiaoqiang.baoxiao.common.ui.info.MineActivity;
+import com.example.xiaoqiang.baoxiao.common.ui.process.ProcessListActivity;
 import com.example.xiaoqiang.baoxiao.common.ui.process.reimbursement.ReimbursementActivity;
 import com.example.xiaoqiang.baoxiao.common.view.QueryView;
-import com.example.xiaoqiang.baoxiao.common.view.UpdataView;
-import com.google.gson.Gson;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
@@ -50,7 +47,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.BmobUser;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, QueryView {
@@ -185,9 +181,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 break;
             case R.id.nav_baoxiao:
-                toReimbursement();
+                getUserInfo(1);
                 break;
             case R.id.nav_shiyi:
+                getUserInfo(2);
                 break;
             case R.id.nav_logout:
                 BmobUser.logOut();
@@ -199,20 +196,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    private void toReimbursement() {
-        Gson gson = new Gson();
-        BmobUser bmobUser = BmobUser.getCurrentUser();
-        if (bmobUser == null) {
+    private void getUserInfo(final int type) {
+        SpManager.getInstance().queryCurrentUser(this, user, new SpManager.IGetCurrentUser() {
+            @Override
+            public void showMyUser(StateUser user) {
+                toProcess(type, user);
+            }
+        });
+    }
+
+    private void toProcess(int type, StateUser user) {
+
+        if (user == null) {
             ToastUtil.show("你还未登陆");
             return;
         }
-        MyUser user = gson.fromJson(gson.toJson(bmobUser), MyUser.class);
 
-//        if (TextUtils.isEmpty(user.getCompanyId())) {
-//            ToastUtil.show("您还没有所属公司");
-//            return;
-//        }
-        FastUtil.startActivity(MainActivity.this, ReimbursementActivity.class);
+        if (!user.isJoinCompay()) {
+            ToastUtil.show("您还没有所属公司");
+            return;
+        }
+
+        if (type == 1) {
+            FastUtil.startActivity(MainActivity.this, ReimbursementActivity.class);
+        } else if (type == 2) {
+            FastUtil.startActivity(MainActivity.this, ProcessListActivity.class);
+        }
     }
 
     @Override
@@ -285,7 +294,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void hideDialog() {
-        dialog.hide();
+
     }
 
     @Override

@@ -132,7 +132,7 @@ public abstract class BasisFragment extends Fragment implements IBasisView {
                     public void run() {
                         onVisibleChanged(isVisibleToUser);
                     }
-                }, 10);
+                }, 66);
             } else {
                 lazyLoad();
             }

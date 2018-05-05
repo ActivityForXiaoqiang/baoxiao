@@ -1,6 +1,5 @@
 package com.example.xiaoqiang.baoxiao.common.ui.process;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -8,18 +7,22 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.xiaoqiang.baoxiao.R;
 import com.example.xiaoqiang.baoxiao.common.adapter.ProcessAdapter;
-import com.example.xiaoqiang.baoxiao.common.been.MyUser;
 import com.example.xiaoqiang.baoxiao.common.been.ProcessEntity;
+import com.example.xiaoqiang.baoxiao.common.been.StateUser;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.basis.FastRefreshLoadFragment;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.EventConstant;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.FastConstant;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.GlobalConstant;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.SPConstant;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.helper.BackToTopHelper;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.util.FastUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SPUtil;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SpManager;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.util.Timber;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.ToastUtil;
 import com.example.xiaoqiang.baoxiao.common.ui.process.controller.IProcessListView;
 import com.example.xiaoqiang.baoxiao.common.ui.process.controller.ProcessListController;
-import com.example.xiaoqiang.baoxiao.common.ui.process.reimbursement.ReimbursementActivity;
+import com.example.xiaoqiang.baoxiao.common.ui.process.reimbursement.ReimbursementDetailsActivity;
 import com.google.gson.Gson;
 
 import org.simple.eventbus.Subscriber;
@@ -27,8 +30,6 @@ import org.simple.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import cn.bmob.v3.BmobUser;
 
 /**
  * Created: 2018/4/27
@@ -40,7 +41,6 @@ public class ProcessBaseFragment extends FastRefreshLoadFragment<ProcessEntity, 
     private int animationIndex = GlobalConstant.GLOBAL_ADAPTER_ANIMATION_VALUE;
     private boolean animationAlways = true;
     private int pageStyle = 0;//0我的请求 1待办  2已办事宜
-    private int index = 0;
     ArrayList<ProcessEntity> pList = new ArrayList<>();
 
     public static ProcessBaseFragment newInstance(int pageStyle) {
@@ -59,7 +59,25 @@ public class ProcessBaseFragment extends FastRefreshLoadFragment<ProcessEntity, 
 
     @Override
     public BaseQuickAdapter<ProcessEntity, BaseViewHolder> getAdapter() {
-        mAdapter = new ProcessAdapter();
+        boolean isOperate = false;
+        if (pageStyle == 1) {
+            isOperate = true;
+        }
+        mAdapter = new ProcessAdapter(isOperate);
+        mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                ProcessEntity item = (ProcessEntity) mAdapter.getItem(position);
+                switch (view.getId()) {
+                    case R.id.item_process_reject_tv:
+                        mController.rejectProcces(item, "驳回", position);
+                        break;
+                    case R.id.item_process_approval_tv:
+                        mController.approvalProcess(item, position);
+                        break;
+                }
+            }
+        });
         changeAdapterAnimation(0);
         changeAdapterAnimationAlways(true);
         return mAdapter;
@@ -82,22 +100,25 @@ public class ProcessBaseFragment extends FastRefreshLoadFragment<ProcessEntity, 
 
     @Override
     public void loadData(int page) {
-        Gson gson = new Gson();
-        BmobUser bmobUser = BmobUser.getCurrentUser();
-        MyUser user = gson.fromJson(gson.toJson(bmobUser), MyUser.class);
+        Timber.tag(TAG).i("loadData" + pageStyle + "--**" + DEFAULT_PAGE + "***--" + page);
+        StateUser user = SpManager.getInstance().getUserInfo();
+
         String userId = user.getObjectId();
-        int status = user.getPosition();
-        if (pageStyle == 0) {
-            //查看我的请求  关联userid 与流程装填无关
-            status = -1;
+        if (pageStyle == 0 || pageStyle == 2) {
+            int point = -1;
+            if (pageStyle == 0) {
+                //查看我的请求  关联userid 与流程装填无关
+                point = -1;
+            } else if (pageStyle == 2) {
+                //查看我的已完成事宜  关联userid 与流程状态
+                point = FastConstant.PROCESS_POINT_FINISH;//查看我的已完成流程
+            }
+            mController.getProcessList(page, point, userId, user.getCompany().getObjectId());
         } else if (pageStyle == 1) {
-            //只跟流程相关
-            userId = "";
-        } else if (pageStyle == 2) {
-            //查看我的已完成事宜  关联userid 与流程状态
-            status = 6;//查看我的已完成流程
+            //需要去操作的
+            mController.getAgencyProcessList(page, user.getPosition(), user.getCompany().getObjectId());
         }
-        mController.queryProcessList(index, status, userId);
+
     }
 
     @Override
@@ -121,7 +142,9 @@ public class ProcessBaseFragment extends FastRefreshLoadFragment<ProcessEntity, 
     @Override
     public void onItemClicked(BaseQuickAdapter<ProcessEntity, BaseViewHolder> adapter, View view, int position) {
         super.onItemClicked(adapter, view, position);
-        startActivity(new Intent(getContext(), ReimbursementActivity.class));
+        Bundle bundle = new Bundle();
+        bundle.putString("processEntity", new Gson().toJson(adapter.getItem(position)));
+        FastUtil.startActivity(getActivity(), ReimbursementDetailsActivity.class, bundle);
     }
 
     @Subscriber(mode = ThreadMode.MAIN, tag = EventConstant.EVENT_KEY_CHANGE_ADAPTER_ANIMATION)
@@ -147,7 +170,7 @@ public class ProcessBaseFragment extends FastRefreshLoadFragment<ProcessEntity, 
 
     @Override
     public void showError(String msg) {
-        if (index == 0) {
+        if (DEFAULT_PAGE == 0) {
             mEasyStatusView.error();
         } else {
             ToastUtil.show(msg);
@@ -163,7 +186,7 @@ public class ProcessBaseFragment extends FastRefreshLoadFragment<ProcessEntity, 
         }
         mAdapter.loadMoreComplete();
         if (list == null || list.size() == 0) {
-            if (index == 0) {
+            if (DEFAULT_PAGE == 0) {
                 mEasyStatusView.empty();
             } else {
                 mAdapter.loadMoreEnd();
@@ -171,8 +194,9 @@ public class ProcessBaseFragment extends FastRefreshLoadFragment<ProcessEntity, 
             return;
         }
         mEasyStatusView.content();
-        if (mRefreshLayout.isRefreshing())
+        if (mRefreshLayout.isRefreshing()) {
             mAdapter.setNewData(null);
+        }
         mAdapter.openLoadAnimation();
         mAdapter.addData(list);
         if (list.size() < DEFAULT_PAGE_SIZE) {
@@ -180,5 +204,9 @@ public class ProcessBaseFragment extends FastRefreshLoadFragment<ProcessEntity, 
         }
     }
 
+    @Override
+    public void operateSuccess(int position) {
+        mAdapter.remove(position);
+    }
 
 }
