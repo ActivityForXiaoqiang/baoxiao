@@ -15,6 +15,7 @@ import com.example.xiaoqiang.baoxiao.R;
 import com.example.xiaoqiang.baoxiao.common.base.MyBaseActivity;
 import com.example.xiaoqiang.baoxiao.common.been.MyUser;
 import com.example.xiaoqiang.baoxiao.common.controller.LoginController;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.util.ToastUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.widget.dialog.LoadingDialog;
 import com.example.xiaoqiang.baoxiao.common.view.LoginView;
 
@@ -117,6 +118,6 @@ public class LoginActivity extends MyBaseActivity implements LoginView {
 
     @Override
     public void showError(Throwable throwable) {
-
+        ToastUtil.show(throwable.getMessage());
     }
 }

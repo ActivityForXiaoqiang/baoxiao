@@ -219,7 +219,9 @@ public class RequestActivity extends MyBaseActivity implements QueryView, Delect
                 Glide.with(RequestActivity.this).load(datas.get(position).getUser().getPhotoPath()).into(holder.head);
 
             }
+
             holder.nickenake.setText(datas.get(position).getUser().getNickName());
+            holder.realname.setText(datas.get(position).getUser().getRealname());
             holder.y.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
