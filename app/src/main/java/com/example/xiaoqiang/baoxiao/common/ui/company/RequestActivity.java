@@ -26,7 +26,6 @@ import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SpManager;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.widget.dialog.SelectListDialog;
 import com.example.xiaoqiang.baoxiao.common.view.DelectView;
 import com.example.xiaoqiang.baoxiao.common.view.QueryView;
-import com.example.xiaoqiang.baoxiao.common.view.SaveView;
 import com.example.xiaoqiang.baoxiao.common.view.UpdataView;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -68,7 +67,7 @@ public class RequestActivity extends MyBaseActivity implements QueryView, Delect
         dialog = new SelectListDialog(this, null, FastConstant.SELECT_DIALOG_ZHIWEI, "设置职位");
         dialog.setItemSelectListener(new SelectListDialog.ItemSelect() {
             @Override
-            public void onItemUserSelect(MyUser user) {
+            public void onItemUserSelect(StateUser user) {
 
             }
 

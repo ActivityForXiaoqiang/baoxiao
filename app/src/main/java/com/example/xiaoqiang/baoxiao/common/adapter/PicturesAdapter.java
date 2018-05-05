@@ -63,16 +63,6 @@ public class PicturesAdapter extends BaseAdapter {
             GlideManager.loadImg(R.drawable.add_img, holder.image);
         } else {
             GlideManager.loadImg(path, holder.image);
-//            Glide.with(mContext).load(path).apply(GlideManager.getRequestOptions()).into(holder.image);
-
-//            Glide.with(this)
-//                    .load(path)
-//                    .placeholder(R.mipmap.default_error)
-//                    .error(R.mipmap.default_error)
-//                    .centerCrop()
-//                    .crossFade()
-//                    .into(holder.image);
-
         }
         return convertView;
     }

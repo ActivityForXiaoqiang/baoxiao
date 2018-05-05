@@ -1,6 +1,6 @@
 package com.example.xiaoqiang.baoxiao.common.ui.process.controller;
 
-import com.example.xiaoqiang.baoxiao.common.been.MyUser;
+import com.example.xiaoqiang.baoxiao.common.been.StateUser;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.basis.IBaseView;
 import com.yanzhenjie.album.AlbumFile;
 
@@ -18,5 +18,5 @@ public interface IReimbursementView extends IBaseView {
 
     void onAlbumCancel(String result);
 
-    void onShowPersonList(List<MyUser> result);
+    void onShowPersonList(List<StateUser> result);
 }

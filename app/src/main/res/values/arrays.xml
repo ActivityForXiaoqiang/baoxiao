@@ -6,4 +6,29 @@
         <item>已办事宜</item>
     </string-array>
 
+    <string-array name="arrays_tab1_activity">
+        <item>我的请求</item>
+        <item>已办事宜</item>
+    </string-array>
+
+    <declare-styleable name="SealView">
+        <attr name="seal_radius" format="dimension"/>
+        <attr name="seal_color" format="color" />
+        <attr name="seal_textSize" format="dimension" />
+        <attr name="seal_textFirst" format="reference|string"/>
+        <attr name="seal_textSecond" format="reference|string" />
+        <attr name="seal_rotate" format="integer"/>
+    </declare-styleable>
+    <declare-styleable name="timeline_style" >
+        <attr name="marker" format="color|reference"/>
+        <attr name="line" format="color|reference"/>
+        <attr name="markerSize" format="dimension"/>
+        <attr name="lineSize" format="dimension"/>
+        <attr name="lineOrientation" format="enum">
+            <enum name="horizontal" value="0"/>
+            <enum name="vertical" value="1"/>
+        </attr>
+        <attr name="linePadding" format="dimension"/>
+        <attr name="markerInCenter" format="boolean"/>
+    </declare-styleable>
 </resources>

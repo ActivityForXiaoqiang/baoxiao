@@ -31,14 +31,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".common.ui.info.MineActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".common.ui.sign.SignupActivity"
             android:theme="@style/Translucent" />
-
         <activity
             android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -51,6 +49,10 @@
             android:name=".common.ui.process.ProcessListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".common.ui.process.reimbursement.ReimbursementDetailsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".common.ui.info.EditActivity"
             android:theme="@style/AppTheme.NoActionBar" />

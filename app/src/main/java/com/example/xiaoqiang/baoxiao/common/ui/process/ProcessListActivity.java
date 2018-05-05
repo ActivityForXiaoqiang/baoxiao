@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 
 import com.aries.ui.view.title.TitleBarView;
 import com.example.xiaoqiang.baoxiao.R;
+import com.example.xiaoqiang.baoxiao.common.been.MyUser;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.basis.BaseController;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.basis.FastTitleActivity;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.EventConstant;
@@ -15,9 +16,9 @@ import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.SPConstant;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.manager.LoggerManager;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.manager.TabLayoutManager;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SPUtil;
-import com.example.xiaoqiang.baoxiao.common.fast.constant.widget.dialog.LoadingDialog;
 import com.flyco.tablayout.SegmentTabLayout;
 import com.flyco.tablayout.SlidingTabLayout;
+import com.google.gson.Gson;
 
 import org.simple.eventbus.Subscriber;
 import org.simple.eventbus.ThreadMode;
@@ -27,6 +28,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
+import cn.bmob.v3.BmobUser;
 
 /**
  * author : yhx
@@ -90,9 +92,6 @@ public class ProcessListActivity extends FastTitleActivity {
      */
     @Override
     public void initView(Bundle savedInstanceState) {
-
-        LoadingDialog loadingDialog = new LoadingDialog(this);
-        loadingDialog.show();
 //        setTab();
     }
 
@@ -119,14 +118,20 @@ public class ProcessListActivity extends FastTitleActivity {
         listFragment.clear();
 
         listFragment.add(ProcessBaseFragment.newInstance(0));
-        listFragment.add(ProcessBaseFragment.newInstance(1));
+        Gson gson = new Gson();
+        MyUser user = gson.fromJson(gson.toJson(BmobUser.getCurrentUser()), MyUser.class);
+        if (user.getPosition() != 0) {
+            listFragment.add(ProcessBaseFragment.newInstance(1));
+        }
         listFragment.add(ProcessBaseFragment.newInstance(2));
         if (isSliding) {
             TabLayoutManager.getInstance().setSlidingTabData(this, mSlidingTab, vpContent,
-                    getTitles(R.array.arrays_tab_activity), listFragment);
+                    user.getPosition() != 0 ? getTitles(R.array.arrays_tab_activity) : getTitles(R.array.arrays_tab1_activity),
+                    listFragment);
         } else {
             TabLayoutManager.getInstance().setSegmentTabData(this, mSegmentTab, vpContent,
-                    getResources().getStringArray(R.array.arrays_tab_activity), listFragment);
+                    user.getPosition() != 0 ? getResources().getStringArray(R.array.arrays_tab_activity) :
+                            getResources().getStringArray(R.array.arrays_tab1_activity), listFragment);
         }
         //SlidingTabLayout--需这样切换一下不然选中变粗没有效果不知是SlidingTabLayout BUG还是设置问题
         mSlidingTab.setCurrentTab(1);

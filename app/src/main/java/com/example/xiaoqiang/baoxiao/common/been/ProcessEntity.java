@@ -1,5 +1,10 @@
 package com.example.xiaoqiang.baoxiao.common.been;
 
+import android.text.TextUtils;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import java.util.List;
 
 import cn.bmob.v3.BmobObject;
@@ -10,22 +15,113 @@ import cn.bmob.v3.BmobObject;
  */
 
 public class ProcessEntity extends BmobObject {
-    private String name;
-    private Integer position;
+    private String creatorName;//创建人姓名 M
+    private Integer position;//创建人職位 M
     private String account;//账号
+    private String accountType;//账号类型 M
     private Double amount;//金额
-    private String reason;//金额
-    private Integer status;//当前节点
-    private String pointStatus;
-    private long startTime;
-    private long endTime;
-    private long createTime;
+    private String reason;//原因
+    private Long startTime;
+    private Long endTime;
+    private Long createTime;
     private String userId;//创建人id
     private String companyId;//创建人所属公司
     private String setout;//出发地
-    private String destination;//出发地
-    private String vehicle;//出发地
+    private String destination;//目的地
+    private String vehicle;//交通工具
     private List<String> imgs;//附件
+    private Integer point;//当前节点 相關節點信息注釋前往FastConstant類中查看
+    private Integer processType;//流程类型 和流程节点 一起判断  1普通員工申請  2主管申請  3總經理申請
+    private String pointList;//節點时间轴
+    private Boolean isReject = false;//是否被驳回
+
+    public String getCreatorName() {
+        return creatorName;
+    }
+
+    public void setCreatorName(String creatorName) {
+        this.creatorName = creatorName;
+    }
+
+    public Integer getPosition() {
+        return position;
+    }
+
+    public void setPosition(Integer position) {
+        this.position = position;
+    }
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
+    public String getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
+    }
+
+    public Double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Double amount) {
+        this.amount = amount;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    public Long getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Long startTime) {
+        this.startTime = startTime;
+    }
+
+    public Long getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Long endTime) {
+        this.endTime = endTime;
+    }
+
+    public Long getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Long createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(String companyId) {
+        this.companyId = companyId;
+    }
 
     public String getSetout() {
         return setout;
@@ -51,14 +147,6 @@ public class ProcessEntity extends BmobObject {
         this.vehicle = vehicle;
     }
 
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
     public List<String> getImgs() {
         return imgs;
     }
@@ -67,91 +155,42 @@ public class ProcessEntity extends BmobObject {
         this.imgs = imgs;
     }
 
-    public String getReason() {
-        return reason;
+    public Integer getPoint() {
+        return point;
     }
 
-    public void setReason(String reason) {
-        this.reason = reason;
+    public void setPoint(Integer point) {
+        this.point = point;
     }
 
-    public String getName() {
-        return name;
+    public Integer getProcessType() {
+        return processType;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setProcessType(Integer processType) {
+        this.processType = processType;
     }
 
-    public Integer getPosition() {
-        return position;
+    public List<PointEntity> getPointList() {
+        if (TextUtils.isEmpty(pointList)) {
+            return null;
+        }
+        return new Gson().fromJson(pointList, new TypeToken<List<PointEntity>>() {
+        }.getType());
     }
 
-    public void setPosition(Integer position) {
-        this.position = position;
+    public void setPointList(List<PointEntity> pointList) {
+        if (pointList == null) {
+            return;
+        }
+        this.pointList = new Gson().toJson(pointList);
     }
 
-    public String getAccount() {
-        return account;
+    public Boolean getReject() {
+        return isReject;
     }
 
-    public void setAccount(String account) {
-        this.account = account;
-    }
-
-    public Double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Double amount) {
-        this.amount = amount;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    public String getPointStatus() {
-        return pointStatus;
-    }
-
-    public void setPointStatus(String pointStatus) {
-        this.pointStatus = pointStatus;
-    }
-
-    public long getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(long startTime) {
-        this.startTime = startTime;
-    }
-
-    public long getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(long endTime) {
-        this.endTime = endTime;
-    }
-
-    public long getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(long createTime) {
-        this.createTime = createTime;
-    }
-
-    public String getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(String companyId) {
-        this.companyId = companyId;
+    public void setReject(Boolean reject) {
+        isReject = reject;
     }
 }

@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.example.xiaoqiang.baoxiao.R;
-import com.example.xiaoqiang.baoxiao.common.fast.constant.util.FastUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SizeUtil;
 import com.marno.easystatelibrary.EasyStatusView;
 
@@ -56,10 +55,11 @@ public class BackToTopHelper {
             mFloatingActionButton.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
             mFloatingActionButton.setCompatElevation(10);
             mFloatingActionButton.setUseCompatPadding(true);
-            mFloatingActionButton.setImageDrawable(
-                    FastUtil.getTintDrawable(mContext.getResources().getDrawable(R.drawable.ic_top),
-                            mContext.getResources().getColor(R.color.colorTitleText)));
-            mFloatingActionButton.setRippleColor(mContext.getResources().getColor(R.color.colorWhitePressed));
+            mFloatingActionButton.setImageResource(R.drawable.ic_top);
+//            mFloatingActionButton.setImageDrawable(
+//                    FastUtil.getTintDrawable(mContext.getResources().getDrawable(R.drawable.ic_top),
+//                            mContext.getResources().getColor(R.color.colorTitleText)));
+//            mFloatingActionButton.setRippleColor(mContext.getResources().getColor(R.color.colorWhitePressed));
             mEasyStatusView.addView(mFloatingActionButton);
             RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) mFloatingActionButton.getLayoutParams();
             lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);//与父容器的左侧对齐
