@@ -13,6 +13,8 @@ import com.example.xiaoqiang.baoxiao.common.base.MyBaseActivity;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.manager.GlideManager;
 import com.example.xiaoqiang.baoxiao.common.been.MyUser;
 import com.example.xiaoqiang.baoxiao.common.controller.UpdataController;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.util.ToastUtil;
+import com.example.xiaoqiang.baoxiao.common.ui.message.ProblemActivity;
 import com.example.xiaoqiang.baoxiao.common.utils.StatusBarUtil;
 import com.example.xiaoqiang.baoxiao.common.view.UpdataView;
 import com.flyco.roundview.RoundTextView;
@@ -32,7 +34,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MineActivity extends MyBaseActivity implements UpdataView {
     private CircleImageView head;
     private RoundTextView roundTextView;
-    private TextView nickname;
+    private TextView nickname, btn_baoxiao, btn_company, btn_about, btn_call;
 
     private ArrayList<AlbumFile> mAlbumFiles;
 
@@ -79,6 +81,35 @@ public class MineActivity extends MyBaseActivity implements UpdataView {
         if (!TextUtils.isEmpty(user.getNickName())) {
             nickname.setText(user.getNickName());
         }
+        btn_baoxiao = findViewById(R.id.btn_baoxiao);
+        btn_company = findViewById(R.id.btn_company);
+        btn_about = findViewById(R.id.btn_about);
+        btn_call = findViewById(R.id.btn_call);
+
+        btn_baoxiao.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        btn_company.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        btn_about.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ToastUtil.show("我是最帅的，没有之一！！！");
+            }
+        });
+        btn_call.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MineActivity.this, ProblemActivity.class));
+            }
+        });
     }
 
     void openAlbum() {

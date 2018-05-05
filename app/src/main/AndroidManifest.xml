@@ -68,6 +68,9 @@
         <activity
             android:name=".common.ui.company.RequestActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".common.ui.message.ProblemActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
     </application>
 

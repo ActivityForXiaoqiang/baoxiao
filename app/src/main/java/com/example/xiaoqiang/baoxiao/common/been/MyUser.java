@@ -13,6 +13,35 @@ public class MyUser extends BmobUser {
     private boolean isApplying;
     private String companyId;//所属公司
 
+
+    private String realname;
+    private String code;
+    private String birthday;
+
+    public String getRealname() {
+        return realname;
+    }
+
+    public void setRealname(String realname) {
+        this.realname = realname;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
     public boolean isApplying() {
         return isApplying;
     }
