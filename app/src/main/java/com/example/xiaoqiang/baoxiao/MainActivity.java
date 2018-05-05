@@ -160,13 +160,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (stateUser.isJoinCompay()) {
                     ToastUtil.show("已加入公司！ 不能创建！");
                 } else {
-                    if (TextUtils.isEmpty(user.getNickName())) {
-                        Toast.makeText(MainActivity.this, "请完善个人信息", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Intent it = new Intent(MainActivity.this, CreateCompanyActivity.class);
-                        it.putExtra("objId", stateUser.getObjectId());
-                        startActivity(it);
+                    if (stateUser.isAppying()){
+                        ToastUtil.show("正在申请加入公司！ 不能创建！");
+                    }else {
+                        if (TextUtils.isEmpty(user.getNickName())) {
+                            Toast.makeText(MainActivity.this, "请完善个人信息", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Intent it = new Intent(MainActivity.this, CreateCompanyActivity.class);
+                            it.putExtra("objId", stateUser.getObjectId());
+                            startActivity(it);
+                        }
                     }
+
                 }
 
 
@@ -294,7 +299,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void hideDialog() {
-
+        dialog.hide();
     }
 
     @Override
