@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.example.xiaoqiang.baoxiao.common.been.Company;
-import com.example.xiaoqiang.baoxiao.common.been.MyUser;
 import com.example.xiaoqiang.baoxiao.common.been.ProcessEntity;
 import com.example.xiaoqiang.baoxiao.common.been.StateUser;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.basis.BaseController;
@@ -15,7 +14,6 @@ import com.yanzhenjie.album.Album;
 import com.yanzhenjie.album.AlbumFile;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
@@ -40,80 +38,6 @@ public class ReimbursementController extends BaseController<IReimbursementView> 
         return this;
     }
 
-    /**
-     * 获取公司各个级别是否有人
-     */
-
-    public void getPositionByCompanyId(String companyId, final int processType, int... position) {
-        showLoadingDialog(mContext);
-        BmobQuery<MyUser> query = new BmobQuery<>();
-        query.addWhereEqualTo("companyId", companyId);
-        query.addWhereContainedIn("position", Arrays.asList(position));
-        query.findObjects(new FindListener<MyUser>() {
-            @Override
-            public void done(List<MyUser> object, BmobException e) {
-                dissmissLoadingDialog();
-                boolean hasDepartmentHead = false;
-                boolean hasFinanceDirector = false;
-                boolean hasGeneralManager = false;//
-                boolean hasCashier = false;
-                if (e == null) {
-                    for (int i = 0; i < object.size(); i++) {
-                        switch (object.get(i).getPosition()) {
-                            case 2:
-                                hasCashier = true;
-                                break;
-                            case 3:
-                                hasDepartmentHead = true;
-                                break;
-                            case 4:
-                                hasFinanceDirector = true;
-                                break;
-                            case 5:
-                                hasGeneralManager = true;
-                                break;
-                        }
-                        if (object.get(i).getPosition() == 3) {
-
-                        } else if (object.get(i).getPosition() == 5) {
-                            hasGeneralManager = true;
-                        } else if (object.get(i).getPosition() == 2) {
-                            hasCashier = true;
-                        }
-                    }
-                    switch (processType) {
-                        case 1:
-                            //012→3、4→5→2
-                            if (hasDepartmentHead || hasFinanceDirector) {
-
-                            } else {
-                                if (hasGeneralManager) {
-
-                                } else {
-                                    if (hasCashier) {
-
-                                    } else {
-                                        ToastUtil.show("提交失败，请联系管理员及时添加流程相关职位");
-                                    }
-                                }
-                            }
-                            break;
-                        case 2:
-                            //3、4→5→2
-                            break;
-                        case 3:
-                            //5→4→2
-                            break;
-                    }
-
-                } else {
-                    Timber.d("showError:" + e.toString());
-//                    getView().showError(e.getMessage().toString());
-                }
-            }
-
-        });
-    }
 
     /**
      * 根据公司id获取 人员列表

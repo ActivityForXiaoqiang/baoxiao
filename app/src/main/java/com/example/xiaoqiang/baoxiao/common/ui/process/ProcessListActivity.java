@@ -8,7 +8,7 @@ import android.widget.LinearLayout;
 
 import com.aries.ui.view.title.TitleBarView;
 import com.example.xiaoqiang.baoxiao.R;
-import com.example.xiaoqiang.baoxiao.common.been.MyUser;
+import com.example.xiaoqiang.baoxiao.common.been.StateUser;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.basis.BaseController;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.basis.FastTitleActivity;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.EventConstant;
@@ -16,9 +16,9 @@ import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.SPConstant;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.manager.LoggerManager;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.manager.TabLayoutManager;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SPUtil;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SpManager;
 import com.flyco.tablayout.SegmentTabLayout;
 import com.flyco.tablayout.SlidingTabLayout;
-import com.google.gson.Gson;
 
 import org.simple.eventbus.Subscriber;
 import org.simple.eventbus.ThreadMode;
@@ -28,7 +28,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
-import cn.bmob.v3.BmobUser;
 
 /**
  * author : yhx
@@ -118,8 +117,7 @@ public class ProcessListActivity extends FastTitleActivity {
         listFragment.clear();
 
         listFragment.add(ProcessBaseFragment.newInstance(0));
-        Gson gson = new Gson();
-        MyUser user = gson.fromJson(gson.toJson(BmobUser.getCurrentUser()), MyUser.class);
+        StateUser user = SpManager.getInstance().getUserInfo();
         if (user.getPosition() != 0) {
             listFragment.add(ProcessBaseFragment.newInstance(1));
         }

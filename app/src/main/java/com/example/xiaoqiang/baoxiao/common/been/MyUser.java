@@ -6,12 +6,8 @@ public class MyUser extends BmobUser {
 
     private String nickName;
     private String photoPath;
-    private int position; //职位id
     private boolean sex;
     private boolean isSuper;
-    private boolean isJoinCompany;
-    private boolean isApplying;
-    private String companyId;//所属公司
 
 
     private String realname;
@@ -42,21 +38,6 @@ public class MyUser extends BmobUser {
         this.birthday = birthday;
     }
 
-    public boolean isApplying() {
-        return isApplying;
-    }
-
-    public void setApplying(boolean applying) {
-        isApplying = applying;
-    }
-
-    public boolean isJoinCompany() {
-        return isJoinCompany;
-    }
-
-    public void setJoinCompany(boolean joinCompany) {
-        isJoinCompany = joinCompany;
-    }
 
     public boolean isSex() {
         return sex;
@@ -83,13 +64,6 @@ public class MyUser extends BmobUser {
         this.nickName = nickName;
     }
 
-    public int getPosition() {
-        return position;
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
-    }
 
     public boolean isSuper() {
         return isSuper;
@@ -99,11 +73,4 @@ public class MyUser extends BmobUser {
         isSuper = aSuper;
     }
 
-    public String getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(String companyId) {
-        this.companyId = companyId;
-    }
 }
