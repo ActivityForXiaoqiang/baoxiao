@@ -73,7 +73,9 @@
         <activity
             android:name=".common.ui.message.ProblemActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-
+        <activity
+            android:name=".common.ui.report.ReportActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

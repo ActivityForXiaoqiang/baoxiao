@@ -38,6 +38,7 @@ import com.example.xiaoqiang.baoxiao.common.ui.company.RequestActivity;
 import com.example.xiaoqiang.baoxiao.common.ui.info.MineActivity;
 import com.example.xiaoqiang.baoxiao.common.ui.process.ProcessListActivity;
 import com.example.xiaoqiang.baoxiao.common.ui.process.reimbursement.ReimbursementActivity;
+import com.example.xiaoqiang.baoxiao.common.ui.report.ReportActivity;
 import com.example.xiaoqiang.baoxiao.common.view.QueryView;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -160,9 +161,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (stateUser.isJoinCompay()) {
                     ToastUtil.show("已加入公司！ 不能创建！");
                 } else {
-                    if (stateUser.isAppying()){
+                    if (stateUser.isAppying()) {
                         ToastUtil.show("正在申请加入公司！ 不能创建！");
-                    }else {
+                    } else {
                         if (TextUtils.isEmpty(user.getNickName())) {
                             Toast.makeText(MainActivity.this, "请完善个人信息", Toast.LENGTH_SHORT).show();
                         } else {
