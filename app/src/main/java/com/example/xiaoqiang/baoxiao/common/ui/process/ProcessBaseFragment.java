@@ -1,6 +1,7 @@
 package com.example.xiaoqiang.baoxiao.common.ui.process;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -20,6 +21,8 @@ import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SPUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SpManager;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.Timber;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.ToastUtil;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.widget.dialog.AlertDialog;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.widget.dialog.RejectReMarkDialog;
 import com.example.xiaoqiang.baoxiao.common.ui.process.controller.IProcessListView;
 import com.example.xiaoqiang.baoxiao.common.ui.process.controller.ProcessListController;
 import com.example.xiaoqiang.baoxiao.common.ui.process.reimbursement.ReimbursementDetailsActivity;
@@ -67,13 +70,17 @@ public class ProcessBaseFragment extends FastRefreshLoadFragment<ProcessEntity, 
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+
                 ProcessEntity item = (ProcessEntity) mAdapter.getItem(position);
                 switch (view.getId()) {
                     case R.id.item_process_reject_tv:
-                        mController.rejectProcces(item, "驳回", position);
+                        indexItem = item;
+                        showRejectDialog(position);
+
                         break;
                     case R.id.item_process_approval_tv:
-                        mController.approvalProcess(item, position);
+                        indexItem = item;
+                        showApprovalDialog(SpManager.getInstance().getNextPoint(item.getPoint(), item.getProcessType()), position);
                         break;
                 }
             }
@@ -82,6 +89,7 @@ public class ProcessBaseFragment extends FastRefreshLoadFragment<ProcessEntity, 
         changeAdapterAnimationAlways(true);
         return mAdapter;
     }
+
 
     @Override
     public int getContentLayout() {
@@ -142,6 +150,10 @@ public class ProcessBaseFragment extends FastRefreshLoadFragment<ProcessEntity, 
     @Override
     public void onItemClicked(BaseQuickAdapter<ProcessEntity, BaseViewHolder> adapter, View view, int position) {
         super.onItemClicked(adapter, view, position);
+        if (adapter.getItem(position).getReject()) {
+            ToastUtil.show("此报销已被退回，不能查看");
+            return;
+        }
         Bundle bundle = new Bundle();
         bundle.putString("processEntity", new Gson().toJson(adapter.getItem(position)));
         FastUtil.startActivity(getActivity(), ReimbursementDetailsActivity.class, bundle);
@@ -204,9 +216,46 @@ public class ProcessBaseFragment extends FastRefreshLoadFragment<ProcessEntity, 
         }
     }
 
+
     @Override
     public void operateSuccess(int position) {
         mAdapter.remove(position);
     }
 
+    private ProcessEntity indexItem;
+
+    private void showApprovalDialog(int nextPoint, final int position) {
+        String title = "是否确认批准？";
+        if (nextPoint == FastConstant.PROCESS_POINT_FINISH) {
+            title = "批准后将归档，是否确认批准？";
+        }
+        AlertDialog alertDialog = new AlertDialog(getContext());
+        alertDialog.setTitle(title)
+                .setPositiveText("确定")
+                .setNegativeText("取消")
+                .setPositiveListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mController.approvalProcess(indexItem, position);
+                    }
+                })
+                .show();
+    }
+
+
+    private void showRejectDialog(final int position) {
+        final RejectReMarkDialog rejectReMarkDialog = new RejectReMarkDialog(getContext());
+        rejectReMarkDialog.setPositiveText("驳回")
+                .setNegativeText("取消")
+                .setPositiveListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (TextUtils.isEmpty(rejectReMarkDialog.getRemark().trim())) {
+                            ToastUtil.show("请填写驳回原因");
+                        } else {
+                            mController.rejectProcces(indexItem, rejectReMarkDialog.getRemark(), position);
+                        }
+                    }
+                }).show();
+    }
 }

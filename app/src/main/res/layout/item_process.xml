@@ -8,12 +8,12 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@drawable/form_frame_shape">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/form_frame_shape"
             android:orientation="vertical">
 
             <TextView
@@ -166,6 +166,55 @@
                 android:background="@color/colorTitleDivider" />
 
             <LinearLayout
+                android:id="@+id/reimbursement_reject_reason_l"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorWhite"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <View
+                        android:layout_width="0.5dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/colorTitleDivider" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="驳回原因："
+                        android:textColor="@color/txt_black1"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/reimbursement_reject_reason_tv"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_weight="1"
+                        android:gravity="top"
+                        android:maxLines="10"
+                        android:textColor="@color/txt_black"
+                        android:textSize="14sp" />
+
+                    <View
+                        android:layout_width="0.5dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/colorTitleDivider" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/colorTitleDivider" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -242,18 +291,27 @@
             </LinearLayout>
         </LinearLayout>
 
-        <com.example.xiaoqiang.baoxiao.common.fast.constant.widget.dialog.SealView
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/item_process_seal"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_alignParentRight="true"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
             android:visibility="gone"
-            app:seal_color="@color/colorPrimaryDark"
-            app:seal_radius="100dp"
-            app:seal_rotate="-30"
-            app:seal_textFirst="审批通过"
-            app:seal_textSecond="20180504"
-            app:seal_textSize="20sp" />
+            app:srcCompat="@drawable/ic_process_finish" />
+        <!-- <com.example.xiaoqiang.baoxiao.common.fast.constant.widget.dialog.SealView
+             android:layout_width="100dp"
+             android:layout_height="100dp"
+             android:layout_alignParentRight="true"
+             android:layout_marginRight="10dp"
+             android:layout_marginTop="10dp"
+             android:visibility="gone"
+             app:seal_color="@color/colorPrimaryDark"
+             app:seal_radius="100dp"
+             app:seal_rotate="-30"
+             app:seal_textFirst="审批通过"
+             app:seal_textSecond="20180504"
+             app:seal_textSize="20sp" />-->
     </RelativeLayout>
 </com.aries.ui.view.radius.RadiusRelativeLayout>

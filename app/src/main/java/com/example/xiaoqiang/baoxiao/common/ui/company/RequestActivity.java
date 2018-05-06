@@ -74,10 +74,10 @@ public class RequestActivity extends MyBaseActivity implements QueryView, Delect
             @Override
             public void onItemSelect(String content) {
                 Log.e("xiaoqiang", "content" + content);
-                for (String key : SpManager.mPositionManager.keySet()) {
+                for (Integer key : SpManager.mPositionManager.keySet()) {
                     if (content.equals(SpManager.mPositionManager.get(key))) {
-                        Log.e("xiaoqiang", "content+????" + Integer.valueOf(key));
-                        stateUser.setPosition(Integer.valueOf(key));
+                        Log.e("xiaoqiang", "content+????" + key);
+                        stateUser.setPosition(key);
                         stateUser.setJoinCompay(true);
                         stateUser.setCompany(company);
                         updataController.updataStateUser(stateUser, stateId);

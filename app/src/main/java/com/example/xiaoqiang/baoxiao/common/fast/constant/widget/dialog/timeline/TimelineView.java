@@ -51,7 +51,7 @@ public class TimelineView extends AppCompatImageView {
         typedArray.recycle();
 
         if (mMarker == null) {
-            mMarker = mContext.getResources().getDrawable(R.drawable.marker);
+            mMarker = mContext.getResources().getDrawable(R.drawable.ic_marker);
         }
 
         if (mStartLine == null && mEndLine == null) {
@@ -142,7 +142,7 @@ public class TimelineView extends AppCompatImageView {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (mMarker != null) {
-            mMarker.draw(canvas);
+//            mMarker.draw(canvas);
         }
 
         if (mStartLine != null) {

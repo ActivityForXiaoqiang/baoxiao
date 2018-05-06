@@ -27,6 +27,20 @@ public class NumberFormatterUtil {
     }
 
     /**
+     * 以，格式化金额
+     *
+     * @param amount
+     * @return
+     */
+    public static String formatMoneyHideZero(String amount) {
+        if (TextUtils.isEmpty(amount)) {
+            amount = "0";
+        }
+        DecimalFormat df = new DecimalFormat(",###,###.##");
+        return df.format(new BigDecimal(amount));
+    }
+
+    /**
      * 以，格式化金额，返回整数
      *
      * @param amount

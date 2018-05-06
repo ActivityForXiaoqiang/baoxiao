@@ -2,6 +2,7 @@ package com.example.xiaoqiang.baoxiao.common.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,9 @@ import android.widget.TextView;
 
 import com.example.xiaoqiang.baoxiao.R;
 import com.example.xiaoqiang.baoxiao.common.been.PointEntity;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.FastConstant;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.manager.GlideManager;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.util.TimeFormatUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.widget.dialog.timeline.TimelineView;
 
 import java.util.List;
@@ -27,15 +31,22 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
     private Context mContext;
     private boolean mWithLinePadding;
     private LayoutInflater mLayoutInflater;
+    private Integer currentPoint;
 
-    public TimeLineAdapter(List<PointEntity> plist, boolean withLinePadding) {
+    public TimeLineAdapter(List<PointEntity> plist, boolean withLinePadding, Integer currentPoint) {
+       /* //反序
+        for (int i = plist.size() - 1; i >= 0; i--) {
+            this.plist = new ArrayList<>();
+            this.plist.add(plist.get(i));
+        }*/
         this.plist = plist;
         mWithLinePadding = withLinePadding;
+        this.currentPoint = currentPoint;
     }
 
     @Override
     public int getItemViewType(int position) {
-        return TimelineView.getTimeLineViewType(position,getItemCount());
+        return TimelineView.getTimeLineViewType(position, getItemCount());
     }
 
     @Override
@@ -43,24 +54,74 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
         mContext = parent.getContext();
         mLayoutInflater = LayoutInflater.from(mContext);
         View view;
-        view = mLayoutInflater.inflate(R.layout.item_layout_point_time_line , parent, false);
+        view = mLayoutInflater.inflate(R.layout.item_layout_point_time_line, parent, false);
         return new TimeLineViewHolder(view, viewType);
     }
 
     @Override
     public void onBindViewHolder(TimeLineViewHolder holder, int position) {
-        PointEntity item =plist.get(position);
+        PointEntity item = plist.get(position);
         PointEntity timeLineModel = plist.get(position);
-        holder.mTimelineView.setImageResource(R.drawable.marker);
+        GlideManager.loadCircleImg(item.getCreatorHeadImg(), holder.mTimelineView, R.drawable.ic_marker);
 //        holder.mTimelineView.setMarker(ContextCompat.getDrawable(mContext, R.drawable.marker), ContextCompat.getColor(mContext, R.color.colorPrimary));
-//        holder.name.setText( SpManager.getInstance().getUserInfo().getUser().getNickName());
-//        holder.status.setText( "");
-//        holder.time.setText( TimeFormatUtil.formatTime(item.getCreateTime(), FastConstant.TIME_FORMAT_TYPE));
+        holder.name.setText(item.getCreatorName());
+        String statusInfo = "";
+        if (item.getPoint() == FastConstant.PROCESS_POINT_ONE) {
+            if (position == 0) {
+
+            }
+        }
+        if (item.getPointStatus() == FastConstant.POINT_STATUS_TWO) {
+            //已经操作了
+            if (item.getPoint() == FastConstant.PROCESS_POINT_ONE) {
+                //节点在自己
+                if (position == 0) {
+                    statusInfo = "发起申请";
+                } else {
+                    statusInfo = "提交至退回节点";
+                }
+            } else {
+                //节点在上级
+
+                if (TextUtils.isEmpty(item.getRemark())) {
+                    //同意
+                    statusInfo = "已同意";
+                    if (currentPoint == FastConstant.PROCESS_POINT_FINISH && (position == plist.size() - 1)) {
+                        statusInfo = "归档";
+                    }
+                } else {
+                    //不同意  驳回
+                    statusInfo = "已退回";
+                }
+            }
+        } else if (item.getPointStatus() == FastConstant.POINT_STATUS_ONE) {
+            //未操作
+            if (item.getPoint() == FastConstant.PROCESS_POINT_ONE) {
+                //节点在自己
+                if (position != 0) {
+                    statusInfo = "等待修改";
+                }
+            } else {
+                //节点在上级
+                statusInfo = "等待审批";
+//                holder.status.setText("等待审批");
+            }
+
+        }
+        holder.status.setText(statusInfo);
+
+        if (item.getCreateTime() != null) {
+            holder.time.setText(TimeFormatUtil.formatTime(item.getCreateTime(), FastConstant.TIME_FORMAT_TYPE));
+        }
+    }
+
+    private void getStatusInfo() {
+
     }
 
     @Override
     public int getItemCount() {
-        return (plist!=null? plist.size():0);
+        return (plist != null ? plist.size() : 0);
     }
 
     public class TimeLineViewHolder extends RecyclerView.ViewHolder {
@@ -73,6 +134,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
         TextView time;
         @BindView(R.id.item_layout_point_time_line_marker)
         TimelineView mTimelineView;
+
         public TimeLineViewHolder(View itemView, int viewType) {
             super(itemView);
             ButterKnife.bind(this, itemView);

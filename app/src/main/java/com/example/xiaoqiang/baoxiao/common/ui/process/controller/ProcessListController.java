@@ -2,7 +2,6 @@ package com.example.xiaoqiang.baoxiao.common.ui.process.controller;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.example.xiaoqiang.baoxiao.common.been.PointEntity;
 import com.example.xiaoqiang.baoxiao.common.been.ProcessEntity;
@@ -12,6 +11,7 @@ import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.FastConstant;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SpManager;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.Timber;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.ToastUtil;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -124,11 +124,11 @@ public class ProcessListController extends BaseController<IProcessListView> {
                 dissmissLoadingDialog();
                 getView().onShowList(object);
                 if (e == null) {
-
+                    Timber.i("bmob" + "成功：" + new Gson().toJson(object));
                 } else {
                     ToastUtil.show(e.getMessage());
 //                    getView().showError(e.getMessage().toString());
-                    Timber.i("bmob", "失败：" + e.getMessage() + "," + e.getErrorCode());
+                    Timber.i("bmob" + "失败：" + e.getMessage() + "+" + e.getErrorCode());
                 }
             }
 
@@ -149,12 +149,15 @@ public class ProcessListController extends BaseController<IProcessListView> {
         plist.get(endPosition).setCreatorHeadImg(user.getUser().getPhotoPath());
         plist.get(endPosition).setPointStatus(FastConstant.POINT_STATUS_TWO);
 
+
         int nextPoint = SpManager.getInstance().getNextPoint(processEntity.getPoint(), processEntity.getProcessType());
         processEntity.setPoint(nextPoint);
+        if (nextPoint != FastConstant.PROCESS_POINT_FINISH) {
+            PointEntity pointE1 = new PointEntity();
+            pointE1.setPoint(nextPoint);
+            plist.add(pointE1);
+        }
 
-        PointEntity pointE1 = new PointEntity();
-        pointE1.setPoint(nextPoint);
-        plist.add(pointE1);
         processEntity.setPointList(plist);//转换string保存
 
         processEntity.update(processEntity.getObjectId(), new UpdateListener() {
@@ -165,14 +168,16 @@ public class ProcessListController extends BaseController<IProcessListView> {
                     getView().operateSuccess(position);
 //                    ToastUtil.show("");
                     ToastUtil.show("成功批准");
-                    Log.i("bmob", "成功批准");
+                    Timber.i("bmob" + "成功批准");
                 } else {
                     ToastUtil.show(e.getMessage());
-                    Log.i("bmob", "更新失败：" + e.getMessage() + "," + e.getErrorCode());
+                    Timber.i("bmob" + "失败：" + e.getMessage() + "+" + e.getErrorCode());
                 }
             }
         });
     }
+
+
 
     /**
      * 驳回请求
@@ -202,10 +207,10 @@ public class ProcessListController extends BaseController<IProcessListView> {
                 if (e == null) {
                     getView().operateSuccess(position);
                     ToastUtil.show("成功驳回");
-                    Timber.i("bmob", "成功驳回");
+                    Timber.i("bmob" + "成功驳回");
                 } else {
                     ToastUtil.show(e.getMessage());
-                    Timber.i("bmob", "更新失败：" + e.getMessage() + "," + e.getErrorCode());
+                    Timber.i("bmob" + "失败：" + e.getMessage() + "+" + e.getErrorCode());
                 }
             }
         });

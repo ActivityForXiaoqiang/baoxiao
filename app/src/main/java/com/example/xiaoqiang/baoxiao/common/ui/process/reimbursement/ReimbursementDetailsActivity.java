@@ -3,6 +3,9 @@ package com.example.xiaoqiang.baoxiao.common.ui.process.reimbursement;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aries.ui.view.title.TitleBarView;
@@ -10,7 +13,11 @@ import com.example.xiaoqiang.baoxiao.R;
 import com.example.xiaoqiang.baoxiao.common.adapter.TimeLineAdapter;
 import com.example.xiaoqiang.baoxiao.common.been.ProcessEntity;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.basis.FastTitleActivity;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.FastConstant;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.util.NumberFormatterUtil;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SpManager;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.Timber;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.util.TimeFormatUtil;
 import com.example.xiaoqiang.baoxiao.common.ui.process.controller.IReimbursementDetailsView;
 import com.example.xiaoqiang.baoxiao.common.ui.process.controller.ReimbursementDetailsController;
 import com.example.xiaoqiang.baoxiao.common.view.NoScollGridView;
@@ -47,6 +54,8 @@ public class ReimbursementDetailsActivity extends FastTitleActivity<Reimbursemen
     TextView mTvReason;
     @BindView(R.id.reimbursement_details_gridView)
     NoScollGridView mGridView;
+    @BindView(R.id.reimbursement_default_seal)
+    ImageView mImgSeal;
     private TimeLineAdapter mAdapter;
 
     @Override
@@ -75,10 +84,6 @@ public class ReimbursementDetailsActivity extends FastTitleActivity<Reimbursemen
         mController.attachView(this);
     }
 
-
-    public void loadData() {
-    }
-
     @Override
     public void onRequestCompleted() {
 
@@ -100,8 +105,51 @@ public class ReimbursementDetailsActivity extends FastTitleActivity<Reimbursemen
         mTimeline.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mTimeline.setHasFixedSize(true);
         mTimeline.setNestedScrollingEnabled(false);
-        TimeLineAdapter adapter = new TimeLineAdapter(mProcessEntity.getPointList(), false);
+        TimeLineAdapter adapter = new TimeLineAdapter(mProcessEntity.getPointList(), false, mProcessEntity.getProcessType());
         mTimeline.setAdapter(adapter);
+
+        mTvPersonnel.setText(mProcessEntity.getCreatorName());
+        mTvPosition.setText(SpManager.getInstance().mPositionManager.get(mProcessEntity.getPosition()));
+        mTvAccountType.setText(mProcessEntity.getAccountType() + "：");
+        mTvAccount.setText(mProcessEntity.getAccount());
+        mTvReason.setText(mProcessEntity.getReason());
+        if (mProcessEntity.getAmount() != null) {
+            mTvAmount.setText(NumberFormatterUtil.formatMoneyHideZero(mProcessEntity.getAmount() + ""));
+        }
+
+        if (!TextUtils.isEmpty(mProcessEntity.getSetout())) {
+            mTvSetout.setText(mProcessEntity.getSetout());
+        } else {
+            mTvSetout.setText("未填");
+        }
+
+        if (!TextUtils.isEmpty(mProcessEntity.getDestination())) {
+            mTvDestination.setText(mProcessEntity.getDestination());
+        } else {
+            mTvDestination.setText("未填");
+        }
+
+        if (!TextUtils.isEmpty(mProcessEntity.getVehicle())) {
+            mTvVehicle.setText(mProcessEntity.getVehicle());
+        } else {
+            mTvVehicle.setText("未填");
+        }
+
+        if (mProcessEntity.getStartTime() != null) {
+            mTvStartTime.setText(TimeFormatUtil.formatTime(mProcessEntity.getStartTime(), FastConstant.TIME_FORMAT_TYPE));
+        } else {
+            mTvStartTime.setText("未填");
+        }
+
+        if (mProcessEntity.getEndTime() != null) {
+            mTvEndTime.setText(TimeFormatUtil.formatTime(mProcessEntity.getEndTime(), FastConstant.TIME_FORMAT_TYPE));
+        } else {
+            mTvEndTime.setText("未填");
+        }
+
+        if (mProcessEntity.getPoint() == FastConstant.PROCESS_POINT_FINISH) {
+            mImgSeal.setVisibility(View.VISIBLE);
+        }
 //        mTimeline.setAdapter(mAdapter);
 //        mAdapter=new PointTimeLineAdapter(this,mProcessEntity.getPointList());
     }

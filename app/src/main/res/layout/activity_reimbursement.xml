@@ -47,7 +47,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
                     android:layout_weight="1"
                     android:background="@color/colorWhite"
                     android:hint="请填写申请人的姓名"
@@ -139,7 +138,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
                     android:layout_weight="1"
                     android:background="@color/colorWhite"
                     android:hint="请填写您的职位"
@@ -183,7 +181,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
                     android:layout_weight="1"
                     android:background="@color/colorWhite"
                     android:hint="请填写支付宝/微信号"
@@ -234,7 +231,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
                     android:layout_weight="1"
                     android:background="@color/colorWhite"
                     android:hint="请填写您的出发地"
@@ -271,7 +267,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
                     android:layout_weight="1"
                     android:background="@color/colorWhite"
                     android:hint="请填写您的目的地"
@@ -308,14 +303,13 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
                     android:layout_weight="1"
                     android:background="@color/colorWhite"
                     android:hint="请填写您的交通工具"
                     android:inputType="text"
                     android:maxLines="1"
                     android:text=""
-                    android:textColor="@color/txt_black1"
+                    android:textColor="@color/txt_black"
                     android:textSize="14sp" />
 
                 <android.support.v7.widget.AppCompatImageView
@@ -394,7 +388,6 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
                     android:layout_weight="1"
                     android:background="@color/colorWhite"
                     android:inputType="numberDecimal"
@@ -455,6 +448,10 @@
                     android:numColumns="3"
                     android:verticalSpacing="3dp" />
             </LinearLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/reimbursement_point_listview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </ScrollView>
 
