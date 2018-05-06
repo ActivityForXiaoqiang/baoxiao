@@ -2,6 +2,8 @@ package com.example.xiaoqiang.baoxiao.common.ui.process.reimbursement;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 import com.aries.ui.view.title.TitleBarView;
 import com.example.xiaoqiang.baoxiao.R;
 import com.example.xiaoqiang.baoxiao.common.adapter.PicturesAdapter;
+import com.example.xiaoqiang.baoxiao.common.adapter.TimeLineAdapter;
 import com.example.xiaoqiang.baoxiao.common.been.PointEntity;
 import com.example.xiaoqiang.baoxiao.common.been.ProcessEntity;
 import com.example.xiaoqiang.baoxiao.common.been.StateUser;
@@ -18,7 +21,6 @@ import com.example.xiaoqiang.baoxiao.common.fast.constant.basis.FastTitleActivit
 import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.FastConstant;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.NumberFormatterUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SpManager;
-import com.example.xiaoqiang.baoxiao.common.fast.constant.util.Timber;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.TimeFormatUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.ToastUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.widget.dialog.SelectListDialog;
@@ -37,7 +39,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import cn.bmob.v3.BmobUser;
 
 /**
  * Created: yhx on 2018/4/26
@@ -47,7 +48,6 @@ import cn.bmob.v3.BmobUser;
 public class ReimbursementActivity extends FastTitleActivity<ReimbursementController> implements IReimbursementView, View.OnClickListener {
     private final String TAG = "ReimbursementActivity";
     private EditText mEtDepartment;
-    private String[] contents = {"总经理", "财务主管", "部门主管", "财务专员", "出纳", "普通职员"};
     @BindView(R.id.gridView)
     NoScollGridView mGridImgs;
     @BindView(R.id.reimbursement_position_et)
@@ -57,7 +57,7 @@ public class ReimbursementActivity extends FastTitleActivity<ReimbursementContro
     @BindView(R.id.reimbursement_amount_et)
     TextView mEtAmount;//申请金额
     @BindView(R.id.reimbursement_account_et)
-    TextView mEtAccount;//职位
+    TextView mEtAccount;//账号
     @BindView(R.id.reimbursement_reason_et)
     TextView mEtReason;//原因
     @BindView(R.id.reimbursement_set_out_et)
@@ -72,33 +72,39 @@ public class ReimbursementActivity extends FastTitleActivity<ReimbursementContro
     TextView mTvEndTime;//结束时间
     @BindView(R.id.reimbursement_account_type_tv)
     TextView mTvAccountType;//账号类型
+    @BindView(R.id.reimbursement_point_listview)
+    RecyclerView mTimeline;
     private ArrayList<AlbumFile> mAlbumFiles, upDataFiles;
     private PicturesAdapter mAdapter;
     private long startTime = -1, endTime = -1;
     private boolean isStartTime;
     private List<StateUser> mUsersList;
     private StateUser indexUser;
+    private int pageStyle = 0;//0申请  1修改
+    private ProcessEntity mProcessEntity;
 
     @Override
     public int getContentLayout() {
         //让布局向上移来显示软键盘
 //        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        pageStyle = getIntent().getIntExtra("pageStyle", 0);
         return R.layout.activity_reimbursement;
     }
 
 
     @Override
     public void initView(Bundle savedInstanceState) {
-        Gson gson = new Gson();
-        Timber.tag(TAG).i(gson.toJson(BmobUser.getCurrentUser()));
         indexUser = SpManager.getInstance().getUserInfo();//默認自己
-        initUserParameters();
         initGridView();
     }
 
     @Override
     public void setTitleBar(TitleBarView titleBar) {
-        titleBar.setTitleMainText("报销申请");
+        String title = "报销申请";
+        if (pageStyle == 1) {
+            title = "修改申请";
+        }
+        titleBar.setTitleMainText(title);
     }
 
     @Override
@@ -152,12 +158,46 @@ public class ReimbursementActivity extends FastTitleActivity<ReimbursementContro
     }
 
     private void initUserParameters() {
-        if (TextUtils.isEmpty(indexUser.getUser().getNickName())) {
-            mEtPersonnel.setText(indexUser.getUser().getUsername());
-        } else {
+        if (pageStyle == 0) {
             mEtPersonnel.setText(indexUser.getUser().getNickName());
+            mEtPosition.setText(SpManager.getInstance().mPositionManager.get(indexUser.getPosition()));
+        } else {
+            mProcessEntity = new Gson().fromJson(getIntent().getStringExtra("processEntity"), ProcessEntity.class);
+            mEtPersonnel.setText(mProcessEntity.getCreatorName());
+            mEtPosition.setText(SpManager.getInstance().mPositionManager.get(mProcessEntity.getPosition()));
+            mEtAccount.setText(mProcessEntity.getAccount());
+            mTvAccountType.setText(mProcessEntity.getProcessType());
+            mEtReason.setText(mProcessEntity.getReason());
+            if (mProcessEntity.getAmount() != null) {
+                mEtAmount.setText(mProcessEntity.getAmount() + "");
+            }
+
+            if (!TextUtils.isEmpty(mProcessEntity.getSetout())) {
+                mEtSetOUt.setText(mProcessEntity.getSetout());
+            }
+
+            if (!TextUtils.isEmpty(mProcessEntity.getDestination())) {
+                mEtDestination.setText(mProcessEntity.getDestination());
+            }
+
+            if (!TextUtils.isEmpty(mProcessEntity.getVehicle())) {
+                mEtVehicle.setText(mProcessEntity.getVehicle());
+            }
+
+            if (mProcessEntity.getStartTime() != null) {
+                mTvStartTime.setText(TimeFormatUtil.formatTime(mProcessEntity.getStartTime(), FastConstant.TIME_FORMAT_TYPE));
+            }
+
+            if (mProcessEntity.getEndTime() != null) {
+                mTvEndTime.setText(TimeFormatUtil.formatTime(mProcessEntity.getEndTime(), FastConstant.TIME_FORMAT_TYPE));
+            }
+
+            mTimeline.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+            mTimeline.setHasFixedSize(true);
+            mTimeline.setNestedScrollingEnabled(false);
+            TimeLineAdapter adapter = new TimeLineAdapter(mProcessEntity.getPointList(), false, mProcessEntity.getProcessType());
+            mTimeline.setAdapter(adapter);
         }
-        mEtPosition.setText(SpManager.getInstance().mPositionManager.get(indexUser.getPosition() + ""));
     }
 
     private void initGridView() {
@@ -178,6 +218,7 @@ public class ReimbursementActivity extends FastTitleActivity<ReimbursementContro
                 }
             }
         });
+        initUserParameters();
     }
 
     @Override
@@ -283,7 +324,7 @@ public class ReimbursementActivity extends FastTitleActivity<ReimbursementContro
         }
         String account = mEtAccount.getText().toString().trim();
         if (TextUtils.isEmpty(account)) {
-            ToastUtil.show("请填写关联账号");
+            ToastUtil.show("请填写关联账号，支付宝或微信");
             return;
         }
         String accountType = mTvAccountType.getText().toString().trim();
@@ -376,6 +417,10 @@ public class ReimbursementActivity extends FastTitleActivity<ReimbursementContro
                 return;
             }
 
+            if (!TextUtils.equals(indexUser.getUser().getObjectId(), user.getUser().getObjectId())) {
+                ToastUtil.show("账号与申请人不一致，申请人必须是本人。");
+                return;
+            }
             if (upDataFiles != null && upDataFiles.size() > 0) {
                 mController.upDataFiles(upDataFiles, pe);
                 return;

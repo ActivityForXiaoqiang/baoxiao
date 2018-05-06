@@ -27,7 +27,7 @@ public class SpManager {
     private static SharedPreferences preferences;
     protected final String USERINFO = "UserInfo";
     public static final String No_FIRST = "no_first";
-    public static Map<String, String> mPositionManager;
+    public static Map<Integer, String> mPositionManager;
     public static List<String> mVehicleData;
     public static List<String> mAccountTypeData;
     public static List<String> mPositionData;
@@ -35,12 +35,12 @@ public class SpManager {
 
     static {
         mPositionManager = new HashMap<>();
-        mPositionManager.put("0", "普通职员");
-        mPositionManager.put("1", "财务职员");
-        mPositionManager.put("2", "出纳");
-        mPositionManager.put("3", "部门主管");
-        mPositionManager.put("4", "财务主管");
-        mPositionManager.put("5", "总经理");
+        mPositionManager.put(0, "普通职员");
+        mPositionManager.put(1, "财务职员");
+        mPositionManager.put(2, "出纳");
+        mPositionManager.put(3, "部门主管");
+        mPositionManager.put(4, "财务主管");
+        mPositionManager.put(5, "总经理");
         mVehicleData = new ArrayList<>();
         mVehicleData.add("飞机");
         mVehicleData.add("高铁");
