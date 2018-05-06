@@ -15,6 +15,7 @@ import com.example.xiaoqiang.baoxiao.common.been.MyUser;
 import com.example.xiaoqiang.baoxiao.common.controller.UpdataController;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.ToastUtil;
 import com.example.xiaoqiang.baoxiao.common.ui.message.ProblemActivity;
+import com.example.xiaoqiang.baoxiao.common.ui.report.ReportActivity;
 import com.example.xiaoqiang.baoxiao.common.utils.StatusBarUtil;
 import com.example.xiaoqiang.baoxiao.common.view.UpdataView;
 import com.flyco.roundview.RoundTextView;
@@ -95,7 +96,7 @@ public class MineActivity extends MyBaseActivity implements UpdataView {
         btn_company.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(MineActivity.this, ReportActivity.class));
             }
         });
         btn_about.setOnClickListener(new View.OnClickListener() {

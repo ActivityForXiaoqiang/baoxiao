@@ -77,11 +77,11 @@
                     android:id="@+id/btn_company"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@mipmap/nav_company"
+                    android:drawableLeft="@mipmap/icon_report"
                     android:drawablePadding="@dimen/space_normal"
                     android:gravity="center_vertical"
                     android:padding="@dimen/space_normal"
-                    android:text="我的公司"
+                    android:text="表表分析"
                     android:textSize="@dimen/textsize_title" />
 
                 <TextView
