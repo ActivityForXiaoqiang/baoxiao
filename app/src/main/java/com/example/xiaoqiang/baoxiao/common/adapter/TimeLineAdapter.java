@@ -12,6 +12,7 @@ import com.example.xiaoqiang.baoxiao.R;
 import com.example.xiaoqiang.baoxiao.common.been.PointEntity;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.FastConstant;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.manager.GlideManager;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SpManager;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.TimeFormatUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.widget.dialog.timeline.TimelineView;
 
@@ -32,8 +33,9 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
     private boolean mWithLinePadding;
     private LayoutInflater mLayoutInflater;
     private Integer currentPoint;
+    private Integer processType;
 
-    public TimeLineAdapter(List<PointEntity> plist, boolean withLinePadding, Integer currentPoint) {
+    public TimeLineAdapter(List<PointEntity> plist, boolean withLinePadding, Integer currentPoint,Integer processType) {
        /* //反序
         for (int i = plist.size() - 1; i >= 0; i--) {
             this.plist = new ArrayList<>();
@@ -42,6 +44,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
         this.plist = plist;
         mWithLinePadding = withLinePadding;
         this.currentPoint = currentPoint;
+        this.processType = processType;
     }
 
     @Override
@@ -61,9 +64,9 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
     @Override
     public void onBindViewHolder(TimeLineViewHolder holder, int position) {
         PointEntity item = plist.get(position);
-        PointEntity timeLineModel = plist.get(position);
         GlideManager.loadCircleImg(item.getCreatorHeadImg(), holder.mTimelineView, R.drawable.ic_marker);
-//        holder.mTimelineView.setMarker(ContextCompat.getDrawable(mContext, R.drawable.marker), ContextCompat.getColor(mContext, R.color.colorPrimary));
+//        holder.mTimelineView.setMarker(ContextCompat.getDrawable(mContext, R.drawable.marker), ContextCompat.getColor(mContext, R.color
+// .colorPrimary));
         holder.name.setText(item.getCreatorName());
         String statusInfo = "";
         if (item.getPoint() == FastConstant.PROCESS_POINT_ONE) {
@@ -103,8 +106,17 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
                 }
             } else {
                 //节点在上级
-                statusInfo = "等待审批";
-//                holder.status.setText("等待审批");
+//                statusInfo = "等待审批";
+                statusInfo = SpManager.getInstance().getPointInfo(item.getPoint(), processType);
+                if (TextUtils.equals("部门主管", statusInfo) ) {
+                    statusInfo = "等待主管审批";
+                }else if(TextUtils.equals("财务主管", statusInfo)){
+                    statusInfo = "等待财务主管审批";
+                } else if (TextUtils.equals("总经理", statusInfo)) {
+                    statusInfo = "等待总经理审批";
+                } else if (TextUtils.equals("财务结算", statusInfo)) {
+                    statusInfo = "等待财务结算";
+                }
             }
 
         }

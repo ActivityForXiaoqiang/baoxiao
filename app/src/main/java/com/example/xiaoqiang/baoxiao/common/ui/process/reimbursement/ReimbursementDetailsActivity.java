@@ -1,6 +1,7 @@
 package com.example.xiaoqiang.baoxiao.common.ui.process.reimbursement;
 
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -10,12 +11,14 @@ import android.widget.TextView;
 
 import com.aries.ui.view.title.TitleBarView;
 import com.example.xiaoqiang.baoxiao.R;
+import com.example.xiaoqiang.baoxiao.common.adapter.PicturesAdapter;
 import com.example.xiaoqiang.baoxiao.common.adapter.TimeLineAdapter;
 import com.example.xiaoqiang.baoxiao.common.been.ProcessEntity;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.basis.FastTitleActivity;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.FastConstant;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.NumberFormatterUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SpManager;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SpanUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.Timber;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.TimeFormatUtil;
 import com.example.xiaoqiang.baoxiao.common.ui.process.controller.IReimbursementDetailsView;
@@ -52,11 +55,14 @@ public class ReimbursementDetailsActivity extends FastTitleActivity<Reimbursemen
     TextView mTvAmount;
     @BindView(R.id.reimbursement_details_reason_tv)
     TextView mTvReason;
+    @BindView(R.id.reimbursement_details_pictures_tv)
+    TextView mTvPictures;
     @BindView(R.id.reimbursement_details_gridView)
     NoScollGridView mGridView;
     @BindView(R.id.reimbursement_default_seal)
     ImageView mImgSeal;
-    private TimeLineAdapter mAdapter;
+    private TimeLineAdapter mPointAdapter;
+    private PicturesAdapter mPicturesAdapter;
 
     @Override
     public int getContentLayout() {
@@ -105,7 +111,8 @@ public class ReimbursementDetailsActivity extends FastTitleActivity<Reimbursemen
         mTimeline.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mTimeline.setHasFixedSize(true);
         mTimeline.setNestedScrollingEnabled(false);
-        TimeLineAdapter adapter = new TimeLineAdapter(mProcessEntity.getPointList(), false, mProcessEntity.getProcessType());
+        TimeLineAdapter adapter = new TimeLineAdapter(mProcessEntity.getPointList(), false, mProcessEntity.getPoint(), mProcessEntity
+                .getProcessType());
         mTimeline.setAdapter(adapter);
 
         mTvPersonnel.setText(mProcessEntity.getCreatorName());
@@ -120,37 +127,47 @@ public class ReimbursementDetailsActivity extends FastTitleActivity<Reimbursemen
         if (!TextUtils.isEmpty(mProcessEntity.getSetout())) {
             mTvSetout.setText(mProcessEntity.getSetout());
         } else {
-            mTvSetout.setText("未填");
+            mTvSetout.setText(getRedSpan("未填"));
         }
 
         if (!TextUtils.isEmpty(mProcessEntity.getDestination())) {
             mTvDestination.setText(mProcessEntity.getDestination());
         } else {
-            mTvDestination.setText("未填");
+            mTvDestination.setText(getRedSpan("未填"));
         }
 
         if (!TextUtils.isEmpty(mProcessEntity.getVehicle())) {
             mTvVehicle.setText(mProcessEntity.getVehicle());
         } else {
-            mTvVehicle.setText("未填");
+            mTvVehicle.setText(getRedSpan("未填"));
         }
 
         if (mProcessEntity.getStartTime() != null) {
             mTvStartTime.setText(TimeFormatUtil.formatTime(mProcessEntity.getStartTime(), FastConstant.TIME_FORMAT_TYPE));
         } else {
-            mTvStartTime.setText("未填");
+            mTvStartTime.setText(getRedSpan("未填"));
         }
 
         if (mProcessEntity.getEndTime() != null) {
             mTvEndTime.setText(TimeFormatUtil.formatTime(mProcessEntity.getEndTime(), FastConstant.TIME_FORMAT_TYPE));
         } else {
-            mTvEndTime.setText("未填");
+            mTvEndTime.setText(getRedSpan("未填"));
         }
 
         if (mProcessEntity.getPoint() == FastConstant.PROCESS_POINT_FINISH) {
             mImgSeal.setVisibility(View.VISIBLE);
         }
-//        mTimeline.setAdapter(mAdapter);
-//        mAdapter=new PointTimeLineAdapter(this,mProcessEntity.getPointList());
+
+        if (mProcessEntity.getImgs() != null) {
+            mPicturesAdapter = new PicturesAdapter(this, mProcessEntity.getImgs());
+            mGridView.setAdapter(mPicturesAdapter);
+        } else {
+            mTvPictures.setText(new SpanUtil().append("图片：").append("(未上传)").setForegroundColor(ContextCompat.getColor(this, R.color
+                    .colorRed)).create());
+        }
+    }
+
+    private CharSequence getRedSpan(String content) {
+        return new SpanUtil().append(content).setForegroundColor(ContextCompat.getColor(this, R.color.colorRed)).create();
     }
 }

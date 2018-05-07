@@ -195,7 +195,7 @@ public class ReimbursementActivity extends FastTitleActivity<ReimbursementContro
             mTimeline.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
             mTimeline.setHasFixedSize(true);
             mTimeline.setNestedScrollingEnabled(false);
-            TimeLineAdapter adapter = new TimeLineAdapter(mProcessEntity.getPointList(), false, mProcessEntity.getProcessType());
+            TimeLineAdapter adapter = new TimeLineAdapter(mProcessEntity.getPointList(), false, mProcessEntity.getPoint(), mProcessEntity.getProcessType());
             mTimeline.setAdapter(adapter);
         }
     }
