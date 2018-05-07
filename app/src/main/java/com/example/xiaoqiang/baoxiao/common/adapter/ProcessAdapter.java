@@ -16,6 +16,7 @@ import com.example.xiaoqiang.baoxiao.common.fast.constant.util.NumberFormatterUt
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SpManager;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SpanUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.TimeFormatUtil;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.util.VectorDrawableUtils;
 
 /**
  * Created:2018/4/27
@@ -38,18 +39,20 @@ public class ProcessAdapter extends BaseQuickAdapter<ProcessEntity, BaseViewHold
         LinearLayout rejectLayout = helper.getView(R.id.reimbursement_reject_reason_l);
 
 
-
         String pointInfo;
         if (item.getPoint() == FastConstant.PROCESS_POINT_ONE) {
             pointInfo = SpManager.getInstance().getUserInfo().getUser().getNickName() + "(我)";
         } else {
             pointInfo = SpManager.getInstance().getPointInfo(item.getPoint(), item.getProcessType());
-
         }
         if (item.getReject()) {
             sealImg.setVisibility(View.VISIBLE);
             rejectLayout.setVisibility(View.VISIBLE);
-            helper.setText(R.id.reimbursement_reject_reason_tv, item.getPointList().get(item.getPointList().size() - 2).getRemark());
+            helper.setText(R.id.reimbursement_reject_reason_tv, new SpanUtil()
+                    .appendImage(VectorDrawableUtils.getDrawable(mContext, R.drawable.ic_process_failed, R.color.colorRed))
+                    .append("  驳回原因：")
+                    .append(item.getPointList().get(item.getPointList().size() - 2).getRemark())
+                    .setForegroundColor(ContextCompat.getColor(mContext, R.color.colorRed)).create());
 
             pointInfo = SpManager.getInstance().getUserInfo().getUser().getNickName() + "(我)";
 
@@ -71,10 +74,12 @@ public class ProcessAdapter extends BaseQuickAdapter<ProcessEntity, BaseViewHold
         helper.addOnClickListener(R.id.item_process_reject_tv)
                 .addOnClickListener(R.id.item_process_approval_tv);
         helper.setText(R.id.process_title_tv, titleCs)
-                .setText(R.id.process_founder_tv, SpManager.getInstance().getUserInfo().getUser().getNickName())
+                .setText(R.id.process_founder_tv, item.getCreatorName() + "(" + SpManager.getInstance().mPositionData.get(item
+                        .getPosition()) + ")")
                 .setText(R.id.process_accept_time_tv, TimeFormatUtil.formatTime(item.getCreateTime(), FastConstant.TIME_FORMAT_TYPE))
                 .setText(R.id.process_point_tv, pointInfo)
-                .setText(R.id.process_point_status_tv, item.getPointList().get(item.getPointList().size() - 1).getPointStatus() == 1 ? "未操作" : "已处理")
+                .setText(R.id.process_point_status_tv, item.getPointList().get(item.getPointList().size() - 1).getPointStatus() == 1 ?
+                        "未操作" : "已处理")
                 .setText(R.id.process_apply_amount_tv, NumberFormatterUtil.formatMoneyWithSelfValue(item.getAmount() + ""));
 
         RadiusViewHelper.getInstance().setRadiusViewAdapter(((RadiusRelativeLayout) helper.itemView).getDelegate());

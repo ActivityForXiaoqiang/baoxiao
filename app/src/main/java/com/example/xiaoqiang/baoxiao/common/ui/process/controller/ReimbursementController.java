@@ -1,7 +1,10 @@
 package com.example.xiaoqiang.baoxiao.common.ui.process.controller;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.example.xiaoqiang.baoxiao.common.been.Company;
 import com.example.xiaoqiang.baoxiao.common.been.ProcessEntity;
@@ -9,6 +12,7 @@ import com.example.xiaoqiang.baoxiao.common.been.StateUser;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.basis.BaseController;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.Timber;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.ToastUtil;
+import com.google.gson.Gson;
 import com.yanzhenjie.album.Action;
 import com.yanzhenjie.album.Album;
 import com.yanzhenjie.album.AlbumFile;
@@ -65,34 +69,44 @@ public class ReimbursementController extends BaseController<IReimbursementView> 
         });
     }
 
+    private ProcessEntity mProcessEntity;
+    private String[] filePaths;
+
     /**
      * 上传照片
      */
-    public void upDataFiles(ArrayList<AlbumFile> alist, final ProcessEntity pe) {
+    public void upDataFiles(ArrayList<AlbumFile> alist, ProcessEntity pe) {
+        int size = alist.size() - 1;
+        for (int i = size; i >= 0; i--) {
+            if (TextUtils.equals("000000", alist.get(i).getPath())) {
+                alist.remove(i);
+            }
+        }
+        this.mProcessEntity = pe;
         showLoadingDialog(mContext);
-        final String[] filePaths = new String[alist.size()];
+        filePaths = new String[alist.size()];
         for (int i = 0; i < alist.size(); i++) {
             filePaths[i] = alist.get(i).getPath();
         }
+        Timber.i("bmob:" + new Gson().toJson(filePaths));
         BmobFile.uploadBatch(filePaths, new UploadBatchListener() {
 
             @Override
-            public void onSuccess(List<BmobFile> files, List<String> urls) {
+            public void onSuccess(List<BmobFile> files, final List<String> urls) {
+
                 //1、files-上传完成后的BmobFile集合，是为了方便大家对其上传后的数据进行操作，例如你可以将该文件保存到表中
                 //2、urls-上传文件的完整url地址
                 if (urls.size() == filePaths.length) {//如果数量相等，则代表文件全部上传完成
                     //do something
-                    pe.setImgs(urls);
-                    saveProcess(pe);
-                } else {
-                    ToastUtil.show("提交失败，请检查网络是否良好");
-                    dissmissLoadingDialog();
+                    mProcessEntity.setImgs(urls);
+                    mHandler.sendEmptyMessageDelayed(0, 66);
                 }
             }
 
             @Override
             public void onError(int statuscode, String errormsg) {
                 ToastUtil.show("提交失败，请检查网络是否良好");
+                dissmissLoadingDialog();
                 Timber.d("onProgress:" + "错误码" + statuscode + ",错误描述：" + errormsg);
             }
 
@@ -106,6 +120,16 @@ public class ReimbursementController extends BaseController<IReimbursementView> 
             }
         });
     }
+
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 0) {
+                saveProcess(mProcessEntity);
+            }
+        }
+    };
 
     /**
      * 保存流程

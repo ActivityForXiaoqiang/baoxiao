@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:layout_marginTop="26dp"
+        android:layout_marginTop="20dp"
         android:text="请填写驳回原因："
         android:textColor="@color/txt_black"
         android:textSize="16sp" />
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="15dp"
         android:background="@drawable/form_frame_shape"
         android:gravity="top"
         android:hint="请填写驳回原因"

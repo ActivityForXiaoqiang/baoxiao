@@ -45,21 +45,28 @@ public class ProcessListController extends BaseController<IProcessListView> {
         BmobQuery<ProcessEntity> query = new BmobQuery<ProcessEntity>();
         if (position == 1 || position == 2) {
             BmobQuery<ProcessEntity> eq1 = new BmobQuery<>();
-            eq1.addWhereContainedIn("processType", Arrays.asList(new int[]{FastConstant.PROCESS_TYPE_TWO, FastConstant.PROCESS_TYPE_THREE}));
+//            eq1.addWhereContainedIn("processType", Arrays.asList(new int[]{FastConstant.PROCESS_TYPE_TWO, FastConstant
+// .PROCESS_TYPE_THREE}));
+            eq1.addWhereEqualTo("processType", FastConstant.PROCESS_TYPE_TWO);
             eq1.addWhereEqualTo("point", FastConstant.PROCESS_POINT_THREE);
+            BmobQuery<ProcessEntity> eq3 = new BmobQuery<>();
+            eq3.addWhereEqualTo("processType", FastConstant.PROCESS_TYPE_THREE);
+            eq3.addWhereEqualTo("point", FastConstant.PROCESS_POINT_THREE);
             BmobQuery<ProcessEntity> eq2 = new BmobQuery<>();
             eq2.addWhereEqualTo("processType", FastConstant.PROCESS_TYPE_ONE);
             eq2.addWhereEqualTo("point", FastConstant.PROCESS_POINT_FOUR);
             List<BmobQuery<ProcessEntity>> queries = new ArrayList<BmobQuery<ProcessEntity>>();
             queries.add(eq1);
             queries.add(eq2);
+            queries.add(eq3);
             //或条件处理集合
             query.or(queries);
             //可处理所有流程类型 并且 节点point的流程
 
         } else if (position == 3 || position == 4) {
             if (position == 4) {
-                query.addWhereContainedIn("processType", Arrays.asList(new int[]{FastConstant.PROCESS_TYPE_ONE, FastConstant.PROCESS_TYPE_THREE}));
+                query.addWhereContainedIn("processType", Arrays.asList(new int[]{FastConstant.PROCESS_TYPE_ONE, FastConstant
+                        .PROCESS_TYPE_THREE}));
             } else {
                 query.addWhereEqualTo("processType", FastConstant.PROCESS_TYPE_ONE);
             }
@@ -91,10 +98,10 @@ public class ProcessListController extends BaseController<IProcessListView> {
                 dissmissLoadingDialog();
                 getView().onShowList(object);
                 if (e == null) {
-                    Timber.i("ProcessEntity可處理个数：" + object.size());
+                    Timber.i("bmobProcessEntity可處理个数：" + object.size());
                 } else {
                     ToastUtil.show(e.getMessage());
-                    Timber.i("bmob", "失败：" + e.getMessage() + "," + e.getErrorCode());
+                    Timber.i("bmob"+ "失败：" + e.getMessage() + "+" + e.getErrorCode());
                 }
             }
         });
@@ -176,7 +183,6 @@ public class ProcessListController extends BaseController<IProcessListView> {
             }
         });
     }
-
 
 
     /**

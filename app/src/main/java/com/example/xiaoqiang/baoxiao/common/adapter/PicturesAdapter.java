@@ -7,12 +7,16 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.xiaoqiang.baoxiao.R;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.manager.GlideManager;
-import com.example.xiaoqiang.baoxiao.common.fast.constant.util.Timber;
 import com.yanzhenjie.album.AlbumFile;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by yhx
@@ -22,6 +26,7 @@ import java.util.ArrayList;
 public class PicturesAdapter extends BaseAdapter {
     private Context mContext;
     private ArrayList<AlbumFile> listUrls;
+    private List<String> mImgs;
 
     public PicturesAdapter(Context mContext, ArrayList<AlbumFile> listUrls) {
         this.mContext = mContext;
@@ -31,13 +36,21 @@ public class PicturesAdapter extends BaseAdapter {
         }
     }
 
+    public PicturesAdapter(Context mContext, List<String> mImgs) {
+        this.mContext = mContext;
+        this.mImgs = mImgs;
+        if (mImgs.size() == 7) {
+            mImgs.remove(mImgs.size() - 1);
+        }
+    }
+
     public int getCount() {
-        return listUrls.size();
+        return listUrls == null ? mImgs.size() : listUrls.size();
     }
 
     @Override
     public String getItem(int position) {
-        return listUrls.get(position).getPath();
+        return listUrls == null ? mImgs.get(position) : listUrls.get(position).getPath();
     }
 
     @Override
@@ -56,11 +69,15 @@ public class PicturesAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.image.setImageResource(R.drawable.add_img);
-        final String path = listUrls.get(position).getPath();
-        Timber.i(listUrls.size() + "listUrls---" + path);
+//        holder.image.setImageResource(R.drawable.add_img);
+        final String path = listUrls == null ? mImgs.get(position) : listUrls.get(position).getPath();
         if (TextUtils.equals("000000", path)) {
-            GlideManager.loadImg(R.drawable.add_img, holder.image);
+            RequestOptions requestOptions = new RequestOptions()
+                    .centerInside() // 填充方式
+                    .priority(Priority.HIGH) //优先级
+                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE);//缓存策略
+            Glide.with(mContext).load(R.drawable.add_img).apply(requestOptions).into(holder.image);
+//            GlideManager.loadImg(R.drawable.add_img, holder.image);
         } else {
             GlideManager.loadImg(path, holder.image);
         }

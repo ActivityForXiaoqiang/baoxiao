@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/reimbursement_parent_container"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/reimbursement_parent_container"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
-    <include layout="@layout/fast_layout_title_bar" />
+    <include layout="@layout/fast_layout_title_bar"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="@color/colorTitleDivider" />
+        android:background="@color/colorTitleDivider"/>
 
 
     <ScrollView
@@ -45,7 +45,7 @@
                         android:layout_height="wrap_content"
                         android:text="申请人姓名："
                         android:textColor="@color/txt_black1"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"/>
 
                     <TextView
                         android:id="@+id/reimbursement_details_personnel_tv"
@@ -56,7 +56,7 @@
                         android:background="@color/colorWhite"
                         android:maxLines="1"
                         android:textColor="@color/txt_black"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"/>
 
                 </LinearLayout>
 
@@ -64,7 +64,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
                     android:layout_marginLeft="10dp"
-                    android:background="@color/colorTitleDivider" />
+                    android:background="@color/colorTitleDivider"/>
                 <!--部门-->
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -79,7 +79,7 @@
                         android:layout_height="wrap_content"
                         android:text="申请人部门："
                         android:textColor="@color/txt_black1"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"/>
 
                     <EditText
                         android:id="@+id/reimbursement_details_department_tv"
@@ -93,13 +93,13 @@
                         android:inputType="text"
                         android:maxLines="1"
                         android:textColor="@color/txt_black"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"/>
 
                     <android.support.v7.widget.AppCompatImageView
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:scaleType="centerCrop"
-                        app:srcCompat="@drawable/ic_sigh_mark" />
+                        app:srcCompat="@drawable/ic_sigh_mark"/>
 
                 </LinearLayout>
 
@@ -107,7 +107,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
                     android:layout_marginLeft="10dp"
-                    android:background="@color/colorTitleDivider" />
+                    android:background="@color/colorTitleDivider"/>
                 <!--职位-->
                 <LinearLayout
                     android:id="@+id/reimbursement_position_l"
@@ -122,7 +122,7 @@
                         android:layout_height="wrap_content"
                         android:text="申请人职位："
                         android:textColor="@color/txt_black1"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"/>
 
                     <EditText
                         android:id="@+id/reimbursement_details_position_tv"
@@ -135,7 +135,7 @@
                         android:maxLines="1"
                         android:text=""
                         android:textColor="@color/txt_black"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"/>
 
 
                 </LinearLayout>
@@ -144,7 +144,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
                     android:layout_marginLeft="10dp"
-                    android:background="@color/colorTitleDivider" />
+                    android:background="@color/colorTitleDivider"/>
 
                 <!--账号-->
                 <LinearLayout
@@ -160,7 +160,7 @@
                         android:layout_height="wrap_content"
                         android:text=""
                         android:textColor="@color/txt_black1"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"/>
 
                     <TextView
                         android:id="@+id/reimbursement_details_account_tv"
@@ -171,7 +171,7 @@
                         android:background="@color/colorWhite"
                         android:maxLines="1"
                         android:textColor="@color/txt_black"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"/>
 
 
                 </LinearLayout>
@@ -190,7 +190,7 @@
                         android:layout_height="wrap_content"
                         android:text="出发地："
                         android:textColor="@color/txt_black1"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"/>
 
                     <EditText
                         android:id="@+id/reimbursement_details_set_out_tv"
@@ -201,7 +201,7 @@
                         android:background="@color/colorWhite"
                         android:maxLines="1"
                         android:textColor="@color/txt_black"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"/>
 
                 </LinearLayout>
 
@@ -209,7 +209,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
                     android:layout_marginLeft="10dp"
-                    android:background="@color/colorTitleDivider" />
+                    android:background="@color/colorTitleDivider"/>
 
                 <!--目的地-->
                 <LinearLayout
@@ -224,7 +224,7 @@
                         android:layout_height="wrap_content"
                         android:text="目的地："
                         android:textColor="@color/txt_black1"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"/>
 
                     <TextView
                         android:id="@+id/reimbursement_details_destination_tv"
@@ -236,7 +236,7 @@
                         android:maxLines="1"
                         android:text=""
                         android:textColor="@color/txt_black"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"/>
 
                 </LinearLayout>
 
@@ -244,7 +244,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
                     android:layout_marginLeft="10dp"
-                    android:background="@color/colorTitleDivider" />
+                    android:background="@color/colorTitleDivider"/>
                 <!--交通工具-->
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -258,7 +258,7 @@
                         android:layout_height="wrap_content"
                         android:text="交通工具："
                         android:textColor="@color/txt_black1"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"/>
 
                     <TextView
                         android:id="@+id/reimbursement_details_vehicle_tv"
@@ -269,7 +269,7 @@
                         android:background="@color/colorWhite"
                         android:maxLines="1"
                         android:textColor="@color/txt_black"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"/>
 
                 </LinearLayout>
 
@@ -288,7 +288,7 @@
                         android:paddingLeft="10dp"
                         android:text="开始日期："
                         android:textColor="@color/txt_black1"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"/>
 
                     <TextView
                         android:id="@+id/reimbursement_details_start_time_tv"
@@ -299,14 +299,14 @@
                         android:paddingRight="10dp"
                         android:paddingTop="10dp"
                         android:textColor="@color/txt_black"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"/>
 
                     <View
                         android:layout_width="0.5dp"
                         android:layout_height="match_parent"
-                        android:layout_marginTop="7dp"
                         android:layout_marginBottom="7dp"
-                        android:background="@color/colorTitleDivider" />
+                        android:layout_marginTop="7dp"
+                        android:background="@color/colorTitleDivider"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -314,7 +314,7 @@
                         android:paddingLeft="10dp"
                         android:text="截止日期："
                         android:textColor="@color/txt_black1"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"/>
 
                     <TextView
                         android:id="@+id/reimbursement_details_end_time_tv"
@@ -324,7 +324,7 @@
                         android:paddingRight="10dp"
                         android:text=""
                         android:textColor="@color/txt_black"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"/>
                 </LinearLayout>
 
                 <!--金额-->
@@ -341,7 +341,7 @@
                         android:layout_height="wrap_content"
                         android:text="申请金额："
                         android:textColor="@color/txt_black1"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"/>
 
                     <TextView
                         android:id="@+id/reimbursement_details_amount_tv"
@@ -353,7 +353,7 @@
                         android:maxLength="16"
                         android:text=""
                         android:textColor="@color/txt_black"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"/>
 
                 </LinearLayout>
 
@@ -361,7 +361,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
                     android:layout_marginLeft="10dp"
-                    android:background="@color/colorTitleDivider" />
+                    android:background="@color/colorTitleDivider"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -375,7 +375,7 @@
                         android:layout_height="wrap_content"
                         android:text="申请事由："
                         android:textColor="@color/txt_black1"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"/>
 
                     <TextView
                         android:id="@+id/reimbursement_details_reason_tv"
@@ -386,7 +386,7 @@
                         android:gravity="top"
                         android:maxLines="10"
                         android:textColor="@color/txt_black"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"/>
 
                 </LinearLayout>
 
@@ -397,11 +397,12 @@
                     android:padding="10dp">
 
                     <TextView
+                        android:id="@+id/reimbursement_details_pictures_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="图片："
                         android:textColor="@color/txt_black1"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"/>
 
                     <com.example.xiaoqiang.baoxiao.common.view.NoScollGridView
                         android:id="@+id/reimbursement_details_gridView"
@@ -412,29 +413,30 @@
                         android:horizontalSpacing="3dp"
                         android:listSelector="#0000"
                         android:numColumns="3"
-                        android:verticalSpacing="3dp" />
+                        android:verticalSpacing="3dp"/>
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:background="@color/bg_divider" />
+                    android:background="@color/colorPrimaryDark"/>
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/reimbursement_default_point_listview"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"/>
 
             </LinearLayout>
 
             <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/reimbursement_default_seal"
-                android:layout_width="120dp"
+                android:layout_width="148dp"
                 android:layout_height="120dp"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="50dp"
-                android:layout_marginTop="40dp"
-                app:srcCompat="@drawable/ic_process_finish" />
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="30dp"
+                android:visibility="gone"
+                app:srcCompat="@drawable/ic_process_finish"/>
         </RelativeLayout>
     </ScrollView>
 

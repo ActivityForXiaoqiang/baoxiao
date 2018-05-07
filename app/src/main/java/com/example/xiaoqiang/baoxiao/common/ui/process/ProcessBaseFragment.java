@@ -245,7 +245,9 @@ public class ProcessBaseFragment extends FastRefreshLoadFragment<ProcessEntity, 
 
     private void showRejectDialog(final int position) {
         final RejectReMarkDialog rejectReMarkDialog = new RejectReMarkDialog(getContext());
-        rejectReMarkDialog.setPositiveText("驳回")
+        rejectReMarkDialog
+                .setTitle("请填写驳回原因：")
+                .setPositiveText("驳回")
                 .setNegativeText("取消")
                 .setPositiveListener(new View.OnClickListener() {
                     @Override

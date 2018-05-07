@@ -269,7 +269,6 @@ public class SpManager {
      */
     public String getPointInfo(Integer point, Integer proccesType) {
         String info = null;
-
         Map<Integer, String> nextMap1 = new HashMap<>();
         nextMap1.put(FastConstant.PROCESS_POINT_ONE, "自己");
         nextMap1.put(FastConstant.PROCESS_POINT_TWO, "部门主管");
@@ -278,9 +277,9 @@ public class SpManager {
         nextMap1.put(FastConstant.PROCESS_POINT_FINISH, "归档");
         Map<Integer, String> nextMap2 = new HashMap<>();
         nextMap2.put(FastConstant.PROCESS_POINT_ONE, "自己");
-        nextMap2.put(FastConstant.PROCESS_POINT_THREE, "总经理");
-        nextMap2.put(FastConstant.PROCESS_POINT_FOUR, "财务结算");
-        nextMap1.put(FastConstant.PROCESS_POINT_FINISH, "归档");
+        nextMap2.put(FastConstant.PROCESS_POINT_TWO, "总经理");
+        nextMap2.put(FastConstant.PROCESS_POINT_THREE, "财务结算");
+        nextMap2.put(FastConstant.PROCESS_POINT_FINISH, "归档");
         Map<Integer, String> nextMap3 = new HashMap<>();
         nextMap3.put(FastConstant.PROCESS_POINT_ONE, "自己");
         nextMap3.put(FastConstant.PROCESS_POINT_TWO, "财务主管");
