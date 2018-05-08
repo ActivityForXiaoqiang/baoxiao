@@ -11,9 +11,16 @@ import com.orhanobut.logger.PrettyFormatStrategy;
  * Function: logger日志管理类
  */
 public abstract class LoggerManager {
-
+    private static final int CHUNK_SIZE = 200;
     private static String TAG;
     private static boolean DEBUG = true;
+    private static final int LOG_D = 0;
+    private static final int LOG_E = 1;
+    private static final int LOG_W = 2;
+    private static final int LOG_I = 3;
+    private static final int LOG_V = 4;
+    private static final int LOG_JSON = 5;
+    private static final int LOG_XML = 6;
 
     public static void init(String Tag) {
         init(Tag, true);
@@ -46,6 +53,7 @@ public abstract class LoggerManager {
     public static void d(String tag, Object msg) {
         if (isInit() && DEBUG) {
             Logger.t(tag).d(msg);
+//            logContent(LOG_D, tag, msg);
         }
     }
 
@@ -55,7 +63,8 @@ public abstract class LoggerManager {
 
     public static void e(String tag, String msg) {
         if (isInit() && DEBUG) {
-            Logger.t(tag).e(msg);
+//            Logger.t(tag).e(msg);
+            logContent(LOG_E, tag, msg);
         }
     }
 
@@ -65,7 +74,8 @@ public abstract class LoggerManager {
 
     public static void w(String tag, String msg) {
         if (isInit() && DEBUG) {
-            Logger.t(tag).w(msg);
+//            Logger.t(tag).w(msg);
+            logContent(LOG_W, tag, msg);
         }
     }
 
@@ -75,8 +85,10 @@ public abstract class LoggerManager {
 
     public static void i(String tag, String msg) {
         if (isInit() && DEBUG) {
-            Logger.t(tag).i(msg);
+//            Logger.t(tag).i(msg);
+            logContent(LOG_I, tag, msg);
         }
+
     }
 
     public static void v(String message) {
@@ -85,7 +97,8 @@ public abstract class LoggerManager {
 
     public static void v(String tag, String message) {
         if (isInit() && DEBUG) {
-            Logger.t(tag).v(message);
+//            Logger.t(tag).v(message);
+            logContent(LOG_V, tag, message);
         }
     }
 
@@ -95,7 +108,8 @@ public abstract class LoggerManager {
 
     public static void json(String tag, String json) {
         if (isInit() && DEBUG) {
-            Logger.t(tag).json(json);
+//            Logger.t(tag).json(json);
+            logContent(LOG_JSON, tag, json);
         }
     }
 
@@ -105,7 +119,26 @@ public abstract class LoggerManager {
 
     public static void xml(String tag, String xml) {
         if (isInit() && DEBUG) {
-            Logger.t(tag).xml(xml);
+//            Logger.t(tag).xml(xml);
+            logContent(LOG_XML, tag, xml);
+        }
+    }
+
+    private static void logContent(int logType, String tag, String msg) {
+        if (logType == LOG_D) {
+            Logger.t(tag).d(msg);
+        } else if (logType == LOG_E) {
+            Logger.t(tag).e(msg);
+        } else if (logType == LOG_W) {
+            Logger.t(tag).w(msg);
+        } else if (logType == LOG_I) {
+            Logger.t(tag).i(msg);
+        } else if (logType == LOG_V) {
+            Logger.t(tag).v(msg);
+        } else if (logType == LOG_JSON) {
+            Logger.t(tag).json(msg);
+        } else if (logType == LOG_XML) {
+            Logger.t(tag).xml(msg);
         }
     }
 

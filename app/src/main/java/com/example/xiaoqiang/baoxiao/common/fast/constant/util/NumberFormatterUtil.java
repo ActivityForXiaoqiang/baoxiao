@@ -94,4 +94,15 @@ public class NumberFormatterUtil {
         }
         return result;
     }
+
+    public static String formatDouble(Double value){
+        if (value==null) {
+            return "0";
+        }
+        DecimalFormat df = new DecimalFormat("#####.##");
+        return df.format(new BigDecimal(value));
+//        NumberFormat nf =NumberFormat.getInstance();
+//        nf.setGroupingUsed(false);
+//       return nf.format(value);
+    }
 }

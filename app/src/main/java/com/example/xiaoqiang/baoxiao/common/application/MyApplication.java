@@ -24,7 +24,7 @@ import cn.bmob.v3.Bmob;
 public class MyApplication extends Application {
     private final String BMOB_APPID = "dab83fd5d3a1e9a37787615bca47e6e3";
     private static Context mContext;
-    private String TAG = "FastLib";
+    private String TAG = "baoxiao";
     private static int imageHeight = 0;
     private long start;
 
@@ -35,8 +35,8 @@ public class MyApplication extends Application {
 
         SpManager.getInstance().initSpManager(this);
         //初始化Logger日志打印
-        LoggerManager.init(TAG, BuildConfig.DEBUG);
         if (BuildConfig.DEBUG) {
+//            LoggerManager.init(TAG, BuildConfig.DEBUG);
             Timber.plant(new Timber.DebugTree());
         }
         start = System.currentTimeMillis();
