@@ -54,6 +54,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".common.ui.info.BudgetActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
             android:name=".common.ui.info.EditActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 

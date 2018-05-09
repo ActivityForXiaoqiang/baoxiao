@@ -1,12 +1,15 @@
 package com.example.xiaoqiang.baoxiao.common.ui.report;
 
 import android.graphics.Color;
+import android.os.Handler;
+import android.os.Message;
 
 import com.example.xiaoqiang.baoxiao.R;
 import com.example.xiaoqiang.baoxiao.common.base.MyBaseActivity;
 import com.example.xiaoqiang.baoxiao.common.been.DayTime;
 import com.example.xiaoqiang.baoxiao.common.been.ProcessEntity;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.FastConstant;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.util.NumberFormatterUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SpManager;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.Timber;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.TimeFormatUtil;
@@ -95,7 +98,6 @@ public class ReportActivity extends MyBaseActivity {
         BarData data = new BarData(dataSets);
         data.setBarWidth(0.8f);
         barChart.setData(data);
-
     }
 
 
@@ -117,7 +119,7 @@ public class ReportActivity extends MyBaseActivity {
         companyId = SpManager.getInstance().getUserInfo().getCompany().getObjectId();
         this.dayTimes = dlist;
         valueSet1 = new ArrayList<>();
-        Timber.i(  new Gson().toJson(dayTimes));
+        Timber.i(new Gson().toJson(dayTimes));
         showLoadingDialog();
         index = 0;
         queryProcessAmountSumByDay(dayTimes.get(index));
@@ -143,29 +145,37 @@ public class ReportActivity extends MyBaseActivity {
             @Override
             public void done(JSONArray ary, BmobException e) {
                 if (e == null) {
+                    Message message = new Message();
                     if (ary != null) {//
                         try {
                             JSONObject obj = ary.getJSONObject(0);
                             double sum = obj.getDouble("_sumAmount");//_(关键字)+首字母大写的列名
-                            valueSet1.add(new BarEntry(index + 1, (float) sum));
+
+                            message.what = 0;
+                            message.obj = NumberFormatterUtil.DoubleToFloat(sum);
+                            mHandler.sendMessage(message);
+//                            valueSet1.add(new BarEntry(index + 1, (float) sum));
 //                            Timber.i("報銷总額：" + NumberFormatterUtil.formatDouble(sum));
                         } catch (JSONException e1) {
                             e1.printStackTrace();
                         }
                     } else {
+                        message.what = 1;
+                        message.obj = Float.valueOf("0");
+                        mHandler.sendMessage(message);
                         //没有记录
-                        valueSet1.add(new BarEntry(index + 1, 0));
+//                        valueSet1.add(new BarEntry(index + 1, 0));
 //                        ToastUtil.show("查询成功，无数据");
                     }
 
-                    index++;
+                  /*  index++;
                     if (valueSet1.size() >= dayTimes.size()) {
                         test();
                         //返回数据
                         dissmissLoadingDialog();
                     } else {
                         queryProcessAmountSumByDay(dayTimes.get(index));
-                    }
+                    }*/
 
                 } else {
                     ToastUtil.show(e.getMessage());
@@ -177,7 +187,36 @@ public class ReportActivity extends MyBaseActivity {
         });
     }
 
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            index++;
+            switch (msg.what) {
+                case 0:
+                    float sum = (float) msg.obj;
+                    valueSet1.add(new BarEntry(index, (float) sum));
+                    break;
+                case 1:
+                    //没有记录
+                    valueSet1.add(new BarEntry(index, 0));
+                    break;
+                case 3:
+                    test();
+                    dissmissLoadingDialog();
+                    break;
+            }
 
+            if (valueSet1.size() >= dayTimes.size()) {
+                mHandler.sendEmptyMessageDelayed(3, 200);
+//                test();
+//                //返回数据
+//                dissmissLoadingDialog();
+            } else {
+                queryProcessAmountSumByDay(dayTimes.get(index));
+            }
+        }
+    };
     private LoadingDialog loadingDialog;
 
     public void showLoadingDialog() {

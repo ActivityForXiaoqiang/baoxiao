@@ -10,9 +10,12 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.xiaoqiang.baoxiao.R;
 import com.example.xiaoqiang.baoxiao.common.base.MyBaseActivity;
-import com.example.xiaoqiang.baoxiao.common.fast.constant.manager.GlideManager;
 import com.example.xiaoqiang.baoxiao.common.been.MyUser;
+import com.example.xiaoqiang.baoxiao.common.been.StateUser;
 import com.example.xiaoqiang.baoxiao.common.controller.UpdataController;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.manager.GlideManager;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.util.FastUtil;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SpManager;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.ToastUtil;
 import com.example.xiaoqiang.baoxiao.common.ui.message.ProblemActivity;
 import com.example.xiaoqiang.baoxiao.common.ui.report.ReportActivity;
@@ -109,6 +112,26 @@ public class MineActivity extends MyBaseActivity implements UpdataView {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MineActivity.this, ProblemActivity.class));
+            }
+        });
+        findViewById(R.id.btn_budget).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SpManager.getInstance().queryCurrentUser(MineActivity.this, user, new SpManager.IGetCurrentUser() {
+                    @Override
+                    public void showMyUser(StateUser user) {
+                        if (user == null) {
+                            ToastUtil.show("你还未登陆");
+                            return;
+                        }
+
+                        if (!user.isJoinCompay()) {
+                            ToastUtil.show("您还没有所属公司");
+                            return;
+                        }
+                        FastUtil.startActivity(MineActivity.this, BudgetActivity.class);
+                    }
+                });
             }
         });
     }

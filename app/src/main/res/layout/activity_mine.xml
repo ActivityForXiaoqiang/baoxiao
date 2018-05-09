@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorPrimary">
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="match_parent"
+                                             android:background="@color/colorPrimary">
 
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
         android:layout_width="match_parent"
@@ -32,14 +32,14 @@
                     android:layout_marginTop="@dimen/space_normal"
                     android:src="@mipmap/ic_launcher"
                     app:civ_border_color="@android:color/white"
-                    app:civ_border_width="2dp" />
+                    app:civ_border_width="2dp"/>
 
                 <TextView
                     android:id="@+id/mine_nickname"
                     style="@style/AppTheme.Label.Title.Large"
                     android:layout_marginTop="@dimen/space_normal"
                     android:text="昵称"
-                    android:textColor="@android:color/white" />
+                    android:textColor="@android:color/white"/>
 
                 <com.flyco.roundview.RoundTextView
                     android:id="@+id/mine_edit_btn"
@@ -53,7 +53,7 @@
                     android:textColor="@android:color/white"
                     app:rv_isRadiusHalfHeight="true"
                     app:rv_strokeColor="@android:color/white"
-                    app:rv_strokeWidth="1dp" />
+                    app:rv_strokeWidth="1dp"/>
             </LinearLayout>
 
             <LinearLayout
@@ -71,7 +71,7 @@
                     android:gravity="center_vertical"
                     android:padding="@dimen/space_normal"
                     android:text="我的报销"
-                    android:textSize="@dimen/textsize_title" />
+                    android:textSize="@dimen/textsize_title"/>
 
                 <TextView
                     android:id="@+id/btn_company"
@@ -81,8 +81,31 @@
                     android:drawablePadding="@dimen/space_normal"
                     android:gravity="center_vertical"
                     android:padding="@dimen/space_normal"
-                    android:text="表表分析"
-                    android:textSize="@dimen/textsize_title" />
+                    android:text="报表分析"
+                    android:textSize="@dimen/textsize_title"/>
+
+                <LinearLayout
+                    android:id="@+id/btn_budget"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/space_normal">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_budget">
+                    </android.support.v7.widget.AppCompatImageView>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="10dp"
+                        android:text="预算"
+                        android:textSize="@dimen/textsize_title"/>
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/btn_about"
@@ -93,7 +116,7 @@
                     android:gravity="center_vertical"
                     android:padding="@dimen/space_normal"
                     android:text="关于我们"
-                    android:textSize="@dimen/textsize_title" />
+                    android:textSize="@dimen/textsize_title"/>
 
                 <TextView
                     android:id="@+id/btn_call"
@@ -104,7 +127,7 @@
                     android:gravity="center_vertical"
                     android:padding="@dimen/space_normal"
                     android:text="联系我们"
-                    android:textSize="@dimen/textsize_title" />
+                    android:textSize="@dimen/textsize_title"/>
 
             </LinearLayout>
 

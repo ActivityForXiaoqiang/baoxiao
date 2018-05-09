@@ -36,6 +36,7 @@ public abstract class FastRefreshLoadActivity<T, c extends BaseController>
         mRecyclerView = mFastRefreshLoadDelegate.mRecyclerView;
         mRefreshLayout = mFastRefreshLoadDelegate.mRefreshLayout;
         mEasyStatusView = mFastRefreshLoadDelegate.mStatusView;
+        mEasyStatusView.content();
         mController = initController();
         attachView();
     }

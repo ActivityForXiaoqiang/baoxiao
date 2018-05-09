@@ -165,42 +165,35 @@ public class TimeFormatUtil {
         return dayOfweek;
     }
 
-
     /**
-     * 得到下一个月
+     * 获取一个月的天数最小最大时间戳重载
      */
-    public static Date getNextMonth(String date) {
-        if (TextUtils.isEmpty(date)) {
-            return null;
-        }
-        return getNextMonth(stringToDate(date, "yyyy-MM-dd HH:mm:ss"));
-    }
-
-    /**
-     * 得到下一个月
-     */
-    public static Date getNextMonth(Date date) {
-        if (date == null) {
-            return null;
-        }
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        return getNextMonth(calendar);
-    }
-
-    /**
-     * 得到下一个月
-     */
-    public static Date getNextMonth(Calendar calendar) {
+    public static DayTime getMonthTimeOfMonth(Calendar calendar) {
         if (calendar == null) {
             return null;
         }
         int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-        calendar.set(Calendar.MONTH, month - 1);
-        return calendar.getTime();
+        int month = calendar.get(Calendar.MONTH) + 1;
+        //一个月总天数
+        int sumDay = getDaysByYearMonth(year, month);
+        //一个月第一天最小的时间
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        DayTime dt = new DayTime();
+        dt.setMinDate(new BmobDate(new Date(calendar.getTimeInMillis())));
+        //一个月最后一天最大的时间
+        calendar.set(Calendar.DAY_OF_MONTH, sumDay);
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        dt.setMaxDate(new BmobDate(new Date(calendar.getTimeInMillis())));
+
+        Timber.i("bmob: monthtime:" + new Gson().toJson(dt));
+        return dt;
     }
+
 
     /**
      * 获取一个月的天数最小最大时间戳
@@ -235,10 +228,12 @@ public class TimeFormatUtil {
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH) + 1;
         int day = calendar.get(Calendar.DAY_OF_MONTH);
-        int numDay = getDaysByYearMonth(year, month);
+        //一个月总天数
+        int sumDay = getDaysByYearMonth(year, month);
+
         List<DayTime> dlist = new ArrayList<>();
 
-        for (int i = 1; i <= numDay; i++) {
+        for (int i = 1; i <= sumDay; i++) {
             calendar.set(Calendar.DAY_OF_MONTH, i);
             DayTime dt = new DayTime();
 //            dt.setMinTime(getMinTimeByDay(calendar).getTime());
@@ -248,7 +243,6 @@ public class TimeFormatUtil {
             dlist.add(dt);
         }
         Timber.i("bmob: monthtime:" + new Gson().toJson(dlist));
-//        LoggerManager.i("bmob: monthtime:" + new Gson().toJson(dlist));
         return dlist;
     }
 
