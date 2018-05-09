@@ -72,9 +72,9 @@ public class ReportActivity extends MyBaseActivity {
 
     }
 
+    List<IBarDataSet> dataSets = new ArrayList<>();
 
-    void test() {
-        List<IBarDataSet> dataSets = null;
+    private void test() {
         Timber.i("test");
         for (int i = 0; i < valueSet1.size(); i++) {
             Timber.i("x===:" + valueSet1.get(i).getX() + "    y:" + valueSet1.get(i).getY());
@@ -92,12 +92,13 @@ public class ReportActivity extends MyBaseActivity {
         barDataSet1.setColor(Color.parseColor("#45a2ff"));
 
         barDataSet1.setBarShadowColor(Color.parseColor("#01000000"));
-        dataSets = new ArrayList<>();
+        dataSets.clear();
         dataSets.add(barDataSet1);
 
         BarData data = new BarData(dataSets);
         data.setBarWidth(0.8f);
         barChart.setData(data);
+        barChart.scrollTo(0, 10);
     }
 
 
@@ -201,17 +202,12 @@ public class ReportActivity extends MyBaseActivity {
                     //没有记录
                     valueSet1.add(new BarEntry(index, 0));
                     break;
-                case 3:
-                    test();
-                    dissmissLoadingDialog();
-                    break;
             }
 
             if (valueSet1.size() >= dayTimes.size()) {
-                mHandler.sendEmptyMessageDelayed(3, 200);
-//                test();
-//                //返回数据
-//                dissmissLoadingDialog();
+                test();
+                //返回数据
+                dissmissLoadingDialog();
             } else {
                 queryProcessAmountSumByDay(dayTimes.get(index));
             }
