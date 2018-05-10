@@ -12,10 +12,8 @@ import com.example.xiaoqiang.baoxiao.common.been.StateUser;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.basis.BaseController;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.basis.FastTitleActivity;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.EventConstant;
-import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.SPConstant;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.manager.LoggerManager;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.manager.TabLayoutManager;
-import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SPUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SpManager;
 import com.flyco.tablayout.SegmentTabLayout;
 import com.flyco.tablayout.SlidingTabLayout;
@@ -61,10 +59,12 @@ public class ProcessListActivity extends FastTitleActivity {
 
     @Override
     public void setTitleBar(TitleBarView titleBar) {
-        isSliding = true;
         if (isSliding && viewSliding == null) {
             viewSliding = View.inflate(mContext, R.layout.fast_layout_activity_sliding, null);
             mSlidingTab = viewSliding.findViewById(R.id.tabLayout_slidingActivity);
+        } else if (!isSliding && viewSegment == null) {
+            viewSegment = View.inflate(mContext, R.layout.fast_layout_activity_segment, null);
+            mSegmentTab = viewSegment.findViewById(R.id.tabLayout_segment);
         }
         if (isSliding) {
             if (mTabLayout.indexOfChild(viewSliding) == -1) {
@@ -75,6 +75,14 @@ public class ProcessListActivity extends FastTitleActivity {
 
             if (viewSegment != null) {
                 viewSegment.setVisibility(View.GONE);
+            }
+        } else {
+            if (mTabLayout.indexOfChild(viewSegment) == -1) {
+                mTabLayout.addView(viewSegment);
+            }
+            viewSegment.setVisibility(View.VISIBLE);
+            if (viewSliding != null) {
+                viewSliding.setVisibility(View.GONE);
             }
         }
 
@@ -112,7 +120,7 @@ public class ProcessListActivity extends FastTitleActivity {
 //    }
 
     private void setTab() {
-        isSliding = (boolean) SPUtil.get(mContext, SPConstant.SP_KEY_ACTIVITY_TAB_SLIDING, isSliding);
+//        isSliding = (boolean) SPUtil.get(mContext, SPConstant.SP_KEY_ACTIVITY_TAB_SLIDING, isSliding);
         vpContent.removeAllViews();
         listFragment.clear();
 
@@ -132,8 +140,11 @@ public class ProcessListActivity extends FastTitleActivity {
                             getResources().getStringArray(R.array.arrays_tab1_activity), listFragment);
         }
         //SlidingTabLayout--需这样切换一下不然选中变粗没有效果不知是SlidingTabLayout BUG还是设置问题
-        mSlidingTab.setCurrentTab(1);
-        mSlidingTab.setCurrentTab(0);
+        if (isSliding) {
+            mSlidingTab.setCurrentTab(1);
+            mSlidingTab.setCurrentTab(0);
+        }
+
     }
 
     private List<String> getTitles(int array) {

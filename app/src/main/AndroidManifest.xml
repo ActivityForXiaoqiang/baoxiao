@@ -44,19 +44,19 @@
         <activity
             android:name=".common.ui.process.reimbursement.ReimbursementActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBarY"></activity>
         <activity
             android:name=".common.ui.process.ProcessListActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBarY"></activity>
         <activity
             android:name=".common.ui.process.reimbursement.ReimbursementDetailsActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBarY" />
         <activity
             android:name=".common.ui.info.BudgetActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBarY" />
 
         <activity
             android:name=".common.ui.info.EditActivity"

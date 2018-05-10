@@ -78,7 +78,7 @@
         <item name="android:singleLine">false</item>
     </style>
 
-    
+
     <style name="Theme_Transparenr" parent="@android:style/Theme.DeviceDefault.Light.Dialog">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowIsFloating">true</item>
@@ -88,6 +88,7 @@
         <item name="android:windowBackground">@android:color/transparent</item>
 
     </style>
+
     <style name="AlertDialog.AnimationStyle" parent="android:Animation">
         <item name="android:windowEnterAnimation">@anim/dialog_enter</item>
         <item name="android:windowExitAnimation">@anim/dialog_exit</item>
@@ -100,20 +101,20 @@
         <item name="android:windowBackground">@color/colorBackground</item>
     </style>
 
-    <style name="SupperTextStyleItem">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:minHeight">45dp</item>
-        <!--<item name="com.example.xiaoqiang.baixiao.common:sLeftViewMarginLeft">6dp</item>-->
-        <!--<item name="com.example.xiaoqiang.baixiao.common:sLeftIconHeight">24dp</item>-->
-        <!--<item name="com.example.xiaoqiang.baixiao.common:sLeftIconWidth">24dp</item>-->
-        <!--<item name="com.example.xiaoqiang.baixiao.common:sLeftTextSize">15dp</item>-->
-        <!--<item name="com.example.xiaoqiang.baixiao.common:sDividerLineColor">@color/colorLineGray</item>-->
-        <!--<item name="com.example.xiaoqiang.baixiao.common:sDividerLineType">both</item>-->
-        <!--<item name="com.example.xiaoqiang.baixiao.common:sLeftTextColor">@color/colorTextBlack</item>-->
-        <!--<item name="com.example.xiaoqiang.baixiao.common:sRightIconRes">@drawable/ic_arrow_right</item>-->
-        <!--<item name="com.example.xiaoqiang.baixiao.common:sRightTextColor">@color/colorTextGray</item>-->
-        <!--<item name="com.example.xiaoqiang.baixiao.common:sRightTextSize">12dp</item>-->
+    <!--item根布局样式-->
+    <style name="AppTheme.NoActionBarY">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:windowDisablePreview">true</item>
+        <item name="android:windowNoDisplay">false</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <!--<item name="android:windowBackground">@color/colorWhite</item>-->
+        <!--建议使用全透明-减少一层绘制避免过度绘制-->
+        <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
     <!--item根布局样式-->
@@ -124,10 +125,11 @@
         <item name="android:layout_marginLeft">@dimen/dp_margin_item</item>
         <item name="android:layout_marginTop">@dimen/dp_margin_item</item>
         <item name="android:layout_marginRight">@dimen/dp_margin_item</item>
-        <!--<item name="com.example.xiaoqiang.baixiao.common:rv_backgroundColor">@color/colorWhite</item>-->
-        <!--<item name="com.example.xiaoqiang.baixiao.common:rv_backgroundPressedColor">@color/colorWhitePressed</item>-->
-        <!--<item name="com.example.xiaoqiang.baixiao.common:rv_radius">@dimen/dp_radius</item>-->
+        <item name="com.example.xiaoqiang.baoxiao:rv_backgroundColor">@color/colorWhite</item>
+        <item name="com.example.xiaoqiang.baoxiao:rv_backgroundPressedColor">@color/colorWhitePressed</item>
+        <item name="com.example.xiaoqiang.baoxiao:rv_radius">@dimen/dp_radius</item>
     </style>
+
 
     <style name="BaseDialogStyle" parent="@android:style/Theme.Holo.Dialog">
         <item name="android:windowTitleStyle">@null</item>

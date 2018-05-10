@@ -129,6 +129,11 @@ public class MineActivity extends MyBaseActivity implements UpdataView {
                             ToastUtil.show("您还没有所属公司");
                             return;
                         }
+
+                        if (user.getPosition() != 5) {
+                            ToastUtil.show("您没有权限");
+                            return;
+                        }
                         FastUtil.startActivity(MineActivity.this, BudgetActivity.class);
                     }
                 });
