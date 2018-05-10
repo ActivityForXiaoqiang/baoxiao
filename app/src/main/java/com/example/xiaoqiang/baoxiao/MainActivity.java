@@ -38,7 +38,6 @@ import com.example.xiaoqiang.baoxiao.common.ui.company.RequestActivity;
 import com.example.xiaoqiang.baoxiao.common.ui.info.MineActivity;
 import com.example.xiaoqiang.baoxiao.common.ui.process.ProcessListActivity;
 import com.example.xiaoqiang.baoxiao.common.ui.process.reimbursement.ReimbursementActivity;
-import com.example.xiaoqiang.baoxiao.common.ui.report.ReportActivity;
 import com.example.xiaoqiang.baoxiao.common.view.QueryView;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -214,7 +213,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void toProcess(int type, StateUser user) {
 
         if (user == null) {
-            ToastUtil.show("你还未登陆");
+            ToastUtil.show("您还未登陆");
             return;
         }
 
