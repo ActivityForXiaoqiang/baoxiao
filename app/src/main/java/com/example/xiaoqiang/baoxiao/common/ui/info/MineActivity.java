@@ -99,7 +99,22 @@ public class MineActivity extends MyBaseActivity implements UpdataView {
         btn_company.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MineActivity.this, ReportActivity.class));
+                SpManager.getInstance().queryCurrentUser(MineActivity.this, user, new SpManager.IGetCurrentUser() {
+                    @Override
+                    public void showMyUser(StateUser user) {
+                        if (user == null) {
+                            ToastUtil.show("您还未登陆");
+                            return;
+                        }
+
+                        if (!user.isJoinCompay()) {
+                            ToastUtil.show("您还没有所属公司");
+                            return;
+                        }
+
+                        startActivity(new Intent(MineActivity.this, ReportActivity.class));
+                    }
+                });
             }
         });
         btn_about.setOnClickListener(new View.OnClickListener() {
@@ -121,12 +136,17 @@ public class MineActivity extends MyBaseActivity implements UpdataView {
                     @Override
                     public void showMyUser(StateUser user) {
                         if (user == null) {
-                            ToastUtil.show("你还未登陆");
+                            ToastUtil.show("您还未登陆");
                             return;
                         }
 
                         if (!user.isJoinCompay()) {
                             ToastUtil.show("您还没有所属公司");
+                            return;
+                        }
+
+                        if (user.getPosition() != 5) {
+                            ToastUtil.show("您没有权限");
                             return;
                         }
                         FastUtil.startActivity(MineActivity.this, BudgetActivity.class);
