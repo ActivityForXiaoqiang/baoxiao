@@ -231,7 +231,7 @@ public class EditActivity extends MyBaseActivity implements UpdataView {
                 .setCurrentMillseconds(System.currentTimeMillis())
 //                .setThemeColor(getResources().getColor(R.color.timepicker_dialog_bg))
                 .setThemeColor(getResources().getColor(R.color.colorPrimary))
-                .setType(Type.YEAR_MONTH)
+                .setType(Type.YEAR_MONTH_DAY)
                 .setWheelItemTextNormalColor(getResources().getColor(R.color.timetimepicker_default_text_color))
 //                .setWheelItemTextSelectorColor(getResources().getColor(R.color.timepicker_toolbar_bg))
                 .setWheelItemTextSelectorColor(getResources().getColor(R.color.txt_title_blue))

@@ -28,9 +28,11 @@ public class SpManager {
     protected final String USERINFO = "UserInfo";
     public static final String No_FIRST = "no_first";
     public static Map<Integer, String> mPositionManager;
+    public static Map<Integer, String> mBumenManager;
     public static List<String> mVehicleData;
     public static List<String> mAccountTypeData;
     public static List<String> mPositionData;
+    public static List<String> mBumenData;
     private IGetCurrentUser iGetCurrentUser = null;
 
     static {
@@ -41,6 +43,9 @@ public class SpManager {
         mPositionManager.put(3, "部门主管");
         mPositionManager.put(4, "财务主管");
         mPositionManager.put(5, "总经理");
+        mBumenManager = new HashMap<>();
+
+
         mVehicleData = new ArrayList<>();
         mVehicleData.add("飞机");
         mVehicleData.add("高铁");
@@ -58,7 +63,17 @@ public class SpManager {
         mPositionData.add("部门主管");
         mPositionData.add("财务主管");
         mPositionData.add("总经理");
-
+        mBumenData = new ArrayList<>();
+        mBumenData.add("销售部门");
+        mBumenData.add("人事部门");
+        mBumenData.add("财务部门");
+        mBumenData.add("设计部门");
+        mBumenData.add("技术部门");
+        mBumenData.add("生产部门");
+        mBumenData.add("其他部门");
+        for (int i = 0; i < mBumenData.size(); i++) {
+            mBumenManager.put(i, mBumenData.get(i));
+        }
     }
 
     public static SpManager getInstance() {

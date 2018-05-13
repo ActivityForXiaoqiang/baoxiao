@@ -79,16 +79,16 @@ public class ReportActivity extends MyBaseActivity {
         for (int i = 0; i < valueSet1.size(); i++) {
             Timber.i("x===:" + valueSet1.get(i).getX() + "    y:" + valueSet1.get(i).getY());
         }
-       /* valueSet1 = new ArrayList<>();
+        valueSet1 = new ArrayList<>();
         for (int i = 0; i < 31; i++) {
-            float value=0;
-            if(i==5){
-                 value = (float) (Math.random() * 12*//*100以内的随机数*//*);
+            float value = 0;
+            if (i == 5) {
+                value = (float) (Math.random() * 12);
             }
             valueSet1.add(new BarEntry(value, i));
-        }*/
+        }
 
-        BarDataSet barDataSet1 = new BarDataSet(valueSet1, "目标");
+        BarDataSet barDataSet1 = new BarDataSet(valueSet1, "金额");
         barDataSet1.setColor(Color.parseColor("#45a2ff"));
 
         barDataSet1.setBarShadowColor(Color.parseColor("#01000000"));
@@ -171,7 +171,15 @@ public class ReportActivity extends MyBaseActivity {
 
                   /*  index++;
                     if (valueSet1.size() >= dayTimes.size()) {
-                        test();
+                        new Handler(){
+                            @Override
+                            public void handleMessage(Message msg) {
+                                super.handleMessage(msg);
+                                test();
+
+                            }
+                        }.sendEmptyMessage(1);
+
                         //返回数据
                         dissmissLoadingDialog();
                     } else {
