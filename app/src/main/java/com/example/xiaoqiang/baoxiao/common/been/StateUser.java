@@ -8,6 +8,16 @@ public class StateUser extends BmobObject {
     private boolean isJoinCompay;
     private boolean isAppying;
     private int position; //职位
+    private int department;
+
+
+    public int getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(int department) {
+        this.department = department;
+    }
 
     public MyUser getUser() {
         return user;

@@ -49,7 +49,7 @@ public class RequestActivity extends MyBaseActivity implements QueryView, Delect
     DelectController delectController;
     MyUser user;
 
-    SelectListDialog dialog;
+    SelectListDialog dialog, dialog2;
     Company company;
     String stateId;
     String deleteId;
@@ -76,15 +76,44 @@ public class RequestActivity extends MyBaseActivity implements QueryView, Delect
                 Log.e("xiaoqiang", "content" + content);
                 for (Integer key : SpManager.mPositionManager.keySet()) {
                     if (content.equals(SpManager.mPositionManager.get(key))) {
-                        Log.e("xiaoqiang", "content+????" + key);
                         stateUser.setPosition(key);
-                        stateUser.setJoinCompay(true);
-                        stateUser.setCompany(company);
-                        updataController.updataStateUser(stateUser, stateId);
+                        if (key == 5) {
+                            stateUser.setJoinCompay(true);
+                            stateUser.setCompany(company);
+                            stateUser.setDepartment(-1);
+                            updataController.updataStateUser(stateUser, stateId);
+                        } else {
+                            dialog2.show();
+                        }
+                        dialog.dismiss();
+
+
                     }
                 }
             }
         });
+        dialog2 = new SelectListDialog(this, null, FastConstant.SELECT_DIALOG_DEPARTMENT, "所属部门");
+        dialog2.setItemSelectListener(new SelectListDialog.ItemSelect() {
+            @Override
+            public void onItemUserSelect(StateUser user) {
+
+            }
+
+            @Override
+            public void onItemSelect(String content) {
+                Log.e("xiaoqiang", "content" + content);
+                stateUser.setJoinCompay(true);
+                stateUser.setCompany(company);
+                for (Integer key : SpManager.mBumenManager.keySet()) {
+                    if (content.equals(SpManager.mBumenManager.get(key))) {
+                        stateUser.setDepartment(key);
+                    }
+                }
+                dialog2.dismiss();
+                updataController.updataStateUser(stateUser, stateId);
+            }
+        });
+
         delectController = new DelectController(this);
         updataController = new UpdataController(new UpdataView() {
             @Override
