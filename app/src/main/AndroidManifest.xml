@@ -42,6 +42,10 @@
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
+            android:name=".common.ui.report.ReportXActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBarY"/>
+        <activity
             android:name=".common.ui.process.reimbursement.ReimbursementActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBarY"></activity>
