@@ -18,7 +18,7 @@ import com.example.xiaoqiang.baoxiao.common.fast.constant.util.FastUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SpManager;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.ToastUtil;
 import com.example.xiaoqiang.baoxiao.common.ui.message.ProblemActivity;
-import com.example.xiaoqiang.baoxiao.common.ui.report.ReportActivity;
+import com.example.xiaoqiang.baoxiao.common.ui.report.ReportXActivity;
 import com.example.xiaoqiang.baoxiao.common.utils.StatusBarUtil;
 import com.example.xiaoqiang.baoxiao.common.view.UpdataView;
 import com.flyco.roundview.RoundTextView;
@@ -101,18 +101,18 @@ public class MineActivity extends MyBaseActivity implements UpdataView {
             public void onClick(View v) {
                 SpManager.getInstance().queryCurrentUser(MineActivity.this, user, new SpManager.IGetCurrentUser() {
                     @Override
-                    public void showMyUser(StateUser user) {
-                        if (user == null) {
+                    public void showMyUser(StateUser stateUser) {
+                        if (stateUser == null) {
                             ToastUtil.show("您还未登陆");
                             return;
                         }
 
-                        if (!user.isJoinCompay()) {
+                        if (!stateUser.isJoinCompay()) {
                             ToastUtil.show("您还没有所属公司");
                             return;
                         }
 
-                        startActivity(new Intent(MineActivity.this, ReportActivity.class));
+                        startActivity(new Intent(MineActivity.this, ReportXActivity.class));
                     }
                 });
             }
@@ -134,18 +134,18 @@ public class MineActivity extends MyBaseActivity implements UpdataView {
             public void onClick(View view) {
                 SpManager.getInstance().queryCurrentUser(MineActivity.this, user, new SpManager.IGetCurrentUser() {
                     @Override
-                    public void showMyUser(StateUser user) {
-                        if (user == null) {
+                    public void showMyUser(StateUser stateUser) {
+                        if (stateUser == null) {
                             ToastUtil.show("您还未登陆");
                             return;
                         }
 
-                        if (!user.isJoinCompay()) {
+                        if (!stateUser.isJoinCompay()) {
                             ToastUtil.show("您还没有所属公司");
                             return;
                         }
 
-                        if (user.getPosition() != 5) {
+                        if (stateUser.getPosition() != 5) {
                             ToastUtil.show("您没有权限");
                             return;
                         }

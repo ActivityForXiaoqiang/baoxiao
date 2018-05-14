@@ -34,6 +34,7 @@ public class ProcessEntity extends BmobObject {
     private Integer processType;//流程类型 和流程节点 一起判断  1普通員工申請  2主管申請  3總經理申請
     private String pointList;//節點时间轴
     private Boolean isReject = false;//是否被驳回
+    private Integer departmentId ;//部门id
 
     public String getCreatorName() {
         return creatorName;
@@ -192,5 +193,13 @@ public class ProcessEntity extends BmobObject {
 
     public void setReject(Boolean reject) {
         isReject = reject;
+    }
+
+    public Integer getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(Integer departmentId) {
+        this.departmentId = departmentId;
     }
 }

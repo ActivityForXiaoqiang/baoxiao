@@ -359,6 +359,7 @@ public class ReimbursementActivity extends FastTitleActivity<ReimbursementContro
             pe.setCreatorName(name);
             pe.setUserId(user.getObjectId());
             pe.setCompanyId(user.getCompany().getObjectId());
+            pe.setDepartmentId(user.getDepartment());
             //报销流程信息
             pe.setPosition(myPosition);
             pe.setPoint(FastConstant.PROCESS_POINT_TWO);//去往下一个节点
@@ -367,6 +368,7 @@ public class ReimbursementActivity extends FastTitleActivity<ReimbursementContro
             pe.setAccountType(accountType);
             pe.setAmount(NumberFormatterUtil.parseDouble(amount));
             pe.setReason(reason);
+
 
             List<PointEntity> plist = new ArrayList<>();
             PointEntity pointE = new PointEntity();

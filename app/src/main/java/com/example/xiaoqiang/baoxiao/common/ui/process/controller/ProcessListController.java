@@ -38,7 +38,7 @@ public class ProcessListController extends BaseController<IProcessListView> {
     }
 
     /**
-     * 获取代办事宜
+     * 获取待办事宜
      */
     public void getAgencyProcessList(int pageNo, int position, String companyId) {
         showLoadingDialog(mContext);
@@ -68,7 +68,9 @@ public class ProcessListController extends BaseController<IProcessListView> {
                 query.addWhereContainedIn("processType", Arrays.asList(new int[]{FastConstant.PROCESS_TYPE_ONE, FastConstant
                         .PROCESS_TYPE_THREE}));
             } else {
+                //部門主管只能批准自己部門的
                 query.addWhereEqualTo("processType", FastConstant.PROCESS_TYPE_ONE);
+                query.addWhereEqualTo("departmentId",SpManager.getInstance().getUserInfo().getDepartment());
             }
             query.addWhereEqualTo("point", FastConstant.PROCESS_POINT_TWO);
         } else if (position == 5) {
