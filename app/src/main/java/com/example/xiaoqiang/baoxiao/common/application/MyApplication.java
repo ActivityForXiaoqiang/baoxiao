@@ -18,6 +18,8 @@ import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SizeUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SpManager;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.Timber;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.ToastUtil;
+import com.yanzhenjie.nohttp.Logger;
+import com.yanzhenjie.nohttp.NoHttp;
 
 import cn.bmob.v3.Bmob;
 
@@ -106,6 +108,10 @@ public class MyApplication extends Application {
                 //设置虚拟导航栏控制
                 .setNavigationBarControl(impl);
         LoggerManager.d(TAG, "total:" + (System.currentTimeMillis() - start));
+
+        NoHttp.initialize(this);
+        Logger.setDebug(true);// 开启NoHttp的调试模式, 配置后可看到请求过程、日志和错误信息。
+        Logger.setTag("NoHttpSample");
     }
 
     /**

@@ -35,6 +35,7 @@ import com.example.xiaoqiang.baoxiao.common.fast.constant.util.FastUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SpManager;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.ToastUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.widget.dialog.LoadingDialog;
+import com.example.xiaoqiang.baoxiao.common.ui.TravelWayActivity;
 import com.example.xiaoqiang.baoxiao.common.ui.company.CreateCompanyActivity;
 import com.example.xiaoqiang.baoxiao.common.ui.company.JoinActivity;
 import com.example.xiaoqiang.baoxiao.common.ui.company.RequestActivity;
@@ -167,6 +168,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_company:
+                startActivity(new Intent(MainActivity.this, TravelWayActivity.class));
                 break;
             case R.id.nav_create:
                 if (stateUser.isJoinCompay()) {
@@ -321,6 +323,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     void getDatas(List<StateUser> datas) {
+        mainDatas.clear();
         List<StateUser>[] array = new ArrayList[8];
         for (int i = 0; i < array.length; i++) {
             array[i] = new ArrayList<>();
