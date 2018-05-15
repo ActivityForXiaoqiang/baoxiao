@@ -30,6 +30,13 @@
                 android:layout_marginLeft="@dimen/space_normal"
                 android:text="昵称" />
 
+            <TextView
+                android:id="@+id/item_main_pos"
+                style="@style/AppTheme.Label.Discription"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="@string/app_name" />
+
         </LinearLayout>
 
     </LinearLayout>

@@ -92,4 +92,5 @@ dependencies {
 //    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-5'
     implementation 'de.hdodenhof:circleimageview:2.1.0'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.40'
 }
