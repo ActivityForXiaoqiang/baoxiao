@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,8 +23,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.xiaoqiang.baoxiao.common.adapter.SectionAdapter;
 import com.example.xiaoqiang.baoxiao.common.been.Applicant;
 import com.example.xiaoqiang.baoxiao.common.been.Company;
+import com.example.xiaoqiang.baoxiao.common.been.MySection;
 import com.example.xiaoqiang.baoxiao.common.been.MyUser;
 import com.example.xiaoqiang.baoxiao.common.been.StateUser;
 import com.example.xiaoqiang.baoxiao.common.controller.QueryController;
@@ -64,17 +67,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     RecyclerView recyclerView;
     SmartRefreshLayout smartRefreshLayout;
 
-    List<StateUser> companyUsers;
 
     Company company;
 
-    mAdapter adapter;
+
+    List<MySection> mainDatas;
+    SectionAdapter sectionAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        companyUsers = new ArrayList<>();
+        mainDatas = new ArrayList<>();
         dialog = new LoadingDialog(this);
         controller = new QueryController(this);
         user = BmobUser.getCurrentUser(MyUser.class);
@@ -82,6 +86,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+
+
         navigationView.setNavigationItemSelectedListener(this);
         View headLayout = navigationView.getHeaderView(0);
         headLayout.setOnClickListener(new View.OnClickListener() {
@@ -106,10 +112,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
         recyclerView = findViewById(R.id.main_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new mAdapter();
-        recyclerView.setAdapter(adapter);
+        sectionAdapter = new SectionAdapter(this, R.layout.item_main, R.layout.item_main_head, mainDatas);
+        recyclerView.setAdapter(sectionAdapter);
+
         smartRefreshLayout = findViewById(R.id.main_smart);
         smartRefreshLayout.setEnableLoadmore(false);
         smartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
@@ -287,8 +299,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onQueryCompanyUser(List<StateUser> result) {
-        companyUsers = result;
-        adapter.notifyDataSetChanged();
+        getDatas(result);
+
+        sectionAdapter.notifyDataSetChanged();
         smartRefreshLayout.finishRefresh();
     }
 
@@ -307,39 +320,44 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    void getDatas(List<StateUser> datas) {
+        List<StateUser>[] array = new ArrayList[8];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = new ArrayList<>();
+        }
 
-    class mViewHolder extends RecyclerView.ViewHolder {
-        TextView name;
-        CircleImageView head;
+        for (StateUser su : datas) {
+            if (su.getDepartment() == -1) {
+                array[0].add(su);
+            } else {
+                array[su.getDepartment() + 1].add(su);
+            }
 
-        public mViewHolder(View itemView) {
-            super(itemView);
-            name = itemView.findViewById(R.id.item_main_name);
-            head = itemView.findViewById(R.id.mian_item_head);
+        }
+
+        mainDatas.add(new MySection(true, "总经理"));
+        addData(array[0]);
+        mainDatas.add(new MySection(true, "销售部门"));
+        addData(array[1]);
+        mainDatas.add(new MySection(true, "人事部门"));
+        addData(array[2]);
+        mainDatas.add(new MySection(true, "财务部门"));
+        addData(array[3]);
+        mainDatas.add(new MySection(true, "设计部门"));
+        addData(array[4]);
+        mainDatas.add(new MySection(true, "技术部门"));
+        addData(array[5]);
+        mainDatas.add(new MySection(true, "生产部门"));
+        addData(array[6]);
+        mainDatas.add(new MySection(true, "其他部门"));
+        addData(array[7]);
+    }
+
+    void addData(List<StateUser> arrays) {
+        for (StateUser su : arrays) {
+            mainDatas.add(new MySection(su));
         }
     }
 
-    class mAdapter extends RecyclerView.Adapter<mViewHolder> {
-
-        @NonNull
-        @Override
-        public mViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.item_main, parent, false);
-
-            return new mViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull mViewHolder holder, int position) {
-            MyUser itemuser = companyUsers.get(position).getUser();
-            holder.name.setText(itemuser.getNickName());
-            Glide.with(MainActivity.this).load(itemuser.getPhotoPath()).into(holder.head);
-        }
-
-        @Override
-        public int getItemCount() {
-            return companyUsers == null ? 0 : companyUsers.size();
-        }
-    }
 
 }

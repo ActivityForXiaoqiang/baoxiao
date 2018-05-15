@@ -66,6 +66,17 @@ public class EditActivity extends MyBaseActivity implements UpdataView {
         } else {
             items[SEX][1] = "女";
         }
+
+        if (!TextUtils.isEmpty(user.getRealname())) {
+            items[REAL_NAME][1] = user.getRealname();
+
+        }
+        if (!TextUtils.isEmpty(user.getCode())) {
+            items[CODE][1] = user.getCode();
+        }
+        if (!TextUtils.isEmpty(user.getBirthday())) {
+            items[BIRTHDAY][1] = user.getBirthday();
+        }
         adapter = new eAdapter();
         controller = new UpdataController(this);
         recyclerView = findViewById(R.id.info_recyclerView);

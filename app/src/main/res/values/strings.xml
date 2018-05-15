@@ -40,4 +40,7 @@
     <string name="fast_load_more_load_failed">Load more failed</string>
     <string name="fast_load_more_loading">加载中...</string>
 
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
 </resources>
