@@ -335,22 +335,38 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         }
 
-        mainDatas.add(new MySection(true, "总经理"));
-        addData(array[0]);
-        mainDatas.add(new MySection(true, "销售部门"));
-        addData(array[1]);
-        mainDatas.add(new MySection(true, "人事部门"));
-        addData(array[2]);
-        mainDatas.add(new MySection(true, "财务部门"));
-        addData(array[3]);
-        mainDatas.add(new MySection(true, "设计部门"));
-        addData(array[4]);
-        mainDatas.add(new MySection(true, "技术部门"));
-        addData(array[5]);
-        mainDatas.add(new MySection(true, "生产部门"));
-        addData(array[6]);
-        mainDatas.add(new MySection(true, "其他部门"));
-        addData(array[7]);
+        for (int i = 0; i < array.length; i++) {
+            if (array[i].size() > 0) {
+                switch (i) {
+                    case 0:
+                        mainDatas.add(new MySection(true, "总经理"));
+                        break;
+                    case 1:
+                        mainDatas.add(new MySection(true, "销售部门"));
+                        break;
+                    case 2:
+                        mainDatas.add(new MySection(true, "人事部门"));
+                        break;
+                    case 3:
+                        mainDatas.add(new MySection(true, "财务部门"));
+                        break;
+                    case 4:
+                        mainDatas.add(new MySection(true, "设计部门"));
+                        break;
+                    case 5:
+                        mainDatas.add(new MySection(true, "技术部门"));
+                        break;
+                    case 6:
+                        mainDatas.add(new MySection(true, "生产部门"));
+                        break;
+                    case 7:
+                        mainDatas.add(new MySection(true, "其他部门"));
+                        break;
+
+                }
+                addData(array[i]);
+            }
+        }
     }
 
     void addData(List<StateUser> arrays) {
