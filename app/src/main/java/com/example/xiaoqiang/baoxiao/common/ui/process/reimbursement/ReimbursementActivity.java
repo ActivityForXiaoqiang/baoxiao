@@ -1,24 +1,32 @@
 package com.example.xiaoqiang.baoxiao.common.ui.process.reimbursement;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aries.ui.view.title.TitleBarView;
+import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
+import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
+import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.example.xiaoqiang.baoxiao.R;
 import com.example.xiaoqiang.baoxiao.common.adapter.PicturesAdapter;
 import com.example.xiaoqiang.baoxiao.common.adapter.TimeLineAdapter;
+import com.example.xiaoqiang.baoxiao.common.been.AreaEntity;
 import com.example.xiaoqiang.baoxiao.common.been.PointEntity;
 import com.example.xiaoqiang.baoxiao.common.been.ProcessEntity;
 import com.example.xiaoqiang.baoxiao.common.been.StateUser;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.basis.FastTitleActivity;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.FastConstant;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.manager.ThreadPoolManager;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.NumberFormatterUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SpManager;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.TimeFormatUtil;
@@ -28,11 +36,14 @@ import com.example.xiaoqiang.baoxiao.common.ui.process.controller.IReimbursement
 import com.example.xiaoqiang.baoxiao.common.ui.process.controller.ReimbursementController;
 import com.example.xiaoqiang.baoxiao.common.view.NoScollGridView;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.jzxiang.pickerview.TimePickerDialog;
 import com.jzxiang.pickerview.data.Type;
 import com.jzxiang.pickerview.listener.OnDateSetListener;
 import com.yanzhenjie.album.AlbumFile;
 
+import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -55,11 +66,11 @@ public class ReimbursementActivity extends FastTitleActivity<ReimbursementContro
     @BindView(R.id.reimbursement_personnel_et)
     TextView mEtPersonnel;//申请人姓名
     @BindView(R.id.reimbursement_amount_et)
-    TextView mEtAmount;//申请金额
+    EditText mEtAmount;//申请金额
     @BindView(R.id.reimbursement_account_et)
-    TextView mEtAccount;//账号
+    EditText mEtAccount;//账号
     @BindView(R.id.reimbursement_reason_et)
-    TextView mEtReason;//原因
+    EditText mEtReason;//原因
     @BindView(R.id.reimbursement_set_out_et)
     TextView mEtSetOUt;//出发地
     @BindView(R.id.reimbursement_destination_et)
@@ -74,6 +85,10 @@ public class ReimbursementActivity extends FastTitleActivity<ReimbursementContro
     TextView mTvAccountType;//账号类型
     @BindView(R.id.reimbursement_point_listview)
     RecyclerView mTimeline;
+    @BindView(R.id.reimbursement_is_travel_on_business_img)
+    ImageView mCheckImg;
+    @BindView(R.id.reimbursement_reference_price_tv)
+    TextView mTvVehiclePriceReference;
     private ArrayList<AlbumFile> mAlbumFiles, upDataFiles;
     private PicturesAdapter mAdapter;
     private long startTime = -1, endTime = -1;
@@ -82,6 +97,11 @@ public class ReimbursementActivity extends FastTitleActivity<ReimbursementContro
     private StateUser indexUser;
     private int pageStyle = 0;//0申请  1修改
     private ProcessEntity mProcessEntity;
+    private boolean isSetout;
+    private boolean isTravel = false;//是否是差旅
+    private ArrayList<AreaEntity> mProvinces = new ArrayList<>();
+    private ArrayList<ArrayList<String>> mCities = new ArrayList<>();
+    private ArrayList<ArrayList<ArrayList<String>>> mDistricts = new ArrayList<>();
 
     @Override
     public int getContentLayout() {
@@ -94,6 +114,7 @@ public class ReimbursementActivity extends FastTitleActivity<ReimbursementContro
 
     @Override
     public void initView(Bundle savedInstanceState) {
+        processAreaData();
         indexUser = SpManager.getInstance().getUserInfo();//默認自己
         initGridView();
     }
@@ -195,7 +216,8 @@ public class ReimbursementActivity extends FastTitleActivity<ReimbursementContro
             mTimeline.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
             mTimeline.setHasFixedSize(true);
             mTimeline.setNestedScrollingEnabled(false);
-            TimeLineAdapter adapter = new TimeLineAdapter(mProcessEntity.getPointList(), false, mProcessEntity.getPoint(), mProcessEntity.getProcessType());
+            TimeLineAdapter adapter = new TimeLineAdapter(mProcessEntity.getPointList(), false, mProcessEntity.getPoint(), mProcessEntity
+                    .getProcessType());
             mTimeline.setAdapter(adapter);
         }
     }
@@ -222,8 +244,11 @@ public class ReimbursementActivity extends FastTitleActivity<ReimbursementContro
     }
 
     @Override
-    @OnClick({R.id.reimbursement_personnel_search, R.id.reimbursement_vehicle_search, R.id.reimbursement_account_search,
-            R.id.reimbursement_submit, R.id.reimbursement_start_time, R.id.reimbursement_end_time})
+    @OnClick({R.id.reimbursement_personnel_search, R.id.reimbursement_set_out_search
+            , R.id.reimbursement_destination_search, R.id.reimbursement_vehicle_search
+            , R.id.reimbursement_account_search, R.id.reimbursement_submit
+            , R.id.reimbursement_start_time, R.id.reimbursement_end_time
+            , R.id.reimbursement_is_travel_on_business_img, R.id.reimbursement_vehicle_price_question})
     public void onClick(View v) {
         switch (v.getId()) {
             //人员搜索
@@ -234,6 +259,16 @@ public class ReimbursementActivity extends FastTitleActivity<ReimbursementContro
                 } else {
                     showSelectDialog();
                 }
+                break;
+            //出发地
+            case R.id.reimbursement_set_out_search:
+                isSetout = true;
+                selectCity();
+                break;
+            //目的地
+            case R.id.reimbursement_destination_search:
+                isSetout = false;
+                selectCity();
                 break;
             //账号类型选择
             case R.id.reimbursement_account_search:
@@ -255,7 +290,22 @@ public class ReimbursementActivity extends FastTitleActivity<ReimbursementContro
                 isStartTime = false;
                 showTimePickerDialog();
                 break;
-
+            //是否差旅
+            case R.id.reimbursement_is_travel_on_business_img:
+                isTravel = !isTravel;
+                if (isTravel) {
+                    mCheckImg.setImageResource(R.drawable.ic_selected);
+                    findViewByViewId(R.id.reimbursement_travel_on_business_l).setVisibility(View.VISIBLE);
+                } else {
+                    mCheckImg.setImageResource(R.drawable.ic_unchecked);
+                    findViewByViewId(R.id.reimbursement_travel_on_business_l).setVisibility(View.GONE);
+                }
+                break;
+            //查看参考价
+            case R.id.reimbursement_vehicle_price_question:
+                ToastUtil.show("查看参考价");
+//                FastUtil.startActivity(this,);
+                break;
             //提交
             case R.id.reimbursement_submit:
                 submit();
@@ -389,46 +439,116 @@ public class ReimbursementActivity extends FastTitleActivity<ReimbursementContro
 
             pe.setCreateTime(System.currentTimeMillis());
 
+
+            boolean isPass = true;//判断是否差旅信息填写完整
+            String str = "";
             String setout = mEtSetOUt.getText().toString();
-            if (!TextUtils.isEmpty(setout)) {
-                pe.setSetout(setout);
-            }
-
             String destination = mEtDestination.getText().toString();
-            if (!TextUtils.isEmpty(destination)) {
-                pe.setDestination(destination);
-            }
-
             String vehicle = mEtVehicle.getText().toString();
-            if (!TextUtils.isEmpty(vehicle)) {
-                pe.setVehicle(vehicle);
+            if (isTravel) {
+                if (TextUtils.isEmpty(setout)) {
+                    isPass = false;
+                    str = "差旅报销,请填写出发地";
+                }
+
+                if (isPass && TextUtils.isEmpty(destination)) {
+                    isPass = false;
+                    str = "差旅报销,请填写目的地";
+                }
+
+                if (isPass && TextUtils.isEmpty(vehicle)) {
+                    isPass = false;
+                    str = "差旅报销,请填写交通工具";
+                }
+                if (isPass && startTime == -1) {
+                    isPass = false;
+                    str = "差旅报销,请填写开始日期";
+                }
+
+                if (isPass && endTime == -1) {
+                    isPass = false;
+                    str = "差旅报销,请填写截止日期";
+                }
+
             }
 
-            boolean isTimeSelectFinish = false;
-            if (startTime != -1 || endTime != -1) {
-                if (startTime != -1 && endTime != -1) {
-                    pe.setStartTime(startTime);
-                    pe.setEndTime(endTime);
-                    isTimeSelectFinish = true;
-                }
-            } else {
-                isTimeSelectFinish = true;
-            }
-            if (!isTimeSelectFinish) {
-                ToastUtil.show("开始时间和结束时间必须关联，不能只填其一。");
+            if (!isPass) {
+                ToastUtil.show(str);
+                pe.setSetout(setout);
+                pe.setDestination(destination);
+                pe.setVehicle(vehicle);
+                pe.setStartTime(startTime);
+                pe.setEndTime(endTime);
                 return;
+            }
+
+            if (isTravel) {
+                pe.setTravel(isTravel);
+                pe.setVehiclePriceReference(mTvVehiclePriceReference.getText().toString());
             }
 
             if (!TextUtils.equals(indexUser.getUser().getObjectId(), user.getUser().getObjectId())) {
                 ToastUtil.show("账号与申请人不一致，申请人必须是本人。");
                 return;
             }
+
+
+
             if (upDataFiles != null && upDataFiles.size() > 0) {
                 mController.upDataFiles(upDataFiles, pe);
                 return;
             }
             mController.saveProcess(pe);
         }
+
+    }
+
+    /**
+     * 选择地区
+     */
+    private void selectCity() {
+        if (mProvinces.size() == 0) {
+            return;
+        }
+        OptionsPickerView pvOptions = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
+            @Override
+            public void onOptionsSelect(int options1, int options2, int options3, View v) {
+                // 返回的分别是三个级别的选中位置
+                String tx = mProvinces.get(options1).getPickerViewText() + " " +
+                        mCities.get(options1).get(options2) + " " +
+                        mDistricts.get(options1).get(options2).get(options3);
+                String result = mProvinces.get(options1).getPickerViewText();
+                if (mCities.get(options1) != null && mCities.get(options1).size() > 0 && mCities.get(options1).get(options2) != null) {
+                    result += " " + mCities.get(options1).get(options2);
+                    if (mDistricts.get(options1).get(options2) != null && mDistricts.get(options1).get(options2).size() > 0) {
+                        result += " " + mDistricts.get(options1).get(options2).get(options3);
+                    } else {
+                    }
+                } else {
+                }
+                if (isSetout) {
+                    initSetoutTxt(result);
+                } else {
+                    initDestinationTxt(result);
+                }
+            }
+        })
+                .setTitleText("选择城市")
+                .setTitleColor(ContextCompat.getColor(this, R.color.colorWhite))
+                .setSubmitColor(ContextCompat.getColor(this, R.color.colorWhite))
+                .setCancelColor(ContextCompat.getColor(this, R.color.colorWhite))
+                .setTitleBgColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
+                .setSubCalSize(17)// 确定、取消按钮大小设置
+                .setLineSpacingMultiplier(2f)
+                .setBgColor(Color.parseColor("#D8D8D8"))
+                .setDividerColor(ContextCompat.getColor(this, R.color.colorDivider))
+                .setTextColorCenter(ContextCompat.getColor(this, R.color.colorPrimaryTitle)) // 设置选中项文字颜色
+                .setContentTextSize(16)
+                .setOutSideCancelable(false)// default is true
+                .build();
+        pvOptions.setPicker(mProvinces, mCities, mDistricts);// 三级选择器
+        pvOptions.show();
+
 
     }
 
@@ -477,12 +597,91 @@ public class ReimbursementActivity extends FastTitleActivity<ReimbursementContro
         radioDialog.show();
     }
 
-    private void initVehicle(String content) {
-        mEtVehicle.setText(content);
-    }
-
     private void initAccountType(String content) {
         mTvAccountType.setText(content);
     }
 
+    private void initSetoutTxt(String content) {
+        mEtSetOUt.setText(content);
+        initReferencePrice();
+    }
+
+    private void initDestinationTxt(String content) {
+        mEtDestination.setText(content);
+        initReferencePrice();
+    }
+
+    private void initVehicle(String content) {
+        mEtVehicle.setText(content);
+        initReferencePrice();
+    }
+
+    private void initReferencePrice() {
+        if (!TextUtils.isEmpty(mEtSetOUt.getText().toString())
+                && !TextUtils.isEmpty(mEtDestination.getText().toString())
+                && !TextUtils.isEmpty(mEtVehicle.getText().toString())) {
+            String price = "";
+            //提供交通参考价
+            mTvVehiclePriceReference.setText(price);
+        }
+    }
+
+    /**
+     * 处理地区数据
+     */
+    private void processAreaData() {
+        ThreadPoolManager.getInstance().execute(new Thread() {
+            @Override
+            public void run() {
+                InputStream is;
+                try {
+                    StringBuffer sb = new StringBuffer();
+                    is = getAssets().open("cities.json");
+                    int length = is.available();
+                    byte[] buffer = new byte[length];
+                    int len;
+                    while ((len = is.read(buffer)) != -1) {
+                        sb.append(new String(buffer, 0, len, Charset.forName("UTF-8")));
+                    }
+                    is.close();
+                    ArrayList<AreaEntity> areaEntities = new Gson().fromJson(sb.toString(), new TypeToken<ArrayList<AreaEntity>>() {
+                    }.getType());
+
+                    mProvinces = areaEntities;
+
+                    for (int i = 0; i < mProvinces.size(); i++) {//遍历省份
+                        ArrayList<String> CityList = new ArrayList<>();//该省的城市列表（第二级）
+                        ArrayList<ArrayList<String>> Province_AreaList = new ArrayList<>();//该省的所有地区列表（第三极）
+
+                        for (int c = 0; c < mProvinces.get(i).getCityList().size(); c++) {//遍历该省份的所有城市
+                            String CityName = mProvinces.get(i).getCityList().get(c).getName();
+                            CityList.add(CityName);//添加城市
+                            ArrayList<String> City_AreaList = new ArrayList<>();//该城市的所有地区列表
+
+                            //如果无地区数据，建议添加空字符串，防止数据为null 导致三个选项长度不匹配造成崩溃
+                            if (mProvinces.get(i).getCityList().get(c).getArea() == null
+                                    || mProvinces.get(i).getCityList().get(c).getArea().size() == 0) {
+                                City_AreaList.add("");
+                            } else {
+                                City_AreaList.addAll(mProvinces.get(i).getCityList().get(c).getArea());
+                            }
+                            Province_AreaList.add(City_AreaList);//添加该省所有地区数据
+                        }
+
+                        /**
+                         * 添加城市数据
+                         */
+                        mCities.add(CityList);
+
+                        /**
+                         * 添加地区数据
+                         */
+                        mDistricts.add(Province_AreaList);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 }

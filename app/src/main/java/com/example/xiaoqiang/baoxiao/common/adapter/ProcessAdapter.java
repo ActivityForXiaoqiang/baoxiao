@@ -1,6 +1,7 @@
 package com.example.xiaoqiang.baoxiao.common.adapter;
 
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -35,6 +36,16 @@ public class ProcessAdapter extends BaseQuickAdapter<ProcessEntity, BaseViewHold
         if (isOperate) {
             helper.setVisible(R.id.item_process_operate_l, true);
         }
+        //设置参考价
+        LinearLayout reference_price_l = helper.getView(R.id.item_process_reference_price_l);
+        if (item.isTravel() && TextUtils.isEmpty(item.getVehiclePriceReference())) {
+            reference_price_l.setVisibility(View.VISIBLE);
+            helper.setText(R.id.item_process_reference_price, item.getVehiclePriceReference());
+        } else {
+            reference_price_l.setVisibility(View.GONE);
+        }
+
+        //设置标签
         ImageView sealImg = helper.getView(R.id.item_process_seal);
         LinearLayout rejectLayout = helper.getView(R.id.reimbursement_reject_reason_l);
 
@@ -67,7 +78,7 @@ public class ProcessAdapter extends BaseQuickAdapter<ProcessEntity, BaseViewHold
             }
         }
 
-
+        //参数处理 填充
         CharSequence titleCs = new SpanUtil().append("申请事由：")
                 .setForegroundColor(ContextCompat.getColor(mContext, R.color.txt_black1))
                 .append(item.getReason()).create();

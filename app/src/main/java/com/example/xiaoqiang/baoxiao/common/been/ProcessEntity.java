@@ -34,7 +34,9 @@ public class ProcessEntity extends BmobObject {
     private Integer processType;//流程类型 和流程节点 一起判断  1普通員工申請  2主管申請  3總經理申請
     private String pointList;//節點时间轴
     private Boolean isReject = false;//是否被驳回
-    private Integer departmentId ;//部门id
+    private Integer departmentId;//部门id
+    private String vehiclePriceReference;//交通参考价
+    private boolean isTravel = false;//是否差旅
 
     public String getCreatorName() {
         return creatorName;
@@ -201,5 +203,21 @@ public class ProcessEntity extends BmobObject {
 
     public void setDepartmentId(Integer departmentId) {
         this.departmentId = departmentId;
+    }
+
+    public String getVehiclePriceReference() {
+        return vehiclePriceReference;
+    }
+
+    public void setVehiclePriceReference(String vehiclePriceReference) {
+        this.vehiclePriceReference = vehiclePriceReference;
+    }
+
+    public boolean isTravel() {
+        return isTravel;
+    }
+
+    public void setTravel(boolean travel) {
+        isTravel = travel;
     }
 }
