@@ -13,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,6 +43,7 @@ import com.example.xiaoqiang.baoxiao.common.ui.company.RequestActivity;
 import com.example.xiaoqiang.baoxiao.common.ui.info.MineActivity;
 import com.example.xiaoqiang.baoxiao.common.ui.process.ProcessListActivity;
 import com.example.xiaoqiang.baoxiao.common.ui.process.reimbursement.ReimbursementActivity;
+import com.example.xiaoqiang.baoxiao.common.ui.sign.LoginActivity;
 import com.example.xiaoqiang.baoxiao.common.view.QueryView;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -168,7 +170,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_company:
-                startActivity(new Intent(MainActivity.this, TravelWayActivity.class));
+//                Intent iit=new Intent(MainActivity.this, TravelWayActivity.class);
+//                iit.putExtra("mode","4");
+//                iit.putExtra("from","北京");
+//                iit.putExtra("to","上海");
+//
+//                startActivity(iit);
                 break;
             case R.id.nav_create:
                 if (stateUser.isJoinCompay()) {
@@ -207,6 +214,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_logout:
                 BmobUser.logOut();
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 finish();
                 break;
         }
