@@ -546,7 +546,7 @@ public class ReimbursementActivity extends FastTitleActivity<ReimbursementContro
                 if (mCities.get(options1) != null && mCities.get(options1).size() > 0 && mCities.get(options1).get(options2) != null) {
                     result += " " + mCities.get(options1).get(options2);
                     if (mDistricts.get(options1).get(options2) != null && mDistricts.get(options1).get(options2).size() > 0) {
-                        result += " " + mDistricts.get(options1).get(options2).get(options3);
+//                        result += " " + mDistricts.get(options1).get(options2).get(options3);
                     } else {
                     }
                 } else {
@@ -571,7 +571,8 @@ public class ReimbursementActivity extends FastTitleActivity<ReimbursementContro
                 .setContentTextSize(16)
                 .setOutSideCancelable(false)// default is true
                 .build();
-        pvOptions.setPicker(mProvinces, mCities, mDistricts);// 三级选择器
+        pvOptions.setPicker(mProvinces, mCities);// 二级选择器
+//        pvOptions.setPicker(mProvinces, mCities, mDistricts);// 三级选择器
         pvOptions.show();
 
 
