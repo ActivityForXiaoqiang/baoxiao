@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="@dimen/space_normal"
+    android:layout_margin="@dimen/space_normal">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/space_normal">
+
+            <TextView
+                android:id="@+id/t_item_title"
+                style="@style/AppTheme.Label.Title.Large"
+                android:padding="@dimen/space_normal"
+                android:text="上海虹桥站--南京南站" />
+
+            <TextView
+                android:id="@+id/checi"
+                style="@style/AppTheme.Label.Title.Small"
+                android:paddingLeft="@dimen/space_normal"
+                android:text="航班/车次 k1511" />
+
+            <TextView
+                android:id="@+id/starttime"
+                style="@style/AppTheme.Label.Title"
+                android:text="出发时间 ：2018-05-17 14:15" />
+
+            <TextView
+                android:id="@+id/endtime"
+                style="@style/AppTheme.Label.Title"
+                android:layout_marginTop="@dimen/space_normal"
+                android:text="抵达时间 ：2018-05-17 14:15" />
+
+            <TextView
+                android:id="@+id/zhuwei"
+                style="@style/AppTheme.Label.Title"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="right"
+                android:padding="@dimen/space_normal"
+                android:text="二等座"
+                android:textColor="@color/colorPrimary" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/jiage"
+            style="@style/AppTheme.Label.Title.Large"
+            android:layout_alignParentRight="true"
+            android:padding="@dimen/space_normal"
+            android:text="¥160"
+            android:textColor="@android:color/holo_red_light" />
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>
