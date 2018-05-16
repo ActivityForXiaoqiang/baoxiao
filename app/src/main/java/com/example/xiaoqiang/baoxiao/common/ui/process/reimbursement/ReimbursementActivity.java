@@ -27,11 +27,14 @@ import com.example.xiaoqiang.baoxiao.common.been.StateUser;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.basis.FastTitleActivity;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.FastConstant;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.manager.ThreadPoolManager;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.util.FastUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.NumberFormatterUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SpManager;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.util.Timber;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.TimeFormatUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.ToastUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.widget.dialog.SelectListDialog;
+import com.example.xiaoqiang.baoxiao.common.ui.TravelWayActivity;
 import com.example.xiaoqiang.baoxiao.common.ui.process.controller.IReimbursementView;
 import com.example.xiaoqiang.baoxiao.common.ui.process.controller.ReimbursementController;
 import com.example.xiaoqiang.baoxiao.common.view.NoScollGridView;
@@ -87,8 +90,8 @@ public class ReimbursementActivity extends FastTitleActivity<ReimbursementContro
     RecyclerView mTimeline;
     @BindView(R.id.reimbursement_is_travel_on_business_img)
     ImageView mCheckImg;
-    @BindView(R.id.reimbursement_reference_price_tv)
-    TextView mTvVehiclePriceReference;
+    //    @BindView(R.id.reimbursement_reference_price_tv)
+//    TextView mTvVehiclePriceReference;
     private ArrayList<AlbumFile> mAlbumFiles, upDataFiles;
     private PicturesAdapter mAdapter;
     private long startTime = -1, endTime = -1;
@@ -303,8 +306,30 @@ public class ReimbursementActivity extends FastTitleActivity<ReimbursementContro
                 break;
             //查看参考价
             case R.id.reimbursement_vehicle_price_question:
+                if (TextUtils.isEmpty(mEtSetOUt.getText().toString())) {
+                    ToastUtil.show("出发地不能为空");
+                    return;
+                }
+                if (TextUtils.isEmpty(mEtDestination.getText().toString())) {
+                    ToastUtil.show("目的地不能为空");
+                    return;
+                }
+                if (TextUtils.isEmpty(mEtVehicle.getText().toString())) {
+                    ToastUtil.show("交通工具不能为空");
+                    return;
+                }
                 ToastUtil.show("查看参考价");
-//                FastUtil.startActivity(this,);
+                Bundle bundle = new Bundle();
+                bundle.putString("from", mEtSetOUt.getText().toString().split(" ")[1]);
+                bundle.putString("to", mEtDestination.getText().toString().split(" ")[1]);
+                String mode = "2";
+                if (TextUtils.equals("飞机", mEtVehicle.getText().toString())) {
+                    mode = "2";
+                } else if (TextUtils.equals("火车", mEtVehicle.getText().toString())) {
+                    mode = "4";
+                }
+                bundle.putString("mode", mode);
+                FastUtil.startActivity(this, TravelWayActivity.class, bundle);
                 break;
             //提交
             case R.id.reimbursement_submit:
@@ -474,17 +499,18 @@ public class ReimbursementActivity extends FastTitleActivity<ReimbursementContro
 
             if (!isPass) {
                 ToastUtil.show(str);
+                return;
+            } else {
                 pe.setSetout(setout);
                 pe.setDestination(destination);
                 pe.setVehicle(vehicle);
                 pe.setStartTime(startTime);
                 pe.setEndTime(endTime);
-                return;
             }
 
             if (isTravel) {
                 pe.setTravel(isTravel);
-                pe.setVehiclePriceReference(mTvVehiclePriceReference.getText().toString());
+//                pe.setVehiclePriceReference(mTvVehiclePriceReference.getText().toString());
             }
 
             if (!TextUtils.equals(indexUser.getUser().getObjectId(), user.getUser().getObjectId())) {
@@ -492,8 +518,7 @@ public class ReimbursementActivity extends FastTitleActivity<ReimbursementContro
                 return;
             }
 
-
-
+            Timber.i(new Gson().toJson(pe));
             if (upDataFiles != null && upDataFiles.size() > 0) {
                 mController.upDataFiles(upDataFiles, pe);
                 return;
@@ -617,13 +642,13 @@ public class ReimbursementActivity extends FastTitleActivity<ReimbursementContro
     }
 
     private void initReferencePrice() {
-        if (!TextUtils.isEmpty(mEtSetOUt.getText().toString())
+     /*   if (!TextUtils.isEmpty(mEtSetOUt.getText().toString())
                 && !TextUtils.isEmpty(mEtDestination.getText().toString())
                 && !TextUtils.isEmpty(mEtVehicle.getText().toString())) {
-            String price = "";
+//            String price = "";
             //提供交通参考价
-            mTvVehiclePriceReference.setText(price);
-        }
+//            mTvVehiclePriceReference.setText(price);
+        }*/
     }
 
     /**

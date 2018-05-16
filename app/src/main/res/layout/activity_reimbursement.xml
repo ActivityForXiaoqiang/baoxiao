@@ -325,7 +325,6 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:layout_marginLeft="10dp"
                     android:background="@color/colorTitleDivider"/>
 
                 <LinearLayout
@@ -515,6 +514,7 @@
 
                 <!--参考价-->
                 <LinearLayout
+                    android:id="@+id/reimbursement_vehicle_price_question"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/colorWhite"
@@ -537,7 +537,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="交通参考价："
+                            android:text="查看交通参考价"
                             android:textColor="@color/txt_black1"
                             android:textSize="14sp"/>
 
@@ -550,11 +550,10 @@
                             android:textSize="14sp"/>
 
                         <android.support.v7.widget.AppCompatImageView
-                            android:id="@+id/reimbursement_vehicle_price_question"
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
                             android:scaleType="centerCrop"
-                            app:srcCompat="@drawable/ic_question"/>
+                            app:srcCompat="@drawable/ic_right"/>
 
                         <android.support.v7.widget.AppCompatImageView
                             android:layout_width="25dp"

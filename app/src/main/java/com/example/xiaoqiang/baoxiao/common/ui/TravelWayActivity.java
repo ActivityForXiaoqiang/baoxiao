@@ -13,16 +13,15 @@ import com.example.xiaoqiang.baoxiao.R;
 import com.example.xiaoqiang.baoxiao.common.base.MyBaseActivity;
 import com.example.xiaoqiang.baoxiao.common.been.Plan;
 import com.example.xiaoqiang.baoxiao.common.been.Trave;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.util.Timber;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.TimeFormatUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.ToastUtil;
 import com.google.gson.Gson;
-import com.yanzhenjie.nohttp.NoHttp;
 import com.yanzhenjie.nohttp.RequestMethod;
 import com.yanzhenjie.nohttp.rest.AsyncRequestExecutor;
 import com.yanzhenjie.nohttp.rest.Response;
 import com.yanzhenjie.nohttp.rest.SimpleResponseListener;
 import com.yanzhenjie.nohttp.rest.StringRequest;
-import com.yanzhenjie.nohttp.rest.SyncRequestExecutor;
 
 import java.util.Date;
 import java.util.List;
@@ -52,7 +51,10 @@ public class TravelWayActivity extends MyBaseActivity {
         from = getIntent().getStringExtra("from");
         to = getIntent().getStringExtra("to");
         mode = getIntent().getStringExtra("mode");
-
+        from="北京";
+        to="上海";
+        mode="4";
+        Timber.i("from:" + from + "---to:" + to + "--mode:" + mode);
         url.replace("%from%", from);
         url.replace("%to%", to);
         url.replace("%time%", time);

@@ -23,6 +23,7 @@ import com.example.xiaoqiang.baoxiao.common.fast.constant.util.Timber;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.ToastUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.widget.dialog.AlertDialog;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.widget.dialog.RejectReMarkDialog;
+import com.example.xiaoqiang.baoxiao.common.ui.TravelWayActivity;
 import com.example.xiaoqiang.baoxiao.common.ui.process.controller.IProcessListView;
 import com.example.xiaoqiang.baoxiao.common.ui.process.controller.ProcessListController;
 import com.example.xiaoqiang.baoxiao.common.ui.process.reimbursement.ReimbursementDetailsActivity;
@@ -81,6 +82,19 @@ public class ProcessBaseFragment extends FastRefreshLoadFragment<ProcessEntity, 
                     case R.id.item_process_approval_tv:
                         indexItem = item;
                         showApprovalDialog(SpManager.getInstance().getNextPoint(item.getPoint(), item.getProcessType()), position);
+                        break;
+                    case R.id.item_process_reference_price_l:
+                        Bundle bundle = new Bundle();
+                        bundle.putString("from", item.getSetout().split(" ")[1]);
+                        bundle.putString("to", item.getDestination().split(" ")[1]);
+                        String mode = "2";
+                        if (TextUtils.equals("飞机", item.getVehicle())) {
+                            mode = "2";
+                        } else if (TextUtils.equals("火车", item.getVehicle())) {
+                            mode = "4";
+                        }
+                        bundle.putString("mode", mode);
+                        FastUtil.startActivity(getActivity(), TravelWayActivity.class, bundle);
                         break;
                 }
             }

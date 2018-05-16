@@ -14,7 +14,6 @@ import com.example.xiaoqiang.baoxiao.common.fast.constant.util.ToastUtil;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
@@ -65,14 +64,28 @@ public class ProcessListController extends BaseController<IProcessListView> {
 
         } else if (position == 3 || position == 4) {
             if (position == 4) {
-                query.addWhereContainedIn("processType", Arrays.asList(new int[]{FastConstant.PROCESS_TYPE_ONE, FastConstant
-                        .PROCESS_TYPE_THREE}));
+                //财务部门 普通员工批准
+                BmobQuery<ProcessEntity> eq1 = new BmobQuery<>();
+                eq1.addWhereEqualTo("processType", FastConstant.PROCESS_TYPE_ONE);
+                eq1.addWhereEqualTo("point", FastConstant.PROCESS_POINT_TWO);
+                query.addWhereEqualTo("departmentId",SpManager.getInstance().getUserInfo().getDepartment());
+                //批准总经理
+                BmobQuery<ProcessEntity> eq2 = new BmobQuery<>();
+                eq2.addWhereEqualTo("processType", FastConstant.PROCESS_TYPE_THREE);
+                eq2.addWhereEqualTo("point", FastConstant.PROCESS_POINT_TWO);
+                List<BmobQuery<ProcessEntity>> queries = new ArrayList<BmobQuery<ProcessEntity>>();
+                queries.add(eq1);
+                queries.add(eq2);
+                //或条件处理集合
+                query.or(queries);
+//                query.addWhereContainedIn("processType", Arrays.asList(new int[]{FastConstant.PROCESS_TYPE_ONE, FastConstant
+//                        .PROCESS_TYPE_THREE}));
             } else {
                 //部門主管只能批准自己部門的
                 query.addWhereEqualTo("processType", FastConstant.PROCESS_TYPE_ONE);
+                query.addWhereEqualTo("point", FastConstant.PROCESS_POINT_TWO);
                 query.addWhereEqualTo("departmentId",SpManager.getInstance().getUserInfo().getDepartment());
             }
-            query.addWhereEqualTo("point", FastConstant.PROCESS_POINT_TWO);
         } else if (position == 5) {
             //可处理流程类型为1 并且point为三级
             BmobQuery<ProcessEntity> query1 = new BmobQuery<ProcessEntity>();

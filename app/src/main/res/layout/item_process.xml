@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.aries.ui.view.radius.RadiusRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                               xmlns:app="http://schemas.android.com/apk/res-auto"
-                                               style="@style/RadiusViewItemStyle"
-                                               android:layout_width="match_parent"
-                                               android:layout_height="wrap_content"
-                                               android:elevation="@dimen/dp_elevation">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/RadiusViewItemStyle"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="@dimen/dp_elevation">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -24,12 +24,12 @@
                 android:maxLines="2"
                 android:padding="10dp"
                 android:textColor="@color/txt_black"
-                android:textSize="15sp"/>
+                android:textSize="15sp" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:background="@color/colorTitleDivider"/>
+                android:background="@color/colorTitleDivider" />
 
 
             <LinearLayout
@@ -49,7 +49,7 @@
                         android:layout_height="wrap_content"
                         android:text="当前节点:"
                         android:textColor="@color/txt_black1"
-                        android:textSize="13sp"/>
+                        android:textSize="13sp" />
 
                     <TextView
                         android:id="@+id/process_point_tv"
@@ -59,13 +59,13 @@
                         android:maxLines="1"
                         android:paddingLeft="8dp"
                         android:textColor="@color/txt_black"
-                        android:textSize="13sp"/>
+                        android:textSize="13sp" />
                 </LinearLayout>
 
                 <View
                     android:layout_width="0.5dp"
                     android:layout_height="match_parent"
-                    android:background="@color/colorTitleDivider"/>
+                    android:background="@color/colorTitleDivider" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -79,7 +79,7 @@
                         android:layout_height="wrap_content"
                         android:text="当前状态:"
                         android:textColor="@color/txt_black1"
-                        android:textSize="13sp"/>
+                        android:textSize="13sp" />
 
                     <TextView
                         android:id="@+id/process_point_status_tv"
@@ -90,14 +90,14 @@
                         android:paddingLeft="8dp"
                         android:text=""
                         android:textColor="@color/txt_black"
-                        android:textSize="13sp"/>
+                        android:textSize="13sp" />
                 </LinearLayout>
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:background="@color/colorTitleDivider"/>
+                android:background="@color/colorTitleDivider" />
 
             <LinearLayout
                 android:id="@+id/reimbursement_reject_reason_l"
@@ -111,13 +111,12 @@
                     android:layout_height="wrap_content"
                     android:background="@color/colorWhite"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    >
+                    android:orientation="horizontal">
 
                     <View
                         android:layout_width="0.5dp"
                         android:layout_height="match_parent"
-                        android:background="@color/colorTitleDivider"/>
+                        android:background="@color/colorTitleDivider" />
 
                     <TextView
                         android:id="@+id/reimbursement_reject_reason_tv"
@@ -128,19 +127,19 @@
                         android:padding="10dp"
                         android:text="驳回原因："
                         android:textColor="@color/txt_black1"
-                        android:textSize="14sp"/>
+                        android:textSize="14sp" />
 
 
                     <View
                         android:layout_width="0.5dp"
                         android:layout_height="match_parent"
-                        android:background="@color/colorTitleDivider"/>
+                        android:background="@color/colorTitleDivider" />
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:background="@color/colorTitleDivider"/>
+                    android:background="@color/colorTitleDivider" />
             </LinearLayout>
 
             <LinearLayout
@@ -160,7 +159,7 @@
                         android:layout_height="wrap_content"
                         android:text="创建人:"
                         android:textColor="@color/txt_black1"
-                        android:textSize="13sp"/>
+                        android:textSize="13sp" />
 
                     <TextView
                         android:id="@+id/process_founder_tv"
@@ -170,13 +169,13 @@
                         android:maxLines="1"
                         android:paddingLeft="8dp"
                         android:textColor="@color/txt_black"
-                        android:textSize="13sp"/>
+                        android:textSize="13sp" />
                 </LinearLayout>
 
                 <View
                     android:layout_width="0.5dp"
                     android:layout_height="match_parent"
-                    android:background="@color/colorTitleDivider"/>
+                    android:background="@color/colorTitleDivider" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -191,7 +190,7 @@
                         android:layout_height="wrap_content"
                         android:text="时间:"
                         android:textColor="@color/txt_black1"
-                        android:textSize="13sp"/>
+                        android:textSize="13sp" />
 
                     <TextView
                         android:id="@+id/process_accept_time_tv"
@@ -202,14 +201,14 @@
                         android:paddingLeft="8dp"
                         android:text="2015-08-02 12:12"
                         android:textColor="@color/txt_black"
-                        android:textSize="13sp"/>
+                        android:textSize="13sp" />
                 </LinearLayout>
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:background="@color/colorTitleDivider"/>
+                android:background="@color/colorTitleDivider" />
 
 
             <LinearLayout
@@ -229,7 +228,7 @@
                         android:layout_height="wrap_content"
                         android:text="申请金额:"
                         android:textColor="@color/txt_black1"
-                        android:textSize="13sp"/>
+                        android:textSize="13sp" />
 
                     <TextView
                         android:id="@+id/process_apply_amount_tv"
@@ -240,7 +239,7 @@
                         android:paddingLeft="8dp"
                         android:text=""
                         android:textColor="@color/txt_black"
-                        android:textSize="13sp"/>
+                        android:textSize="13sp" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -254,7 +253,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:background="@color/colorTitleDivider"/>
+                    android:background="@color/colorTitleDivider" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -265,20 +264,26 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="交通参考价:"
+                        android:text="查看交通参考价"
                         android:textColor="@color/txt_black1"
-                        android:textSize="13sp"/>
+                        android:textSize="13sp" />
 
                     <TextView
                         android:id="@+id/item_process_reference_price"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:ellipsize="end"
                         android:maxLines="1"
                         android:paddingLeft="8dp"
                         android:text=""
                         android:textColor="@color/txt_black"
-                        android:textSize="13sp"/>
+                        android:textSize="13sp" />
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        app:srcCompat="@drawable/ic_right" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -286,7 +291,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:background="@color/colorTitleDivider"/>
+                android:background="@color/colorTitleDivider" />
 
             <LinearLayout
                 android:id="@+id/item_process_operate_l"
@@ -309,7 +314,7 @@
                     android:paddingTop="3dp"
                     android:text="驳回"
                     android:textColor="@color/colorWhite"
-                    android:textSize="13sp"/>
+                    android:textSize="13sp" />
 
                 <TextView
                     android:id="@+id/item_process_approval_tv"
@@ -324,7 +329,7 @@
                     android:paddingTop="3dp"
                     android:text="批准"
                     android:textColor="@color/colorWhite"
-                    android:textSize="13sp"/>
+                    android:textSize="13sp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -336,7 +341,7 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
             android:visibility="gone"
-            app:srcCompat="@drawable/ic_process_finish"/>
+            app:srcCompat="@drawable/ic_process_finish" />
         <!-- <com.example.xiaoqiang.baoxiao.common.fast.constant.widget.dialog.SealView
              android:layout_width="100dp"
              android:layout_height="100dp"

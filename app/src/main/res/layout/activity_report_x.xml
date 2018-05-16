@@ -121,6 +121,7 @@
                     android:background="@color/bg_divider"/>
 
                 <TextView
+                    android:id="@+id/activity_report_x_department"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"

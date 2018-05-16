@@ -35,7 +35,6 @@ public class ProcessEntity extends BmobObject {
     private String pointList;//節點时间轴
     private Boolean isReject = false;//是否被驳回
     private Integer departmentId;//部门id
-    private String vehiclePriceReference;//交通参考价
     private boolean isTravel = false;//是否差旅
 
     public String getCreatorName() {
@@ -205,13 +204,6 @@ public class ProcessEntity extends BmobObject {
         this.departmentId = departmentId;
     }
 
-    public String getVehiclePriceReference() {
-        return vehiclePriceReference;
-    }
-
-    public void setVehiclePriceReference(String vehiclePriceReference) {
-        this.vehiclePriceReference = vehiclePriceReference;
-    }
 
     public boolean isTravel() {
         return isTravel;

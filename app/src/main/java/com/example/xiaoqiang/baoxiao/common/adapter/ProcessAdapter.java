@@ -1,7 +1,6 @@
 package com.example.xiaoqiang.baoxiao.common.adapter;
 
 import android.support.v4.content.ContextCompat;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -38,9 +37,9 @@ public class ProcessAdapter extends BaseQuickAdapter<ProcessEntity, BaseViewHold
         }
         //设置参考价
         LinearLayout reference_price_l = helper.getView(R.id.item_process_reference_price_l);
-        if (item.isTravel() && TextUtils.isEmpty(item.getVehiclePriceReference())) {
+        if (item.isTravel()) {
+            helper.addOnClickListener(R.id.item_process_reference_price_l);
             reference_price_l.setVisibility(View.VISIBLE);
-            helper.setText(R.id.item_process_reference_price, item.getVehiclePriceReference());
         } else {
             reference_price_l.setVisibility(View.GONE);
         }
