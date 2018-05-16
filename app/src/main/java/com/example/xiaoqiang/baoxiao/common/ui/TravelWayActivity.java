@@ -13,17 +13,17 @@ import com.example.xiaoqiang.baoxiao.R;
 import com.example.xiaoqiang.baoxiao.common.base.MyBaseActivity;
 import com.example.xiaoqiang.baoxiao.common.been.Plan;
 import com.example.xiaoqiang.baoxiao.common.been.Trave;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.util.Timber;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.TimeFormatUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.ToastUtil;
 import com.google.gson.Gson;
-import com.yanzhenjie.nohttp.NoHttp;
 import com.yanzhenjie.nohttp.RequestMethod;
 import com.yanzhenjie.nohttp.rest.AsyncRequestExecutor;
 import com.yanzhenjie.nohttp.rest.Response;
 import com.yanzhenjie.nohttp.rest.SimpleResponseListener;
 import com.yanzhenjie.nohttp.rest.StringRequest;
-import com.yanzhenjie.nohttp.rest.SyncRequestExecutor;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -47,22 +47,33 @@ public class TravelWayActivity extends MyBaseActivity {
     @Override
     public void init() {
 
-
-        time = TimeFormatUtil.formatTime(new Date(), "yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.DAY_OF_MONTH, 1);
+        time = TimeFormatUtil.formatTime(calendar.getTime(), "yyyy-MM-dd");
         from = getIntent().getStringExtra("from");
         to = getIntent().getStringExtra("to");
         mode = getIntent().getStringExtra("mode");
+        Timber.i("from:" + from + "---to:" + to + "--mode:" + mode + "---time:" + time);
 
-        url.replace("%from%", from);
-        url.replace("%to%", to);
-        url.replace("%time%", time);
-        url.replace("%mode%", mode);
+        if (from.charAt(from.length() - 1) == '市') {
+            from = from.substring(0, from.length() - 1);
+        }
+        if (to.charAt(to.length() - 1) == '市') {
+            to = to.substring(0, to.length() - 1);
+        }
+
+        url = url.replace("%from%", from);
+        url = url.replace("%to%", to);
+        url = url.replace("%time%", time);
+        url = url.replace("%mode%", mode);
+
 
         recyclerView = findViewById(R.id.trave_recyc);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new tAdapter();
         recyclerView.setAdapter(adapter);
-
+        Timber.i("url:" + url);
         StringRequest request = new StringRequest(url, RequestMethod.GET);
         AsyncRequestExecutor.INSTANCE.execute(0, request, new SimpleResponseListener<String>() {
             @Override

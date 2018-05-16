@@ -48,11 +48,7 @@ public class SpManager {
 
         mVehicleData = new ArrayList<>();
         mVehicleData.add("飞机");
-        mVehicleData.add("高铁");
         mVehicleData.add("火车");
-        mVehicleData.add("船渡");
-        mVehicleData.add("游艇·帆船");
-        mVehicleData.add("巴士");
         mAccountTypeData = new ArrayList<>();
         mAccountTypeData.add("支付宝");
         mAccountTypeData.add("微信");

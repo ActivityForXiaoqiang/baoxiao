@@ -52,6 +52,8 @@ import cn.bmob.v3.listener.QueryListener;
 public class ReportXActivity extends FastTitleActivity implements View.OnClickListener {
     @BindView(R.id.mHorizontalScrollView)
     HorizontalScrollView mHorizontalScrollView;
+    @BindView(R.id.activity_report_x_department)
+    TextView mTvDepartment;
     @BindView(R.id.mListView)
     ListView mListView;
     @BindView(R.id.esv_layoutFastLib)
@@ -316,7 +318,7 @@ public class ReportXActivity extends FastTitleActivity implements View.OnClickLi
             dismissLoadingDialog();
             footerView.setVisibility(View.GONE);
             mEasyStatusView.empty();
-            mHorizontalScrollView.scrollBy((int) mHorizontalScrollView.getPivotX() - DisplayUtil.dip2px(this, 50), 0);
+            mHorizontalScrollView.smoothScrollTo(mTvDepartment.getLeft()-(DisplayUtil.getWindowWidth(this)-mTvDepartment.getWidth())/2, 0);
 
             return;
         }
@@ -328,7 +330,7 @@ public class ReportXActivity extends FastTitleActivity implements View.OnClickLi
      * 填充数据
      */
     private void fillData(double sum) {
-        mHorizontalScrollView.scrollTo(0, 0);
+        mHorizontalScrollView.smoothScrollTo(0, 0);
         mEasyStatusView.content();
         mAdapter.setNewData(mDataList);
         footerView.setVisibility(View.VISIBLE);
