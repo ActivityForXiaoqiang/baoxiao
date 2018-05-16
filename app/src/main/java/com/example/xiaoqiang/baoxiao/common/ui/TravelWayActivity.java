@@ -51,9 +51,6 @@ public class TravelWayActivity extends MyBaseActivity {
         from = getIntent().getStringExtra("from");
         to = getIntent().getStringExtra("to");
         mode = getIntent().getStringExtra("mode");
-        from="北京";
-        to="上海";
-        mode="4";
         Timber.i("from:" + from + "---to:" + to + "--mode:" + mode);
         url.replace("%from%", from);
         url.replace("%to%", to);
