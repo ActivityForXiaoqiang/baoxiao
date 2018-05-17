@@ -68,7 +68,7 @@ public class ProcessListController extends BaseController<IProcessListView> {
                 BmobQuery<ProcessEntity> eq1 = new BmobQuery<>();
                 eq1.addWhereEqualTo("processType", FastConstant.PROCESS_TYPE_ONE);
                 eq1.addWhereEqualTo("point", FastConstant.PROCESS_POINT_TWO);
-                query.addWhereEqualTo("departmentId",SpManager.getInstance().getUserInfo().getDepartment());
+                eq1.addWhereEqualTo("departmentId",SpManager.getInstance().getUserInfo().getDepartment());
                 //批准总经理
                 BmobQuery<ProcessEntity> eq2 = new BmobQuery<>();
                 eq2.addWhereEqualTo("processType", FastConstant.PROCESS_TYPE_THREE);
@@ -78,8 +78,6 @@ public class ProcessListController extends BaseController<IProcessListView> {
                 queries.add(eq2);
                 //或条件处理集合
                 query.or(queries);
-//                query.addWhereContainedIn("processType", Arrays.asList(new int[]{FastConstant.PROCESS_TYPE_ONE, FastConstant
-//                        .PROCESS_TYPE_THREE}));
             } else {
                 //部門主管只能批准自己部門的
                 query.addWhereEqualTo("processType", FastConstant.PROCESS_TYPE_ONE);

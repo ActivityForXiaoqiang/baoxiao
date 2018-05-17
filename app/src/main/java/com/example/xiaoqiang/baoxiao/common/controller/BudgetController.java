@@ -72,7 +72,7 @@ public class BudgetController extends BaseController<IBudgetListView> {
                     if (object.size() == 0) {
                         dissmissLoadingDialog();
                         getView().onShowList(object);
-                    }else{
+                    } else {
                         queryProcessAmountSumBymonth(object);
                     }
                     Timber.i("bmob" + "成功：" + new Gson().toJson(object));
@@ -94,13 +94,13 @@ public class BudgetController extends BaseController<IBudgetListView> {
         this.blist = blist;
         //获取当前月
         index = 0;
-        queryBudgetAmountSumByMonth(blist.get(index).getMonthTime());
+        queryBudgetAmountSumByMonth(blist.get(index).getMonthTime(), blist.get(index).getDepartment());
     }
 
     /**
      * 查询一个月的报销额
      */
-    public void queryBudgetAmountSumByMonth(long year_month) {
+    public void queryBudgetAmountSumByMonth(long year_month, int departmentId) {
         //获取当前月
         Calendar ca = Calendar.getInstance();
         ca.setTime(new Date(year_month));
@@ -118,6 +118,7 @@ public class BudgetController extends BaseController<IBudgetListView> {
 
         BmobQuery<ProcessEntity> query = new BmobQuery<>();
         query.and(andQuery);
+        query.addWhereEqualTo("departmentId", departmentId);
         query.addWhereEqualTo("companyId", SpManager.getInstance().getUserInfo().getCompany().getObjectId());
         query.addWhereEqualTo("point", FastConstant.PROCESS_POINT_FINISH);
         query.sum(new String[]{"amount"});
@@ -175,7 +176,7 @@ public class BudgetController extends BaseController<IBudgetListView> {
                 //返回数据
                 dissmissLoadingDialog();
             } else {
-                queryBudgetAmountSumByMonth(blist.get(index).getMonthTime());
+                queryBudgetAmountSumByMonth(blist.get(index).getMonthTime(), blist.get(index).getDepartment());
             }
         }
     };

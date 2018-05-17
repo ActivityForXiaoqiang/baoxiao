@@ -3,9 +3,12 @@ package com.example.xiaoqiang.baoxiao.common.ui.report;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aries.ui.view.title.TitleBarView;
@@ -27,6 +30,7 @@ import com.example.xiaoqiang.baoxiao.common.fast.constant.util.Timber;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.TimeFormatUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.ToastUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.widget.dialog.LoadingDialog;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.widget.dialog.SelectListPopwindow;
 import com.google.gson.Gson;
 import com.jzxiang.pickerview.TimePickerDialog;
 import com.jzxiang.pickerview.data.Type;
@@ -52,19 +56,37 @@ import cn.bmob.v3.listener.QueryListener;
 public class ReportXActivity extends FastTitleActivity implements View.OnClickListener {
     @BindView(R.id.mHorizontalScrollView)
     HorizontalScrollView mHorizontalScrollView;
-    @BindView(R.id.activity_report_x_department)
-    TextView mTvDepartment;
     @BindView(R.id.mListView)
     ListView mListView;
     @BindView(R.id.esv_layoutFastLib)
     EasyStatusView mEasyStatusView;
     @BindView(R.id.report_x_time)
     TextView mTvTime;
+    @BindView(R.id.activity_report_x_name)
+    TextView mTvName;
+    @BindView(R.id.activity_report_x_position)
+    TextView mTvPosition;
+    @BindView(R.id.activity_report_x_department)
+    TextView mTvDepartment;
+    @BindView(R.id.activity_report_x_name_img)
+    ImageView mImgName;
+    @BindView(R.id.activity_report_x_position_img)
+    ImageView mImgPosition;
+    @BindView(R.id.activity_report_x_department_img)
+    ImageView mImgDepartment;
+    @BindView(R.id.activity_report_x_department_r)
+    RelativeLayout mTvDepartmentR;
     private ReportXAdapter mAdapter;
     private Calendar mCalendar;
     private StateUser mStateUser;
     private View footerView;//脚布局
     private TextView mTvSum;//总额度tv
+    private List<StateUser> mUserList;
+    private List<String> ulist, plist, dlist;//人员集合 ,职位集合，部门集合
+    private int conditionIndex;//0,1,2  0姓名 1职位 2部门
+    private String mUserId;
+    private int mPosition = -1;
+    private int mDepartment = -1;
 
     public int getContentLayout() {
         return R.layout.activity_report_x;
@@ -95,12 +117,24 @@ public class ReportXActivity extends FastTitleActivity implements View.OnClickLi
         mTvSum = footerView.findViewById(R.id.item_layout_report_amount);
         mTvSum.setMaxLines(4);
         footerView.setVisibility(View.GONE);
+
+        mStateUser = SpManager.getInstance().getUserInfo();
+
+        if (mStateUser.getPosition() == 0 || mStateUser.getPosition() == 1 || mStateUser.getPosition() == 2) {
+
+        } else if (mStateUser.getPosition() == 3) {
+            mImgName.setVisibility(View.VISIBLE);
+            mImgPosition.setVisibility(View.VISIBLE);
+        } else if (mStateUser.getPosition() == 5 || mStateUser.getPosition() == 4) {
+            mImgName.setVisibility(View.VISIBLE);
+            mImgPosition.setVisibility(View.VISIBLE);
+            mImgDepartment.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
     public void loadData() {
         super.loadData();
-        mStateUser = SpManager.getInstance().getUserInfo();
         mCalendar = Calendar.getInstance();
         mCalendar.setTime(new Date());
         mCalendar.set(Calendar.DAY_OF_MONTH, 1);
@@ -108,12 +142,6 @@ public class ReportXActivity extends FastTitleActivity implements View.OnClickLi
         mAdapter = new ReportXAdapter(this, new ArrayList<ProcessEntity>());
         mListView.setAdapter(mAdapter);
         mListView.addFooterView(footerView);
-//        List<ProcessEntity> list = new ArrayList<>();
-//        for (int i = 0; i < 30; i++) {
-//            ProcessEntity pe = new ProcessEntity();
-//            list.add(pe);
-//        }
-//        mAdapter.addData(list);
         initTime();
     }
 
@@ -133,7 +161,8 @@ public class ReportXActivity extends FastTitleActivity implements View.OnClickLi
     }
 
     @Override
-    @OnClick({R.id.report_x_left, R.id.report_x_right, R.id.report_x_time})
+    @OnClick({R.id.report_x_left, R.id.report_x_right, R.id.report_x_time,
+            R.id.activity_report_x_name, R.id.activity_report_x_position, R.id.activity_report_x_department})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.report_x_left:
@@ -144,6 +173,43 @@ public class ReportXActivity extends FastTitleActivity implements View.OnClickLi
                 break;
             case R.id.report_x_time:
                 showTimePickerDialog();
+                break;
+            case R.id.activity_report_x_name:
+                if (mImgName.getVisibility() == View.GONE) {
+                    return;
+                }
+                conditionIndex = 0;
+                if (ulist == null || ulist.size() == 0) {
+                    getPersonList();
+                } else {
+                    showPop(view, ulist);
+                }
+
+                break;
+            case R.id.activity_report_x_position:
+                if (mImgPosition.getVisibility() == View.GONE) {
+                    return;
+                }
+                conditionIndex = 1;
+                if (plist == null) {
+                    plist = new ArrayList();
+                    plist.add("全部");
+                    plist.addAll(SpManager.getInstance().mPositionData);
+                }
+                showPop(view, plist);
+                break;
+            case R.id.activity_report_x_department:
+                if (mImgDepartment.getVisibility() == View.GONE) {
+                    return;
+                }
+                conditionIndex = 2;
+                if (dlist == null) {
+                    dlist = new ArrayList();
+                    dlist.add("全部");
+                    dlist.addAll(SpManager.getInstance().mBumenData);
+                }
+
+                showPop(view, dlist);
                 break;
         }
     }
@@ -196,10 +262,111 @@ public class ReportXActivity extends FastTitleActivity implements View.OnClickLi
         queryProcessList();
     }
 
+    private SelectListPopwindow popwindow;
+
+    //选择条件弹框
+    private void showPop(View v, List<String> contents) {
+        popwindow = new SelectListPopwindow(this, contents, DisplayUtil.getWindowHeight(this), new
+                SelectListPopwindow.OnMyPopListener() {
+                    @Override
+                    public void onItemClick(int position, String content) {
+                        //初始化 条件
+                        mUserId = null;
+                        mPosition = -1;
+                        mDepartment = -1;
+                        if (position == 0) {
+                            initCondition(content);
+                            queryProcessList();
+                            return;
+                        }
+                        if (conditionIndex == 0) {
+                            //按人员
+                            mUserId = mUserList.get(position - 1).getObjectId();
+                        } else if (conditionIndex == 1) {
+                            //按职位
+                            mPosition = position - 1;
+                        } else {
+                            //按部门
+                            mDepartment = position - 1;
+                        }
+                        initCondition(content);
+                        queryProcessList();
+                    }
+
+                    @Override
+                    public void onDismiss() {
+                        findViewByViewId(R.id.report_x_mark).setVisibility(View.GONE);
+                    }
+                });
+        popwindow.showAsDropDown(v);
+        findViewByViewId(R.id.report_x_mark).setVisibility(View.VISIBLE);
+    }
+
+    private void initCondition(String content) {
+        if (!TextUtils.isEmpty(mUserId)) {
+            mTvName.setText("姓名\n(" + content + ")");
+        } else {
+            mTvName.setText("姓名");
+        }
+
+        if (mPosition != -1) {
+            mTvPosition.setText("职位\n(" + content + ")");
+        } else {
+            mTvPosition.setText("职位");
+        }
+
+        if (mDepartment != -1) {
+            mTvDepartment.setText("部门\n(" + content + ")");
+        } else {
+            mTvDepartment.setText("部门");
+        }
+    }
+
+
+    /**
+     * 获取 人员列表
+     */
+    public void getPersonList() {
+        //最后组装完整的and条件
+        showLoadingDialog();
+        BmobQuery<StateUser> query = new BmobQuery<>();
+        query.order("-position");// 根据职位字段降序显示数据
+        if (mStateUser.getPosition() == 0 || mStateUser.getPosition() == 1 || mStateUser.getPosition() == 2) {
+
+        } else if (mStateUser.getPosition() == 3) {
+            //只能看到自己部门的
+            query.addWhereEqualTo("department", mStateUser.getDepartment());
+        } else if (mStateUser.getPosition() == 5 || mStateUser.getPosition() == 4) {
+
+        }
+        query.addWhereEqualTo("company", mStateUser.getCompany());
+        query.include("user,company");
+        query.findObjects(new FindListener<StateUser>() {
+            @Override
+            public void done(List<StateUser> object, BmobException e) {
+                dismissLoadingDialog();
+                if (e == null) {
+                    mUserList = object;
+                    ulist = new ArrayList<>();
+                    ulist.add("全部");
+                    for (int i = 0; i < mUserList.size(); i++) {
+                        ulist.add(mUserList.get(i).getUser().getNickName());
+                    }
+                    showPop(mTvName, ulist);
+                    Timber.i("---" + new Gson().toJson(ulist));
+                } else {
+                    Timber.d("showError:" + e.toString());
+                }
+            }
+
+        });
+    }
+
     /**
      * 获取指定月份的报销流程
      */
     public void queryProcessList() {
+
         //  point当前节点 详细注解看fastConstans类
         showLoadingDialog();
 //        获取当前月
@@ -220,13 +387,29 @@ public class ReportXActivity extends FastTitleActivity implements View.OnClickLi
         BmobQuery<ProcessEntity> query = new BmobQuery<>();
         query.and(andQuery);
 
+
         int position = mStateUser.getPosition();
         if (position == 0 || position == 1 || position == 2) {
-            query.addWhereEqualTo("userId", mStateUser.getUser().getObjectId());
+            query.addWhereEqualTo("userId", mStateUser.getObjectId());
         } else if (position == 3) {
-            query.addWhereEqualTo("department", mStateUser.getDepartment());
+            if (!TextUtils.isEmpty(mUserId)) {
+                query.addWhereEqualTo("userId", mUserId);
+            }
+            if (mPosition != -1) {
+                query.addWhereEqualTo("position", mPosition);
+            }
+            query.addWhereEqualTo("departmentId", mStateUser.getDepartment());
         } else if (position == 5 || position == 4) {
-
+            if (!TextUtils.isEmpty(mUserId)) {
+                query.addWhereEqualTo("userId", mUserId);
+            }
+            if (mPosition != -1) {
+                query.addWhereEqualTo("position", mPosition);
+            }
+            if (mDepartment != -1) {
+                query.addWhereEqualTo("departmentId", mDepartment);
+            }
+            Timber.i("mUserId:" + mUserId + "--mPosition:" + mPosition + "--mDepartment:" + mDepartment);
         }
 //            query.setLimit(pageSize);// 限制最多pageSize条数据结果作为一页
 //            query.setSkip(pageSize * pageNo);//忽略条目
@@ -253,7 +436,7 @@ public class ReportXActivity extends FastTitleActivity implements View.OnClickLi
     /**
      * 查询一个月的报销总额
      */
-    private void queryBudgetAmountSumByMonth() {
+    private void queryAmountSumByMonth() {
         DayTime dayTime = TimeFormatUtil.getMonthTimeOfMonth(mCalendar);
         Timber.i(new Gson().toJson(dayTime));
         //--and条件1
@@ -271,11 +454,27 @@ public class ReportXActivity extends FastTitleActivity implements View.OnClickLi
 
         int position = mStateUser.getPosition();
         if (position == 0 || position == 1 || position == 2) {
-            query.addWhereEqualTo("userId", mStateUser.getUser().getObjectId());
+            query.addWhereEqualTo("userId", mStateUser.getObjectId());
         } else if (position == 3) {
-            query.addWhereEqualTo("department", mStateUser.getDepartment());
-        } else if (position == 5 || position == 4) {
+            if (!TextUtils.isEmpty(mUserId)) {
+                query.addWhereEqualTo("userId", mUserId);
+            }
+            if (mPosition != -1) {
+                query.addWhereEqualTo("position", mPosition);
+            }
+            query.addWhereEqualTo("departmentId", mStateUser.getDepartment());
 
+        } else if (position == 5 || position == 4) {
+            if (!TextUtils.isEmpty(mUserId)) {
+                query.addWhereEqualTo("userId", mUserId);
+            }
+            if (mPosition != -1) {
+                query.addWhereEqualTo("position", mPosition);
+            }
+            if (mDepartment != -1) {
+                query.addWhereEqualTo("departmentId", mDepartment);
+            }
+            Timber.i("mUserId:" + mUserId + "--mPosition:" + mPosition + "--mDepartment:" + mDepartment);
         }
 //            query.setLimit(pageSize);// 限制最多pageSize条数据结果作为一页
 //            query.setSkip(pageSize * pageNo);//忽略条目
@@ -318,19 +517,25 @@ public class ReportXActivity extends FastTitleActivity implements View.OnClickLi
             dismissLoadingDialog();
             footerView.setVisibility(View.GONE);
             mEasyStatusView.empty();
-            mHorizontalScrollView.smoothScrollTo(mTvDepartment.getLeft()-(DisplayUtil.getWindowWidth(this)-mTvDepartment.getWidth())/2, 0);
-
+            //获取屏幕宽度
+            //计算控件居正中时距离左侧屏幕的距离
+            int middleLeftPosition = (DisplayUtil.getWindowWidth(this) - mTvDepartmentR.getWidth()) / 2;
+            //正中间位置需要向左偏移的距离
+            int offset = mTvDepartmentR.getLeft() - middleLeftPosition;
+            //让水平的滚动视图按照执行的x的偏移量进行移动
+            Timber.i("offset:" + offset);
+            mHorizontalScrollView.smoothScrollTo(offset, 0);
+//            mHorizontalScrollView.scrollTo(mHorizontalScrollView.getMeasuredWidth() / 2 - DisplayUtil.dip2px(this, 3), 0);
             return;
         }
         mDataList = list;
-        queryBudgetAmountSumByMonth();
+        queryAmountSumByMonth();
     }
 
     /**
      * 填充数据
      */
     private void fillData(double sum) {
-        mHorizontalScrollView.smoothScrollTo(0, 0);
         mEasyStatusView.content();
         mAdapter.setNewData(mDataList);
         footerView.setVisibility(View.VISIBLE);
