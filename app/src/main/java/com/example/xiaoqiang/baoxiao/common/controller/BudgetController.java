@@ -100,7 +100,7 @@ public class BudgetController extends BaseController<IBudgetListView> {
     /**
      * 查询一个月的报销额
      */
-    private void queryBudgetAmountSumByMonth(long year_month) {
+    public void queryBudgetAmountSumByMonth(long year_month) {
         //获取当前月
         Calendar ca = Calendar.getInstance();
         ca.setTime(new Date(year_month));

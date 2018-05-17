@@ -1,5 +1,6 @@
 package com.example.xiaoqiang.baoxiao;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,6 +9,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,35 +26,57 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.xiaoqiang.baoxiao.common.adapter.SectionAdapter;
 import com.example.xiaoqiang.baoxiao.common.been.Applicant;
+import com.example.xiaoqiang.baoxiao.common.been.BudgetEntity;
 import com.example.xiaoqiang.baoxiao.common.been.Company;
+import com.example.xiaoqiang.baoxiao.common.been.DayTime;
 import com.example.xiaoqiang.baoxiao.common.been.MySection;
 import com.example.xiaoqiang.baoxiao.common.been.MyUser;
+import com.example.xiaoqiang.baoxiao.common.been.ProcessEntity;
 import com.example.xiaoqiang.baoxiao.common.been.StateUser;
+import com.example.xiaoqiang.baoxiao.common.controller.BudgetController;
 import com.example.xiaoqiang.baoxiao.common.controller.QueryController;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.FastConstant;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.manager.GlideManager;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.FastUtil;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.util.NumberFormatterUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SpManager;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.util.Timber;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.util.TimeFormatUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.ToastUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.widget.dialog.LoadingDialog;
 import com.example.xiaoqiang.baoxiao.common.ui.TravelWayActivity;
 import com.example.xiaoqiang.baoxiao.common.ui.company.CreateCompanyActivity;
 import com.example.xiaoqiang.baoxiao.common.ui.company.JoinActivity;
 import com.example.xiaoqiang.baoxiao.common.ui.company.RequestActivity;
+import com.example.xiaoqiang.baoxiao.common.ui.info.BudgetActivity;
 import com.example.xiaoqiang.baoxiao.common.ui.info.MineActivity;
 import com.example.xiaoqiang.baoxiao.common.ui.process.ProcessListActivity;
 import com.example.xiaoqiang.baoxiao.common.ui.process.reimbursement.ReimbursementActivity;
 import com.example.xiaoqiang.baoxiao.common.ui.sign.LoginActivity;
+import com.example.xiaoqiang.baoxiao.common.view.IBudgetListView;
 import com.example.xiaoqiang.baoxiao.common.view.QueryView;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
+import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.QueryListener;
+import cn.bmob.v3.listener.UpdateListener;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, QueryView {
@@ -76,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     List<MySection> mainDatas;
     SectionAdapter sectionAdapter;
+    AlertDialog dialogTip;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -87,7 +112,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         user = BmobUser.getCurrentUser(MyUser.class);
         controller.queryStatuser(user);
 
-
+        if (user.isSuper()) {
+            TextView tips = findViewById(R.id.main_tip);
+            tips.setVisibility(View.VISIBLE);
+        }
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 
 
@@ -123,6 +151,41 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         recyclerView = findViewById(R.id.main_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         sectionAdapter = new SectionAdapter(this, R.layout.item_main, R.layout.item_main_head, mainDatas);
+        sectionAdapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(BaseQuickAdapter adapter, View view, final int position) {
+                if (user.isSuper()) {
+                    if (!mainDatas.get(position).isHeader) {
+                        if (dialogTip == null) {
+                            dialogTip = new AlertDialog.Builder(MainActivity.this).create();
+                            dialogTip.setTitle("提示");
+                            dialogTip.setMessage("是否将该成员移除？");
+                            dialogTip.setButton(DialogInterface.BUTTON_POSITIVE, "确定", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialogTip.dismiss();
+                                    deletUser(mainDatas.get(position).t);
+
+                                }
+                            });
+                            dialogTip.setButton(DialogInterface.BUTTON_NEGATIVE, "取消", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialogTip.dismiss();
+
+                                }
+                            });
+                            dialogTip.show();
+                        } else {
+                            dialogTip.show();
+                        }
+                    }
+                }
+
+                return false;
+            }
+        });
+
         recyclerView.setAdapter(sectionAdapter);
 
         smartRefreshLayout = findViewById(R.id.main_smart);
@@ -135,12 +198,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
+
     private void initCompayView() {
         RelativeLayout nullView = findViewById(R.id.null_data_view);
         nullView.setVisibility(View.GONE);
         TextView companyTitle = findViewById(R.id.company_title);
         companyTitle.setText(stateUser.getCompany().getName());
 
+    }
+
+    private void deletUser(StateUser stateUser) {
+        showDialog();
+        stateUser.setDepartment(100);
+        stateUser.setAppying(false);
+        stateUser.setJoinCompay(false);
+        stateUser.setPosition(100);
+        stateUser.setCompany(new Company());
+        stateUser.update(new UpdateListener() {
+            @Override
+            public void done(BmobException e) {
+                if (e == null) {
+                    ToastUtil.show("移除成功");
+                    smartRefreshLayout.autoRefresh();
+                } else {
+                    ToastUtil.show("移除失败");
+                }
+                hideDialog();
+            }
+        });
     }
 
     @Override
@@ -170,12 +255,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_company:
-//                Intent iit=new Intent(MainActivity.this, TravelWayActivity.class);
-//                iit.putExtra("mode","4");
-//                iit.putExtra("from","北京");
-//                iit.putExtra("to","上海");
-//
-//                startActivity(iit);
+//                queryTotal(0);
+//                queryBM(0);
                 break;
             case R.id.nav_create:
                 if (stateUser.isJoinCompay()) {
@@ -266,7 +347,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onResume();
         if (user != null) {
             user = BmobUser.getCurrentUser(MyUser.class);
-            nickname.setText(user.getNickName());
+            if (!TextUtils.isEmpty(user.getNickName()))
+                nickname.setText(user.getNickName());
 
             if (!TextUtils.isEmpty(user.getPhotoPath())) {
                 Glide.with(this).load(user.getPhotoPath()).apply(GlideManager.getRequestOptions()).into(head);
@@ -340,13 +422,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         for (StateUser su : datas) {
             if (su.getDepartment() == -1) {
                 array[0].add(su);
-            } else {
+            } else if (su.getDepartment() != -2) {
                 array[su.getDepartment() + 1].add(su);
             }
 
         }
 
         for (int i = 0; i < array.length; i++) {
+
             if (array[i].size() > 0) {
                 switch (i) {
                     case 0:
@@ -378,6 +461,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 addData(array[i]);
             }
         }
+        if (stateUser.getPosition() == 5 || stateUser.getPosition() == 3) {
+            for (MySection mySection : mainDatas) {
+                if (mySection.isHeader) {
+                    for (Integer key : SpManager.mPositionManager.keySet()) {
+                        if (mySection.header.equals(SpManager.mBumenManager.get(key))) {
+                            queryBM(key);
+                        }
+                    }
+                }
+            }
+        }
+
     }
 
     void addData(List<StateUser> arrays) {
@@ -386,5 +481,93 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    //
+    void queryTotal(final int bmId, final List<BudgetEntity> list) {
+
+        Calendar ca = Calendar.getInstance();
+        ca.setTime(new Date());
+        DayTime dayTime = TimeFormatUtil.getMonthTimeOfMonth(ca);
+
+        //--and条件1
+        BmobQuery<ProcessEntity> eq1 = new BmobQuery<>();
+        eq1.addWhereLessThanOrEqualTo("createdAt", dayTime.getMaxDate());//時間<=MaxTime
+        //--and条件2
+        BmobQuery<ProcessEntity> eq2 = new BmobQuery<>();
+        eq2.addWhereGreaterThanOrEqualTo("createdAt", dayTime.getMinDate());//時間>=MinTime
+        List<BmobQuery<ProcessEntity>> andQuery = new ArrayList<>();
+        andQuery.add(eq1);
+        andQuery.add(eq2);
+
+        BmobQuery<ProcessEntity> query = new BmobQuery<>();
+        query.and(andQuery);
+        query.addWhereEqualTo("point", FastConstant.PROCESS_POINT_FINISH);
+        query.addWhereEqualTo("departmentId", bmId);
+        query.addWhereEqualTo("companyId", stateUser.getCompany().getObjectId());
+        query.sum(new String[]{"amount"});
+        query.findStatistics(ProcessEntity.class, new QueryListener<JSONArray>() {
+            @Override
+            public void done(JSONArray ary, BmobException e) {
+                if (e == null) {
+                    JSONObject obj = null;
+                    try {
+                        obj = ary.getJSONObject(0);
+                        double sum = obj.getDouble("_sumAmount");
+                        for (BudgetEntity be : list) {
+                            if (sum > (be.getBudgetAmount() * be.getCordon() / 100)) {
+                                for (MySection mySection : mainDatas) {
+                                    if (mySection.isHeader) {
+                                        if (mySection.header.equals(SpManager.mBumenManager.get(bmId))) {
+                                            mySection.isBig = true;
+                                            Log.e("xiaoqiang", "??//");
+                                        }
+                                    }
+                                }
+
+                            }
+                        }
+                        sectionAdapter.notifyDataSetChanged();
+                    } catch (JSONException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+        });
+
+
+    }
+
+
+    void queryBM(final int bmID) {
+
+        Calendar ca = Calendar.getInstance();
+        ca.setTime(new Date());
+        DayTime dayTime = TimeFormatUtil.getMonthTimeOfMonth(ca);
+
+        //--and条件1
+        BmobQuery<BudgetEntity> eq1 = new BmobQuery<>();
+        eq1.addWhereLessThanOrEqualTo("createdAt", dayTime.getMaxDate());//時間<=MaxTime
+        //--and条件2
+        BmobQuery<BudgetEntity> eq2 = new BmobQuery<>();
+        eq2.addWhereGreaterThanOrEqualTo("createdAt", dayTime.getMinDate());//時間>=MinTime
+        List<BmobQuery<BudgetEntity>> andQuery = new ArrayList<>();
+        andQuery.add(eq1);
+        andQuery.add(eq2);
+
+        BmobQuery<BudgetEntity> query = new BmobQuery<>();
+        query.and(andQuery);
+        query.addWhereEqualTo("companyId", stateUser.getCompany().getObjectId());
+        query.addWhereEqualTo("department", bmID);
+        query.findObjects(new FindListener<BudgetEntity>() {
+            @Override
+            public void done(List<BudgetEntity> list, BmobException e) {
+                if (e == null) {
+                    if (list.size() > 0) {
+                        Log.e("xiaoqiang", list.size() + "---");
+                        queryTotal(bmID, list);
+                    }
+                }
+            }
+        });
+    }
 
 }

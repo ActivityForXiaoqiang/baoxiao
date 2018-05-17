@@ -140,6 +140,7 @@ public class CreateCompanyActivity extends MyBaseActivity implements SaveView {
             public void done(List<Company> list, BmobException e) {
                 StateUser stateUser = new StateUser();
                 stateUser.setJoinCompay(true);
+                stateUser.setPosition(-1);
                 stateUser.setCompany(list.get(0));
                 updataController.updataStateUser(stateUser, stateId);
             }
