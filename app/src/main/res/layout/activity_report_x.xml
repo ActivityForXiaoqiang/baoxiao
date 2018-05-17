@@ -100,7 +100,7 @@
                     <TextView
                         android:id="@+id/activity_report_x_name"
                         android:layout_width="100dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:gravity="center"
                         android:minLines="2"
                         android:padding="10dp"
@@ -110,9 +110,10 @@
 
                     <android.support.v7.widget.AppCompatImageView
                         android:id="@+id/activity_report_x_name_img"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:layout_alignParentBottom="true"
+                        android:visibility="gone"
                         android:layout_alignParentRight="true"
                         app:srcCompat="@drawable/ic_more_unfold" />
                 </RelativeLayout>
