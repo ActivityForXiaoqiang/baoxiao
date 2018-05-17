@@ -3,6 +3,7 @@ package com.example.xiaoqiang.baoxiao.common.ui.info;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 
 import com.aries.ui.view.title.TitleBarView;
@@ -10,6 +11,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.xiaoqiang.baoxiao.R;
 import com.example.xiaoqiang.baoxiao.common.adapter.BudgetAdapter;
 import com.example.xiaoqiang.baoxiao.common.been.BudgetEntity;
+import com.example.xiaoqiang.baoxiao.common.been.StateUser;
 import com.example.xiaoqiang.baoxiao.common.controller.BudgetController;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.basis.FastRefreshLoadActivity;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.EventConstant;
@@ -18,10 +20,13 @@ import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.GlobalConstan
 import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.SPConstant;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SPUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SpManager;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.util.Timber;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.TimeFormatUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.ToastUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.widget.dialog.RejectReMarkDialog;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.widget.dialog.SelectListDialog;
 import com.example.xiaoqiang.baoxiao.common.view.IBudgetListView;
+import com.google.gson.Gson;
 import com.jzxiang.pickerview.TimePickerDialog;
 import com.jzxiang.pickerview.data.Type;
 import com.jzxiang.pickerview.listener.OnDateSetListener;
@@ -74,7 +79,7 @@ public class BudgetActivity extends FastRefreshLoadActivity<BudgetEntity, Budget
                     @Override
                     public void onDateSet(TimePickerDialog timePickerView, long millseconds) {
                         requestType = 0;
-                        mBudgetEntity = new BudgetEntity();
+
                         mBudgetEntity.setMonthTime(millseconds);
                         mBudgetEntity.setCompanyId(companyId);
                         showBudgetDialog();
@@ -97,6 +102,35 @@ public class BudgetActivity extends FastRefreshLoadActivity<BudgetEntity, Budget
         startTimeDialog.show(getSupportFragmentManager(), "year_month");
     }
 
+    SelectListDialog dialog2;
+
+    void showBM() {
+        if (dialog2 == null) {
+            dialog2 = new SelectListDialog(this, null, FastConstant.SELECT_DIALOG_DEPARTMENT, "所属部门");
+            dialog2.setItemSelectListener(new SelectListDialog.ItemSelect() {
+                @Override
+                public void onItemUserSelect(StateUser user) {
+
+                }
+
+                @Override
+                public void onItemSelect(String content) {
+                    Log.e("xiaoqiang", "content" + content);
+                    mBudgetEntity = new BudgetEntity();
+                    for (Integer key : SpManager.mBumenManager.keySet()) {
+                        if (content.equals(SpManager.mBumenManager.get(key))) {
+                            mBudgetEntity.setDepartment(key);
+                        }
+                    }
+                    showTimePickerDialog();
+                    dialog2.dismiss();
+                }
+            });
+        } else {
+            dialog2.show();
+        }
+    }
+
     private RejectReMarkDialog rejectReMarkDialog;
 
     private void showBudgetDialog() {
@@ -117,17 +151,24 @@ public class BudgetActivity extends FastRefreshLoadActivity<BudgetEntity, Budget
                         } else {
                             mBudgetEntity.setBudgetAmount(Double.valueOf(rejectReMarkDialog.getRemark()));
                             if (requestType == 0) {
-                                rejectReMarkDialog.dismiss();
-                                mController.saveBudget(mBudgetEntity);
+                                if (TextUtils.isEmpty(rejectReMarkDialog.getCordon().trim())) {
+                                    ToastUtil.show("请填写预警值");
+                                } else {
+                                    mBudgetEntity.setCordon(Integer.valueOf(rejectReMarkDialog.getCordon()));
+                                    rejectReMarkDialog.dismiss();
+                                    mController.saveBudget(mBudgetEntity);
+                                }
                             } else {
                                 if (TextUtils.isEmpty(rejectReMarkDialog.getCordon().trim())) {
                                     ToastUtil.show("请填写预警值");
                                 } else {
                                     rejectReMarkDialog.dismiss();
                                     mBudgetEntity.setCordon(Integer.valueOf(rejectReMarkDialog.getCordon()));
+                                    Timber.i(new Gson().toJson(mBudgetEntity));
                                     mController.modifyBudget(mBudgetEntity);
                                 }
                             }
+
                         }
                     }
                 }).show();
@@ -156,6 +197,7 @@ public class BudgetActivity extends FastRefreshLoadActivity<BudgetEntity, Budget
     @Override
     public void initView(Bundle savedInstanceState) {
         companyId = SpManager.getInstance().getUserInfo().getCompany().getObjectId();
+
     }
 
     @Override
@@ -206,7 +248,7 @@ public class BudgetActivity extends FastRefreshLoadActivity<BudgetEntity, Budget
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.activity_budget_add:
-                showTimePickerDialog();
+                showBM();
                 break;
         }
     }

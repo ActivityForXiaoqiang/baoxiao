@@ -14,6 +14,15 @@ public class BudgetEntity extends BmobObject {
     private Double budgetAmount;
     private Double sumAmountProcess;
     private int cordon;
+    private int department;//部门；
+
+    public int getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(int department) {
+        this.department = department;
+    }
 
     public String getCompanyId() {
         return companyId;

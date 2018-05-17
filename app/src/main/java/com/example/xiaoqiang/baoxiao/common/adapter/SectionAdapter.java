@@ -1,5 +1,6 @@
 package com.example.xiaoqiang.baoxiao.common.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.widget.ImageView;
 
@@ -32,9 +33,14 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection, BaseViewH
         this.context = context;
     }
 
+    @SuppressLint({"ResourceAsColor", "NewApi"})
     @Override
     protected void convertHead(BaseViewHolder helper, MySection item) {
         helper.setText(R.id.item_head, item.header);
+        if (item.isBig) {
+            helper.setVisible(R.id.item_tip, true);
+            helper.setBackgroundColor(R.id.yujing_bg, context.getColor(R.color.submit_red_bg));
+        }
     }
 
     @Override

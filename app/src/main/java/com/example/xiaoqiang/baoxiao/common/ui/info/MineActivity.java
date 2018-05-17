@@ -18,6 +18,8 @@ import com.example.xiaoqiang.baoxiao.common.fast.constant.util.FastUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SpManager;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.ToastUtil;
 import com.example.xiaoqiang.baoxiao.common.ui.message.ProblemActivity;
+import com.example.xiaoqiang.baoxiao.common.ui.process.ProcessListActivity;
+import com.example.xiaoqiang.baoxiao.common.ui.process.reimbursement.ReimbursementActivity;
 import com.example.xiaoqiang.baoxiao.common.ui.report.ReportXActivity;
 import com.example.xiaoqiang.baoxiao.common.utils.StatusBarUtil;
 import com.example.xiaoqiang.baoxiao.common.view.UpdataView;
@@ -93,7 +95,22 @@ public class MineActivity extends MyBaseActivity implements UpdataView {
         btn_baoxiao.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SpManager.getInstance().queryCurrentUser(MineActivity.this, user, new SpManager.IGetCurrentUser() {
+                    @Override
+                    public void showMyUser(StateUser stateUser) {
+                        if (stateUser == null) {
+                            ToastUtil.show("您还未登陆");
+                            return;
+                        }
 
+                        if (!stateUser.isJoinCompay()) {
+                            ToastUtil.show("您还没有所属公司");
+                            return;
+                        }
+
+                        startActivity(new Intent(MineActivity.this, ProcessListActivity.class));
+                    }
+                });
             }
         });
         btn_company.setOnClickListener(new View.OnClickListener() {

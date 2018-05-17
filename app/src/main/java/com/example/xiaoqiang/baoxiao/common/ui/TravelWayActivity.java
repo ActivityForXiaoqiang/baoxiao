@@ -69,6 +69,8 @@ public class TravelWayActivity extends MyBaseActivity {
         url = url.replace("%mode%", mode);
 
 
+
+
         recyclerView = findViewById(R.id.trave_recyc);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new tAdapter();
@@ -94,7 +96,7 @@ public class TravelWayActivity extends MyBaseActivity {
     void dealData(String data) {
         trave = new Gson().fromJson(data, Trave.class);
         if (trave.error_code != 0) {
-            ToastUtil.show("服务器错误！" + trave.error_code);
+            ToastUtil.show("没有搜到数据！" + trave.error_code);
             return;
         }
         adapter.notifyDataSetChanged();

@@ -169,7 +169,7 @@ public class JoinActivity extends MyBaseActivity implements QueryView, SaveView,
                 @Override
                 public void onClick(View v) {
                     MyUser user = BmobUser.getCurrentUser(MyUser.class);
-                    if (TextUtils.isEmpty(user.getNickName()) || TextUtils.isEmpty(user.getPhotoPath())) {
+                    if (TextUtils.isEmpty(user.getNickName())) {
                         ToastUtil.show("个人信息尚未完善，不能加入");
                         return;
                     }

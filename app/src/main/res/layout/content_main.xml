@@ -27,15 +27,18 @@
 
                 <TextView
                     android:id="@+id/company_title"
-                    android:layout_gravity="center"
                     style="@style/AppTheme.Label.Title.Large"
+                    android:layout_gravity="center"
                     android:padding="@dimen/space_normal"
-                    android:text="公司名称" />
+                    android:text="公司名称"
+                    android:textSize="25sp" />
 
                 <TextView
-                    style="@style/AppTheme.Label.Title"
+                    android:id="@+id/main_tip"
+                    style="@style/AppTheme.Label.Title.Small"
                     android:padding="@dimen/space_normal"
-                    android:text="公司成员" />
+                    android:text="tips:长按成员移除"
+                    android:visibility="gone" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/main_list"
