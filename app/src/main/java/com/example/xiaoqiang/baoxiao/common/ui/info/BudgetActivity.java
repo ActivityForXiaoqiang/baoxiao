@@ -18,6 +18,7 @@ import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.EventConstant
 import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.FastConstant;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.GlobalConstant;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.SPConstant;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.util.NumberFormatterUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SPUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SpManager;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.Timber;
@@ -172,6 +173,10 @@ public class BudgetActivity extends FastRefreshLoadActivity<BudgetEntity, Budget
                         }
                     }
                 }).show();
+        if (requestType == 1) {
+            rejectReMarkDialog.setRemark(NumberFormatterUtil.formatMoneyHideZero(mBudgetEntity.getBudgetAmount()+""));
+            rejectReMarkDialog.setCordon(mBudgetEntity.getCordon() + "");
+        }
     }
 
     @Override

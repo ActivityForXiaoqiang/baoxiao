@@ -44,6 +44,7 @@ public class RejectReMarkDialog extends BaseDialog {
     LinearLayout mLayoutCordon;
     @BindView(R.id.dialog_layout_cordon_et)
     EditText mEtCordon;
+    private String remarkContent, cordonContent;
     private String mHintRemark;
     private int mRemarkInputType = -1;
     private boolean isOnClickDismiss = true;
@@ -123,6 +124,15 @@ public class RejectReMarkDialog extends BaseDialog {
         if (!TextUtils.isEmpty(mHintRemark)) {
             mEtRemark.setHint(mHintRemark);
         }
+
+        if (!TextUtils.isEmpty(remarkContent)) {
+            mEtRemark.setText(remarkContent);
+        }
+
+        if (!TextUtils.isEmpty(cordonContent)) {
+            mEtCordon.setHint(cordonContent);
+        }
+
 
         if (isSetCordon) {
             mLayoutCordon.setVisibility(View.VISIBLE);
@@ -266,6 +276,22 @@ public class RejectReMarkDialog extends BaseDialog {
     public RejectReMarkDialog setIsSetCordon(boolean isSetCordon) {
         this.isSetCordon = isSetCordon;
         return this;
+    }
+
+    public void setRemark(String content) {
+        if (mEtRemark == null) {
+            remarkContent = content;
+            return;
+        }
+        mEtRemark.setText(content);
+    }
+
+    public void setCordon(String content) {
+        if (mEtCordon == null) {
+            cordonContent = content;
+            return;
+        }
+        mEtCordon.setText(content);
     }
 
     public String getRemark() {

@@ -7,6 +7,7 @@ import com.example.xiaoqiang.baoxiao.R;
 import com.example.xiaoqiang.baoxiao.common.been.BudgetEntity;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.helper.RadiusViewHelper;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.NumberFormatterUtil;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SpManager;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.TimeFormatUtil;
 
 /**
@@ -48,7 +49,7 @@ public class BudgetAdapter extends BaseQuickAdapter<BudgetEntity, BaseViewHolder
 
         helper.setText(R.id.item_layout_budget_cordon, "预警值：" + item.getCordon() + "%");
 
-        helper.setText(R.id.item_layout_budget_time, TimeFormatUtil.formatTime(item.getMonthTime(), "yyyy年MM月") + "");
+        helper.setText(R.id.item_layout_budget_time, TimeFormatUtil.formatTime(item.getMonthTime(), "yyyy年MM月") + "  (" + SpManager.getInstance().mBumenManager.get(item.getDepartment()) + ")");
         RadiusViewHelper.getInstance().setRadiusViewAdapter(((RadiusRelativeLayout) helper.itemView).getDelegate());
     }
 }
