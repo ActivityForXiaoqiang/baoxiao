@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -28,7 +29,6 @@ public class RejectReMarkDialog extends BaseDialog {
 
     @BindView(R.id.tv_title)
     TextView mTvTitle;
-
 
     @BindView(R.id.tv_positive)
     TextView mTvPositive;
@@ -95,6 +95,22 @@ public class RejectReMarkDialog extends BaseDialog {
                 return false;
             }
         });
+        initView();
+        initHeight(v);
+
+    }
+
+    private void initView() {
+        setOnShowListener(new OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                InputMethodManager inputMethodManager = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (inputMethodManager == null) {
+                    return;
+                }
+                inputMethodManager.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+        });
 
         setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
@@ -104,7 +120,6 @@ public class RejectReMarkDialog extends BaseDialog {
                 }
             }
         });
-        initHeight(v);
         if (!TextUtils.isEmpty(mTitle)) {
             mTvTitle.setText(mTitle);
             mTvTitle.setVisibility(View.VISIBLE);
@@ -284,6 +299,8 @@ public class RejectReMarkDialog extends BaseDialog {
             return;
         }
         mEtRemark.setText(content);
+        mEtRemark.requestFocus();
+        mEtRemark.selectAll();
     }
 
     public void setCordon(String content) {

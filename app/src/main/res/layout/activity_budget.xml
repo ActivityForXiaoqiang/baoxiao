@@ -8,13 +8,24 @@
 
     <include layout="@layout/fast_layout_title_multi_status_refresh_recycler"/>
 
-    <android.support.v7.widget.AppCompatImageView
-        android:id="@+id/activity_budget_add"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="50dp"
-        android:layout_marginRight="40dp"
-        app:srcCompat="@drawable/ic_add_budget"/>
+        android:layout_marginRight="40dp">
+
+        <com.allen.library.CircleImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@color/colorWhite"
+            />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/activity_budget_add"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:srcCompat="@drawable/ic_add_budget"/>
+    </RelativeLayout>
 </RelativeLayout>

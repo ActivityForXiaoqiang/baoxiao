@@ -5,7 +5,6 @@ import android.os.Message;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -31,6 +30,7 @@ import com.example.xiaoqiang.baoxiao.common.fast.constant.util.TimeFormatUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.ToastUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.widget.dialog.LoadingDialog;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.widget.dialog.SelectListPopwindow;
+import com.example.xiaoqiang.baoxiao.common.view.MyHorizontalScrollView;
 import com.google.gson.Gson;
 import com.jzxiang.pickerview.TimePickerDialog;
 import com.jzxiang.pickerview.data.Type;
@@ -55,7 +55,7 @@ import cn.bmob.v3.listener.QueryListener;
 
 public class ReportXActivity extends FastTitleActivity implements View.OnClickListener {
     @BindView(R.id.mHorizontalScrollView)
-    HorizontalScrollView mHorizontalScrollView;
+    MyHorizontalScrollView mHorizontalScrollView;
     @BindView(R.id.mListView)
     ListView mListView;
     @BindView(R.id.esv_layoutFastLib)
