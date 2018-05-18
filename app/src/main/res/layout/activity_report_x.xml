@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/excel_fragment"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorPage"
-    android:orientation="vertical">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/excel_fragment"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/colorPage"
+              android:orientation="vertical">
 
-    <include layout="@layout/fast_layout_title_bar" />
+    <include layout="@layout/fast_layout_title_bar"/>
 
 
     <LinearLayout
@@ -32,7 +32,7 @@
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:layout_marginRight="20dp"
-                app:srcCompat="@drawable/ic_left" />
+                app:srcCompat="@drawable/ic_left"/>
         </LinearLayout>
 
         <TextView
@@ -45,7 +45,7 @@
             android:text="2018-09"
             android:textColor="@color/txt_black"
             android:textSize="17sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"/>
 
         <LinearLayout
             android:id="@+id/report_x_right"
@@ -59,11 +59,11 @@
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:layout_marginLeft="20dp"
-                app:srcCompat="@drawable/ic_right" />
+                app:srcCompat="@drawable/ic_right"/>
         </LinearLayout>
     </LinearLayout>
 
-    <HorizontalScrollView
+    <com.example.xiaoqiang.baoxiao.common.view.MyHorizontalScrollView
         android:id="@+id/mHorizontalScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -80,62 +80,63 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="100dp"
+                    android:layout_width="120dp"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
+                    android:gravity="center_horizontal|top"
                     android:padding="10dp"
                     android:text="单据ID"
                     android:textColor="@color/txt_black1"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
 
                 <View
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
-                    android:background="@color/bg_divider" />
+                    android:background="@color/bg_divider"/>
 
                 <RelativeLayout
-                    android:layout_width="100dp"
+                    android:layout_width="120dp"
                     android:layout_height="60dp">
 
                     <TextView
                         android:id="@+id/activity_report_x_name"
-                        android:layout_width="100dp"
+                        android:layout_width="120dp"
                         android:layout_height="match_parent"
-                        android:gravity="center"
+                        android:gravity="center_horizontal|top"
                         android:minLines="2"
                         android:padding="10dp"
                         android:text="姓名"
                         android:textColor="@color/txt_black1"
-                        android:textSize="15sp" />
+                        android:textSize="15sp"/>
+
 
                     <android.support.v7.widget.AppCompatImageView
                         android:id="@+id/activity_report_x_name_img"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_alignParentBottom="true"
-                        android:visibility="gone"
                         android:layout_alignParentRight="true"
-                        app:srcCompat="@drawable/ic_more_unfold" />
+                        android:visibility="gone"
+                        app:srcCompat="@drawable/ic_more_unfold"/>
                 </RelativeLayout>
 
                 <View
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
-                    android:background="@color/bg_divider" />
+                    android:background="@color/bg_divider"/>
 
                 <RelativeLayout
-                    android:layout_width="100dp"
+                    android:layout_width="120dp"
                     android:layout_height="60dp">
 
                     <TextView
                         android:id="@+id/activity_report_x_position"
-                        android:layout_width="100dp"
+                        android:layout_width="120dp"
                         android:layout_height="match_parent"
-                        android:gravity="center"
+                        android:gravity="center_horizontal|top"
                         android:padding="10dp"
                         android:text="职位"
                         android:textColor="@color/txt_black1"
-                        android:textSize="15sp" />
+                        android:textSize="15sp"/>
 
                     <android.support.v7.widget.AppCompatImageView
                         android:id="@+id/activity_report_x_position_img"
@@ -144,28 +145,28 @@
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentRight="true"
                         android:visibility="gone"
-                        app:srcCompat="@drawable/ic_more_unfold" />
+                        app:srcCompat="@drawable/ic_more_unfold"/>
                 </RelativeLayout>
 
                 <View
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
-                    android:background="@color/bg_divider" />
+                    android:background="@color/bg_divider"/>
 
                 <RelativeLayout
                     android:id="@+id/activity_report_x_department_r"
-                    android:layout_width="100dp"
+                    android:layout_width="120dp"
                     android:layout_height="60dp">
 
                     <TextView
                         android:id="@+id/activity_report_x_department"
-                        android:layout_width="100dp"
+                        android:layout_width="120dp"
                         android:layout_height="match_parent"
-                        android:gravity="center"
+                        android:gravity="center_horizontal|top"
                         android:padding="10dp"
                         android:text="部门"
                         android:textColor="@color/txt_black1"
-                        android:textSize="15sp" />
+                        android:textSize="15sp"/>
 
                     <android.support.v7.widget.AppCompatImageView
                         android:id="@+id/activity_report_x_department_img"
@@ -174,43 +175,43 @@
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentRight="true"
                         android:visibility="gone"
-                        app:srcCompat="@drawable/ic_more_unfold" />
+                        app:srcCompat="@drawable/ic_more_unfold"/>
                 </RelativeLayout>
 
                 <View
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
-                    android:background="@color/bg_divider" />
+                    android:background="@color/bg_divider"/>
 
                 <TextView
-                    android:layout_width="100dp"
+                    android:layout_width="120dp"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
+                    android:gravity="center_horizontal|top"
                     android:padding="10dp"
                     android:text="金额"
                     android:textColor="@color/txt_black1"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
 
                 <View
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
-                    android:background="@color/bg_divider" />
+                    android:background="@color/bg_divider"/>
 
 
                 <TextView
-                    android:layout_width="200dp"
+                    android:layout_width="240dp"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
+                    android:gravity="center_horizontal|top"
                     android:padding="10dp"
                     android:text="事由"
                     android:textColor="@color/txt_black1"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/bg_divider" />
+                android:background="@color/bg_divider"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -226,7 +227,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:divider="@color/bg_divider"
-                        android:dividerHeight="1dp" />
+                        android:dividerHeight="1dp"/>
                 </com.marno.easystatelibrary.EasyStatusView>
 
                 <View
@@ -234,10 +235,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="#88000000"
-                    android:visibility="gone" />
+                    android:visibility="gone"/>
             </RelativeLayout>
         </LinearLayout>
-    </HorizontalScrollView>
+    </com.example.xiaoqiang.baoxiao.common.view.MyHorizontalScrollView>
 
 
 </LinearLayout>

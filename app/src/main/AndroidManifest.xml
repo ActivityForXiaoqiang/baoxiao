@@ -66,6 +66,7 @@
         <activity
             android:name=".common.ui.info.BudgetActivity"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden"
             android:theme="@style/AppTheme.NoActionBarY" />
 
         <activity

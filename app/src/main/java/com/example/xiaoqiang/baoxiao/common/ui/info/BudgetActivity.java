@@ -1,6 +1,7 @@
 package com.example.xiaoqiang.baoxiao.common.ui.info;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
@@ -18,6 +19,7 @@ import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.EventConstant
 import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.FastConstant;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.GlobalConstant;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.SPConstant;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.util.FastUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.NumberFormatterUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SPUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SpManager;
@@ -45,7 +47,8 @@ import butterknife.OnClick;
  * data: 2018/5/9.
  */
 
-public class BudgetActivity extends FastRefreshLoadActivity<BudgetEntity, BudgetController> implements View.OnClickListener, IBudgetListView {
+public class BudgetActivity extends FastRefreshLoadActivity<BudgetEntity, BudgetController> implements View.OnClickListener,
+        IBudgetListView {
     private BaseQuickAdapter mAdapter;
     private BudgetEntity mBudgetEntity;
     private int animationIndex = GlobalConstant.GLOBAL_ADAPTER_ANIMATION_VALUE;
@@ -173,8 +176,20 @@ public class BudgetActivity extends FastRefreshLoadActivity<BudgetEntity, Budget
                         }
                     }
                 }).show();
+
+        rejectReMarkDialog.setOnDismissListener(new RejectReMarkDialog.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        FastUtil.hideSoftKeyboard(BudgetActivity.this);
+                    }
+                },100);
+            }
+        });
         if (requestType == 1) {
-            rejectReMarkDialog.setRemark(NumberFormatterUtil.formatMoneyHideZero(mBudgetEntity.getBudgetAmount()+""));
+            rejectReMarkDialog.setRemark(NumberFormatterUtil.formatDouble(mBudgetEntity.getBudgetAmount()));
             rejectReMarkDialog.setCordon(mBudgetEntity.getCordon() + "");
         }
     }
@@ -212,7 +227,7 @@ public class BudgetActivity extends FastRefreshLoadActivity<BudgetEntity, Budget
 
     @Override
     public void onRequestCompleted() {
-
+        mRefreshLayout.autoRefresh();
     }
 
     @Override

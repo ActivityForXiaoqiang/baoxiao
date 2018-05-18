@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.text.TextUtils;
+import android.view.inputmethod.InputMethodManager;
 
 import java.util.List;
 import java.util.Random;
@@ -158,7 +159,8 @@ public class FastUtil {
      * @return 平板返回 True，手机返回 False
      */
     public static boolean isTablet(Context context) {
-        return (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE;
+        return (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration
+                .SCREENLAYOUT_SIZE_LARGE;
     }
 
     public static void jumpMarket(Context mContext) {
@@ -250,5 +252,15 @@ public class FastUtil {
         ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         // 将文本内容放到系统剪贴板里。
         cm.setPrimaryClip(ClipData.newPlainText("粘贴板", str));
+    }
+
+    public static void hideSoftKeyboard(Activity activity) {
+        //隐藏软键盘
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService
+                (Activity.INPUT_METHOD_SERVICE);
+        if (inputMethodManager == null) {
+            return;
+        }
+        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
 }

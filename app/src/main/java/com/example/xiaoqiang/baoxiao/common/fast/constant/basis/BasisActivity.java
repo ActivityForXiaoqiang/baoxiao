@@ -160,7 +160,8 @@ public abstract class BasisActivity extends AppCompatActivity implements IBasisV
                 //滑动返回执行完毕，销毁当前 Activity
                 mSwipeBackHelper.swipeBackward();
             }
-        }).setSwipeBackEnable(isSwipeBackEnable());
+        }).setSwipeBackThreshold(0.5f)
+                .setSwipeBackEnable(isSwipeBackEnable());
     }
 
     @Override
