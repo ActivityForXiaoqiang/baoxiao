@@ -1,7 +1,6 @@
 package com.example.xiaoqiang.baoxiao.common.ui.process.controller;
 
 import android.content.Context;
-import android.text.TextUtils;
 
 import com.example.xiaoqiang.baoxiao.common.been.PointEntity;
 import com.example.xiaoqiang.baoxiao.common.been.ProcessEntity;
@@ -14,6 +13,7 @@ import com.example.xiaoqiang.baoxiao.common.fast.constant.util.ToastUtil;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
@@ -68,7 +68,7 @@ public class ProcessListController extends BaseController<IProcessListView> {
                 BmobQuery<ProcessEntity> eq1 = new BmobQuery<>();
                 eq1.addWhereEqualTo("processType", FastConstant.PROCESS_TYPE_ONE);
                 eq1.addWhereEqualTo("point", FastConstant.PROCESS_POINT_TWO);
-                eq1.addWhereEqualTo("departmentId",SpManager.getInstance().getUserInfo().getDepartment());
+                eq1.addWhereEqualTo("departmentId", SpManager.getInstance().getUserInfo().getDepartment());
                 //批准总经理
                 BmobQuery<ProcessEntity> eq2 = new BmobQuery<>();
                 eq2.addWhereEqualTo("processType", FastConstant.PROCESS_TYPE_THREE);
@@ -82,7 +82,7 @@ public class ProcessListController extends BaseController<IProcessListView> {
                 //部門主管只能批准自己部門的
                 query.addWhereEqualTo("processType", FastConstant.PROCESS_TYPE_ONE);
                 query.addWhereEqualTo("point", FastConstant.PROCESS_POINT_TWO);
-                query.addWhereEqualTo("departmentId",SpManager.getInstance().getUserInfo().getDepartment());
+                query.addWhereEqualTo("departmentId", SpManager.getInstance().getUserInfo().getDepartment());
             }
         } else if (position == 5) {
             //可处理流程类型为1 并且point为三级
@@ -114,25 +114,27 @@ public class ProcessListController extends BaseController<IProcessListView> {
                     Timber.i("bmobProcessEntity可處理个数：" + object.size());
                 } else {
                     ToastUtil.show(e.getMessage());
-                    Timber.i("bmob"+ "失败：" + e.getMessage() + "+" + e.getErrorCode());
+                    Timber.i("bmob" + "失败：" + e.getMessage() + "+" + e.getErrorCode());
                 }
             }
         });
     }
 
 
-    public void getProcessList(int pageNo, int point, String userId, String companyId) {
-        //  point当前节点 详细注解看fastConstans类
+    public void getProcessList(int pageNo, int pageStyle, String userId, String companyId) {
         showLoadingDialog(mContext);
         BmobQuery<ProcessEntity> query = new BmobQuery<ProcessEntity>();
-        if (point != -1) {
-            //条件1 需要根据节点 point 查询
-            query.addWhereEqualTo("point", point);//
-        }
-        if (!TextUtils.isEmpty(userId)) {
-            //条件2 需要根据userId 查询
+        if (pageStyle == 2) {
+            //查询经办报销
+            //根经办userid 查询
+            String[] userIdlist = {SpManager.getInstance().getUserInfo().getObjectId()};
+            query.addWhereContainsAll("userIdlist", Arrays.asList(userIdlist));
+        } else {
+            //查询我的报销
+            //根据userId 查询
             query.addWhereEqualTo("userId", userId);//
         }
+
         query.addWhereEqualTo("companyId", companyId);//
         query.setLimit(pageSize);// 限制最多pageSize条数据结果作为一页
         query.setSkip(pageSize * pageNo);//忽略条目

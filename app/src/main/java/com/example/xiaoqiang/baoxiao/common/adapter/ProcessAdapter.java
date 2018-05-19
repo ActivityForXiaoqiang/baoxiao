@@ -86,7 +86,7 @@ public class ProcessAdapter extends BaseQuickAdapter<ProcessEntity, BaseViewHold
         helper.setText(R.id.process_title_tv, titleCs)
                 .setText(R.id.process_founder_tv, item.getCreatorName() + "(" + SpManager.getInstance().mPositionData.get(item
                         .getPosition()) + ")")
-                .setText(R.id.process_accept_time_tv, TimeFormatUtil.formatTime(item.getCreateTime(), FastConstant.TIME_FORMAT_TYPE))
+                .setText(R.id.process_accept_time_tv, TimeFormatUtil.string2Date2String(item.getCreatedAt()))
                 .setText(R.id.process_point_tv, pointInfo)
                 .setText(R.id.process_point_status_tv, item.getPointList().get(item.getPointList().size() - 1).getPointStatus() == 1 ?
                         "未操作" : "已处理")

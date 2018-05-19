@@ -135,7 +135,7 @@ public class ProcessBaseFragment extends FastRefreshLoadFragment<ProcessEntity, 
                 //查看我的已完成事宜  关联userid 与流程状态
                 point = FastConstant.PROCESS_POINT_FINISH;//查看我的已完成流程
             }
-            mController.getProcessList(page, point, userId, user.getCompany().getObjectId());
+            mController.getProcessList(page, pageStyle, userId, user.getCompany().getObjectId());
         } else if (pageStyle == 1) {
             //需要去操作的
             mController.getAgencyProcessList(page, user.getPosition(), user.getCompany().getObjectId());

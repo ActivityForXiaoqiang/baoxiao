@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.BmobObject;
@@ -23,7 +24,6 @@ public class ProcessEntity extends BmobObject {
     private String reason;//原因
     private Long startTime;
     private Long endTime;
-    private Long createTime;
     private String userId;//创建人id
     private String companyId;//创建人所属公司
     private String setout;//出发地
@@ -36,6 +36,7 @@ public class ProcessEntity extends BmobObject {
     private Boolean isReject = false;//是否被驳回
     private Integer departmentId;//部门id
     private boolean isTravel = false;//是否差旅
+    private List<String> userIdlist;//经手的用户id
 
     public String getCreatorName() {
         return creatorName;
@@ -99,14 +100,6 @@ public class ProcessEntity extends BmobObject {
 
     public void setEndTime(Long endTime) {
         this.endTime = endTime;
-    }
-
-    public Long getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Long createTime) {
-        this.createTime = createTime;
     }
 
     public String getUserId() {
@@ -185,6 +178,13 @@ public class ProcessEntity extends BmobObject {
         if (pointList == null) {
             return;
         }
+        List<String> arr = new ArrayList<>();
+        for (int i = 0; i < pointList.size(); i++) {
+            if (pointList.get(i).getUserId() != null) {
+                arr.add(pointList.get(i).getUserId());
+            }
+        }
+        setUserIdlist(arr);
         this.pointList = new Gson().toJson(pointList);
     }
 
@@ -211,5 +211,13 @@ public class ProcessEntity extends BmobObject {
 
     public void setTravel(boolean travel) {
         isTravel = travel;
+    }
+
+    public List<String> getUserIdlist() {
+        return userIdlist;
+    }
+
+    public void setUserIdlist(List<String> userIdlist) {
+        this.userIdlist = userIdlist;
     }
 }
