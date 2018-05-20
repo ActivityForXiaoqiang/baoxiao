@@ -241,7 +241,7 @@ public class ProcessBaseFragment extends FastRefreshLoadFragment<ProcessEntity, 
     private void showApprovalDialog(int nextPoint, final int position) {
         String title = "是否确认批准？";
         if (nextPoint == FastConstant.PROCESS_POINT_FINISH) {
-            title = "批准后将归档，是否确认批准？";
+            title = "确认收款后将归档，是否确认？";
         }
         AlertDialog alertDialog = new AlertDialog(getContext());
         alertDialog.setTitle(title)

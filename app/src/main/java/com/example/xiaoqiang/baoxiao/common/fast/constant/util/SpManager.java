@@ -264,11 +264,12 @@ public class SpManager {
         nextMap.put(FastConstant.PROCESS_POINT_ONE, FastConstant.PROCESS_POINT_TWO);
         nextMap.put(FastConstant.PROCESS_POINT_TWO, FastConstant.PROCESS_POINT_THREE);
         nextMap.put(FastConstant.PROCESS_POINT_THREE, FastConstant.PROCESS_POINT_FOUR);
-        nextMap.put(FastConstant.PROCESS_POINT_FOUR, FastConstant.PROCESS_POINT_FINISH);
+        nextMap.put(FastConstant.PROCESS_POINT_FOUR, FastConstant.PROCESS_POINT_FIVE);
+        nextMap.put(FastConstant.PROCESS_POINT_FIVE, FastConstant.PROCESS_POINT_FINISH);
         Integer nextPoint = nextMap.get(point);
         if (proccesType == FastConstant.PROCESS_TYPE_TWO || proccesType == FastConstant.PROCESS_TYPE_THREE) {
-            //需要跳过四级
-            if (nextPoint == FastConstant.PROCESS_POINT_FOUR) {
+            //需要跳过五级
+            if (nextPoint == FastConstant.PROCESS_POINT_FIVE) {
                 nextPoint = FastConstant.PROCESS_POINT_FINISH;
             }
         }
@@ -285,16 +286,19 @@ public class SpManager {
         nextMap1.put(FastConstant.PROCESS_POINT_TWO, "部门主管");
         nextMap1.put(FastConstant.PROCESS_POINT_THREE, "总经理");
         nextMap1.put(FastConstant.PROCESS_POINT_FOUR, "财务结算");
+        nextMap1.put(FastConstant.PROCESS_POINT_FIVE, "自己");
         nextMap1.put(FastConstant.PROCESS_POINT_FINISH, "归档");
         Map<Integer, String> nextMap2 = new HashMap<>();
         nextMap2.put(FastConstant.PROCESS_POINT_ONE, "自己");
         nextMap2.put(FastConstant.PROCESS_POINT_TWO, "总经理");
         nextMap2.put(FastConstant.PROCESS_POINT_THREE, "财务结算");
+        nextMap2.put(FastConstant.PROCESS_POINT_FOUR, "自己");
         nextMap2.put(FastConstant.PROCESS_POINT_FINISH, "归档");
         Map<Integer, String> nextMap3 = new HashMap<>();
         nextMap3.put(FastConstant.PROCESS_POINT_ONE, "自己");
         nextMap3.put(FastConstant.PROCESS_POINT_TWO, "财务主管");
         nextMap3.put(FastConstant.PROCESS_POINT_THREE, "财务结算");
+        nextMap3.put(FastConstant.PROCESS_POINT_FOUR, "自己");
         nextMap3.put(FastConstant.PROCESS_POINT_FINISH, "归档");
         if (proccesType == FastConstant.PROCESS_TYPE_ONE) {
             info = nextMap1.get(point);

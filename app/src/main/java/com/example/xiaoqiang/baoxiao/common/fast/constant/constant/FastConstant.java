@@ -27,6 +27,7 @@ public class FastConstant {
     public final static int PROCESS_POINT_TWO = 201;//流程二級節點
     public final static int PROCESS_POINT_THREE = 301;//流程三級節點
     public final static int PROCESS_POINT_FOUR = 401;//流程四級節點
+    public final static int PROCESS_POINT_FIVE = 451;//流程五級節點
     public final static int PROCESS_POINT_FINISH = 501;//流程完成状态
 
     public final static int POINT_STATUS_ONE = 1;//未操作

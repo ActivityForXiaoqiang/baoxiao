@@ -126,18 +126,14 @@ public class ProcessListActivity extends FastTitleActivity {
 
         listFragment.add(ProcessBaseFragment.newInstance(0));
         StateUser user = SpManager.getInstance().getUserInfo();
-        if (user.getPosition() != 0) {
-            listFragment.add(ProcessBaseFragment.newInstance(1));
-        }
+        listFragment.add(ProcessBaseFragment.newInstance(1));
         listFragment.add(ProcessBaseFragment.newInstance(2));
         if (isSliding) {
             TabLayoutManager.getInstance().setSlidingTabData(this, mSlidingTab, vpContent,
-                    user.getPosition() != 0 ? getTitles(R.array.arrays_tab_activity) : getTitles(R.array.arrays_tab1_activity),
-                    listFragment);
+                    getTitles(R.array.arrays_tab_activity), listFragment);
         } else {
             TabLayoutManager.getInstance().setSegmentTabData(this, mSegmentTab, vpContent,
-                    user.getPosition() != 0 ? getResources().getStringArray(R.array.arrays_tab_activity) :
-                            getResources().getStringArray(R.array.arrays_tab1_activity), listFragment);
+                    getResources().getStringArray(R.array.arrays_tab_activity), listFragment);
         }
         //SlidingTabLayout--需这样切换一下不然选中变粗没有效果不知是SlidingTabLayout BUG还是设置问题
         if (isSliding) {

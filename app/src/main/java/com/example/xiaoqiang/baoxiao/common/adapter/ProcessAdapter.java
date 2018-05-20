@@ -35,7 +35,18 @@ public class ProcessAdapter extends BaseQuickAdapter<ProcessEntity, BaseViewHold
         if (isOperate) {
             helper.setVisible(R.id.item_process_operate_l, true);
         }
-        //设置参考价
+
+        if ((item.getProcessType() == FastConstant.PROCESS_TYPE_ONE && item.getPoint() == FastConstant.PROCESS_POINT_FIVE)
+                || (item.getProcessType() == FastConstant.PROCESS_TYPE_TWO && item.getPoint() == FastConstant.PROCESS_POINT_FOUR)
+                || (item.getProcessType() == FastConstant.PROCESS_TYPE_THREE && item.getPoint() == FastConstant.PROCESS_POINT_FOUR)) {
+            helper.setText(R.id.item_process_approval_tv, "确认收款");
+            helper.setVisible(R.id.item_process_reject_tv, false);
+        } else {
+            helper.setText(R.id.item_process_approval_tv, "批准");
+            helper.setVisible(R.id.item_process_reject_tv, true);
+        }
+
+        //查看参考价 是否显示
         LinearLayout reference_price_l = helper.getView(R.id.item_process_reference_price_l);
         if (item.isTravel()) {
             helper.addOnClickListener(R.id.item_process_reference_price_l);
