@@ -462,8 +462,6 @@ public class ReimbursementActivity extends FastTitleActivity<ReimbursementContro
             plist.add(pointE1);
             pe.setPointList(plist);
 
-            pe.setCreateTime(System.currentTimeMillis());
-
 
             boolean isPass = true;//判断是否差旅信息填写完整
             String str = "";
@@ -500,15 +498,14 @@ public class ReimbursementActivity extends FastTitleActivity<ReimbursementContro
             if (!isPass) {
                 ToastUtil.show(str);
                 return;
-            } else {
+            }
+
+            if (isTravel) {
                 pe.setSetout(setout);
                 pe.setDestination(destination);
                 pe.setVehicle(vehicle);
                 pe.setStartTime(startTime);
                 pe.setEndTime(endTime);
-            }
-
-            if (isTravel) {
                 pe.setTravel(isTravel);
 //                pe.setVehiclePriceReference(mTvVehiclePriceReference.getText().toString());
             }

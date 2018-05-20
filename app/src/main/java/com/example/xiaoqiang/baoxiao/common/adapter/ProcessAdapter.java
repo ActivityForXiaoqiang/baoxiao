@@ -35,7 +35,18 @@ public class ProcessAdapter extends BaseQuickAdapter<ProcessEntity, BaseViewHold
         if (isOperate) {
             helper.setVisible(R.id.item_process_operate_l, true);
         }
-        //设置参考价
+
+        if ((item.getProcessType() == FastConstant.PROCESS_TYPE_ONE && item.getPoint() == FastConstant.PROCESS_POINT_FIVE)
+                || (item.getProcessType() == FastConstant.PROCESS_TYPE_TWO && item.getPoint() == FastConstant.PROCESS_POINT_FOUR)
+                || (item.getProcessType() == FastConstant.PROCESS_TYPE_THREE && item.getPoint() == FastConstant.PROCESS_POINT_FOUR)) {
+            helper.setText(R.id.item_process_approval_tv, "确认收款");
+            helper.setVisible(R.id.item_process_reject_tv, false);
+        } else {
+            helper.setText(R.id.item_process_approval_tv, "批准");
+            helper.setVisible(R.id.item_process_reject_tv, true);
+        }
+
+        //查看参考价 是否显示
         LinearLayout reference_price_l = helper.getView(R.id.item_process_reference_price_l);
         if (item.isTravel()) {
             helper.addOnClickListener(R.id.item_process_reference_price_l);
@@ -86,7 +97,7 @@ public class ProcessAdapter extends BaseQuickAdapter<ProcessEntity, BaseViewHold
         helper.setText(R.id.process_title_tv, titleCs)
                 .setText(R.id.process_founder_tv, item.getCreatorName() + "(" + SpManager.getInstance().mPositionData.get(item
                         .getPosition()) + ")")
-                .setText(R.id.process_accept_time_tv, TimeFormatUtil.formatTime(item.getCreateTime(), FastConstant.TIME_FORMAT_TYPE))
+                .setText(R.id.process_accept_time_tv, TimeFormatUtil.string2Date2String(item.getCreatedAt()))
                 .setText(R.id.process_point_tv, pointInfo)
                 .setText(R.id.process_point_status_tv, item.getPointList().get(item.getPointList().size() - 1).getPointStatus() == 1 ?
                         "未操作" : "已处理")

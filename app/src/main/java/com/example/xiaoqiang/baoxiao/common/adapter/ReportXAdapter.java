@@ -58,10 +58,12 @@ public class ReportXAdapter extends BaseAdapter {
             vh = new viewHolder();
             view = LayoutInflater.from(mContext).inflate(R.layout.item_layout_report, null);
             vh.mTvID = view.findViewById(R.id.item_layout_report_process_id);
+            vh.mTvCreateTime = view.findViewById(R.id.item_layout_report_create_time);
             vh.mTvName = view.findViewById(R.id.item_layout_report_name);
             vh.mTvPosition = view.findViewById(R.id.item_layout_report_position);
             vh.mTvDePartment = view.findViewById(R.id.item_layout_report_department);
             vh.mTvAmount = view.findViewById(R.id.item_layout_report_amount);
+            vh.mTvFinishTime = view.findViewById(R.id.item_layout_report_finish_time);
             vh.mTvReason = view.findViewById(R.id.item_layout_report_reason);
             view.setTag(vh);
         } else {
@@ -77,8 +79,10 @@ public class ReportXAdapter extends BaseAdapter {
         } else {
             departmentTxt = SpManager.getInstance().mBumenManager.get(item.getDepartmentId());
         }
+        vh.mTvCreateTime.setText(item.getCreatedAt());
         vh.mTvDePartment.setText(departmentTxt);
         vh.mTvAmount.setText(NumberFormatterUtil.formatMoneyHideZero(item.getAmount() + ""));
+        vh.mTvFinishTime.setText(item.getUpdatedAt());
         vh.mTvReason.setText(item.getReason());
         return view;  // 返回加载好了内容的行布局
     }
@@ -100,10 +104,12 @@ public class ReportXAdapter extends BaseAdapter {
 
     class viewHolder {
         private TextView mTvID;
+        private TextView mTvCreateTime;
         private TextView mTvName;
         private TextView mTvPosition;
         private TextView mTvDePartment;
         private TextView mTvAmount;
+        private TextView mTvFinishTime;
         private TextView mTvReason;
 
     }

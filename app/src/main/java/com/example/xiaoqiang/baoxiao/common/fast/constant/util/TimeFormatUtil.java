@@ -3,6 +3,7 @@ package com.example.xiaoqiang.baoxiao.common.fast.constant.util;
 import android.text.TextUtils;
 
 import com.example.xiaoqiang.baoxiao.common.been.DayTime;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.FastConstant;
 import com.google.gson.Gson;
 
 import java.text.ParseException;
@@ -44,6 +45,9 @@ public class TimeFormatUtil {
     }
 
     public static String formatTime(Date time, String format) {
+        if (time == null) {
+            time = new Date();
+        }
         SimpleDateFormat sdf = new SimpleDateFormat(format);
         return sdf.format(time);
     }
@@ -60,6 +64,20 @@ public class TimeFormatUtil {
             e.printStackTrace();
         }
         return date;
+    }
+
+    /**
+     * format bmob 时间
+     */
+    public static String string2Date2String(String strTime) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+        try {
+            date = formatter.parse(strTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+       return formatTime(date, FastConstant.TIME_FORMAT_TYPE);
     }
 
     // date要转换的date类型的时间
