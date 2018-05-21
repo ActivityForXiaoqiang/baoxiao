@@ -141,6 +141,7 @@ public class CreateCompanyActivity extends MyBaseActivity implements SaveView {
                 StateUser stateUser = new StateUser();
                 stateUser.setJoinCompay(true);
                 stateUser.setPosition(-1);
+                stateUser.setDepartment(-2);
                 stateUser.setCompany(list.get(0));
                 updataController.updataStateUser(stateUser, stateId);
             }
