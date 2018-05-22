@@ -288,7 +288,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 break;
             case R.id.nav_baoxiao:
-                getUserInfo(1);
+                if (user.isSuper()) {
+                    ToastUtil.show("管理员无需报销！");
+                } else {
+                    getUserInfo(1);
+                }
+
                 break;
             case R.id.nav_shiyi:
                 getUserInfo(2);
@@ -391,6 +396,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onQueryCompanyUser(List<StateUser> result) {
+
         getDatas(result);
 
         sectionAdapter.notifyDataSetChanged();
@@ -479,6 +485,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         for (StateUser su : arrays) {
             mainDatas.add(new MySection(su));
         }
+
     }
 
     //

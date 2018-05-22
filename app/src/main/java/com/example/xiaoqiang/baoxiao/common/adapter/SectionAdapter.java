@@ -40,6 +40,9 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection, BaseViewH
         if (item.isBig) {
             helper.setVisible(R.id.item_tip, true);
             helper.setBackgroundColor(R.id.yujing_bg, context.getColor(R.color.submit_red_bg));
+        }else {
+            helper.setVisible(R.id.item_tip, false);
+            helper.setBackgroundColor(R.id.yujing_bg, context.getColor(R.color.colorPrimary));
         }
     }
 

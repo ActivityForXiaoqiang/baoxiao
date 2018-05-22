@@ -88,6 +88,7 @@ public class SelectListDialog extends BaseDialog {
         } else if (dialogType == FastConstant.SELECT_DIALOG_ZHIWEI) {
             this.contents1 = SpManager.getInstance().mPositionData;
 
+
         } else if (dialogType == FastConstant.SELECT_DIALOG_DEPARTMENT) {
             this.contents1 = SpManager.getInstance().mBumenData;
         }
@@ -149,6 +150,7 @@ public class SelectListDialog extends BaseDialog {
                 } else if (dialogType == FastConstant.SELECT_DIALOG_RELATION_ACCOUNT_MODE) {
                     mItemSelect.onItemSelect(contents1.get(position));
                 } else if (dialogType == FastConstant.SELECT_DIALOG_ZHIWEI) {
+
                     mItemSelect.onItemSelect(contents1.get(position));
                 } else if (dialogType == FastConstant.SELECT_DIALOG_DEPARTMENT) {
                     mItemSelect.onItemSelect(contents1.get(position));
@@ -269,6 +271,7 @@ public class SelectListDialog extends BaseDialog {
                     vh.mTvContent.setText(this.contents.get(position).getUser().getNickName());
                 }
             } else {
+
                 vh.mTvContent.setText(this.contents1.get(position));
             }
             return convertView;

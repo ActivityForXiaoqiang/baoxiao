@@ -40,7 +40,8 @@ public class EditActivity extends MyBaseActivity implements UpdataView {
     public static final int REAL_NAME = 2;
     public static final int CODE = 3;
     public static final int BIRTHDAY = 4;
-    private String[][] items = {{"昵称", "1"}, {"性别", "1"}, {"真实姓名", "1"}, {"身份证", "1"}, {"出生日期", "1"}};
+    public static final int PHONE = 5;
+    private String[][] items = {{"昵称", "1"}, {"性别", "1"}, {"真实姓名", "1"}, {"身份证", "1"}, {"出生日期", "1"}, {"手机号码", "1"}};
 
     private RecyclerView recyclerView;
 
@@ -75,7 +76,13 @@ public class EditActivity extends MyBaseActivity implements UpdataView {
             items[CODE][1] = user.getCode();
         }
         if (!TextUtils.isEmpty(user.getBirthday())) {
-            items[BIRTHDAY][1] = user.getBirthday();
+            items[BIRTHDAY][1] = user.getBirthday().replace("00:00", "");
+
+        }
+
+        if (!TextUtils.isEmpty(user.getPhone())) {
+            items[PHONE][1] = user.getPhone();
+
         }
         adapter = new eAdapter();
         controller = new UpdataController(this);
@@ -101,6 +108,10 @@ public class EditActivity extends MyBaseActivity implements UpdataView {
                     case BIRTHDAY:
                         showTimePickerDialog();
                         break;
+                    case PHONE:
+                        startActivityForResult(new Intent(EditActivity.this, FillActivity.class), PHONE);
+                        break;
+
                 }
             }
         }));
@@ -124,6 +135,10 @@ public class EditActivity extends MyBaseActivity implements UpdataView {
                     break;
                 case CODE:
                     items[CODE][1] = text;
+                    adapter.notifyDataSetChanged();
+                    break;
+                case PHONE:
+                    items[PHONE][1] = text;
                     adapter.notifyDataSetChanged();
                     break;
             }
@@ -182,6 +197,9 @@ public class EditActivity extends MyBaseActivity implements UpdataView {
         if (!items[BIRTHDAY][1].equals("1")) {
             user.setBirthday(items[BIRTHDAY][1]);
         }
+        if (!items[PHONE][1].equals("1")) {
+            user.setPhone(items[PHONE][1]);
+        }
 
         controller.updataUser(user);
     }
@@ -230,7 +248,7 @@ public class EditActivity extends MyBaseActivity implements UpdataView {
                 .setCallBack(new OnDateSetListener() {
                     @Override
                     public void onDateSet(TimePickerDialog timePickerView, long millseconds) {
-                        items[BIRTHDAY][1] = TimeFormatUtil.formatTime(millseconds, FastConstant.TIME_FORMAT_TYPE);
+                        items[BIRTHDAY][1] = TimeFormatUtil.formatTime(millseconds, FastConstant.TIME_FORMAT_TYPE2);
                         adapter.notifyDataSetChanged();
                     }
                 })

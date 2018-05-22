@@ -55,7 +55,6 @@ public class SpManager {
         mPositionData = new ArrayList<>();
         mPositionData.add("普通职员");
         mPositionData.add("财务职员");
-        mPositionData.add("出纳");
         mPositionData.add("部门主管");
         mPositionData.add("财务主管");
         mPositionData.add("总经理");

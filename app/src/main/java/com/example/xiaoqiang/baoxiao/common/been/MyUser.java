@@ -9,10 +9,18 @@ public class MyUser extends BmobUser {
     private boolean sex;
     private boolean isSuper;
 
-
+    private String phone;
     private String realname;
     private String code;
     private String birthday;
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     public String getRealname() {
         return realname;

@@ -23,6 +23,7 @@ import com.example.xiaoqiang.baoxiao.common.controller.QueryController;
 import com.example.xiaoqiang.baoxiao.common.controller.UpdataController;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.FastConstant;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SpManager;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.util.ToastUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.widget.dialog.SelectListDialog;
 import com.example.xiaoqiang.baoxiao.common.view.DelectView;
 import com.example.xiaoqiang.baoxiao.common.view.QueryView;
@@ -56,6 +57,8 @@ public class RequestActivity extends MyBaseActivity implements QueryView, Delect
     StateUser stateUser;
     SmartRefreshLayout smartRefreshLayout;
 
+    int chosePos;
+
     @Override
     public Integer getViewId() {
         return R.layout.activity_request;
@@ -64,6 +67,7 @@ public class RequestActivity extends MyBaseActivity implements QueryView, Delect
     @Override
     public void init() {
         stateUser = new StateUser();
+
         dialog = new SelectListDialog(this, null, FastConstant.SELECT_DIALOG_ZHIWEI, "设置职位");
         dialog.setItemSelectListener(new SelectListDialog.ItemSelect() {
             @Override
@@ -76,6 +80,8 @@ public class RequestActivity extends MyBaseActivity implements QueryView, Delect
                 Log.e("xiaoqiang", "content" + content);
                 for (Integer key : SpManager.mPositionManager.keySet()) {
                     if (content.equals(SpManager.mPositionManager.get(key))) {
+
+                        chosePos = key;
                         stateUser.setPosition(key);
                         if (key == 5) {
                             stateUser.setJoinCompay(true);
@@ -85,6 +91,8 @@ public class RequestActivity extends MyBaseActivity implements QueryView, Delect
                         } else {
                             dialog2.show();
                         }
+
+
                         dialog.dismiss();
 
 
@@ -102,10 +110,22 @@ public class RequestActivity extends MyBaseActivity implements QueryView, Delect
             @Override
             public void onItemSelect(String content) {
                 Log.e("xiaoqiang", "content" + content);
+
+
                 stateUser.setJoinCompay(true);
                 stateUser.setCompany(company);
                 for (Integer key : SpManager.mBumenManager.keySet()) {
                     if (content.equals(SpManager.mBumenManager.get(key))) {
+                        if ((chosePos == 0 || chosePos == 3) && key == 2) {
+                            ToastUtil.show("该职位不能加入财务部门");
+                            return;
+                        }
+                        if (chosePos == 1 || chosePos == 4) {
+                            if (key != 2) {
+                                ToastUtil.show("财务职员不能加入其他部门");
+                                return;
+                            }
+                        }
                         stateUser.setDepartment(key);
                     }
                 }
