@@ -180,6 +180,9 @@ public class ProcessEntity extends BmobObject {
         }
         List<String> arr = new ArrayList<>();
         for (int i = 0; i < pointList.size(); i++) {
+            if (i == 0) {
+                continue;
+            }
             if (pointList.get(i).getUserId() != null) {
                 arr.add(pointList.get(i).getUserId());
             }

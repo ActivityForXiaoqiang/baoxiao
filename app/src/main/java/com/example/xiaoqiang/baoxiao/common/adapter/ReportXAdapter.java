@@ -71,7 +71,7 @@ public class ReportXAdapter extends BaseAdapter {
         }
         vh.mTvID.setText(item.getObjectId());
         vh.mTvName.setText(item.getCreatorName());
-        vh.mTvPosition.setText(SpManager.getInstance().mPositionData.get(item.getPosition()));
+        vh.mTvPosition.setText(SpManager.getInstance().mPositionManager.get(item.getPosition()));
         String departmentTxt = "";
         if (item.getDepartmentId() == null) {
         } else if (item.getDepartmentId() == -1) {

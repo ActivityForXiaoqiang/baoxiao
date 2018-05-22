@@ -206,7 +206,7 @@ public class ProcessListController extends BaseController<IProcessListView> {
         List<PointEntity> plist = processEntity.getPointList();
         int endPosition = plist.size() - 1;
         plist.get(endPosition).setCreateTime(System.currentTimeMillis());
-        plist.get(endPosition).setCreatorName(user.getUser().getNickName());
+        plist.get(endPosition).setCreatorName(user.getUser().getRealname());
         plist.get(endPosition).setUserId(user.getObjectId());
         plist.get(endPosition).setCreatorHeadImg(user.getUser().getPhotoPath());
         plist.get(endPosition).setPointStatus(FastConstant.POINT_STATUS_TWO);
@@ -249,7 +249,7 @@ public class ProcessListController extends BaseController<IProcessListView> {
         List<PointEntity> plist = processEntity.getPointList();
         int endPosition = plist.size() - 1;
         plist.get(endPosition).setCreateTime(System.currentTimeMillis());
-        plist.get(endPosition).setCreatorName(user.getUser().getNickName());
+        plist.get(endPosition).setCreatorName(user.getUser().getRealname());
         plist.get(endPosition).setUserId(user.getObjectId());
         plist.get(endPosition).setCreatorHeadImg(user.getUser().getPhotoPath());
         plist.get(endPosition).setPointStatus(FastConstant.POINT_STATUS_TWO);
