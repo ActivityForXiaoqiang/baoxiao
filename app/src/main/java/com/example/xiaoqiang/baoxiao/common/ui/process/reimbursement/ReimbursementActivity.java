@@ -183,7 +183,7 @@ public class ReimbursementActivity extends FastTitleActivity<ReimbursementContro
 
     private void initUserParameters() {
         if (pageStyle == 0) {
-            mEtPersonnel.setText(indexUser.getUser().getNickName());
+            mEtPersonnel.setText(indexUser.getUser().getRealname());
             mEtPosition.setText(SpManager.getInstance().mPositionManager.get(indexUser.getPosition()));
         } else {
             mProcessEntity = new Gson().fromJson(getIntent().getStringExtra("processEntity"), ProcessEntity.class);
@@ -399,12 +399,12 @@ public class ReimbursementActivity extends FastTitleActivity<ReimbursementContro
         }
         String account = mEtAccount.getText().toString().trim();
         if (TextUtils.isEmpty(account)) {
-            ToastUtil.show("请填写关联账号，支付宝或微信");
+            ToastUtil.show("请填写收款账号，支付宝或微信");
             return;
         }
         String accountType = mTvAccountType.getText().toString().trim();
         if (TextUtils.isEmpty(accountType)) {
-            ToastUtil.show("请选择关联账号类型");
+            ToastUtil.show("请选择收款账号类型");
             return;
         }
         String amount = mEtAmount.getText().toString().trim();

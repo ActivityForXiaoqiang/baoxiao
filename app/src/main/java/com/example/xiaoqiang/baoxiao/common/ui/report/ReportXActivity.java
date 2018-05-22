@@ -283,8 +283,12 @@ public class ReportXActivity extends FastTitleActivity implements View.OnClickLi
                             //按人员
                             mUserId = mUserList.get(position - 1).getObjectId();
                         } else if (conditionIndex == 1) {
+                            if (position == 1) {
+                                mPosition = position - 1;
+                            } else {
+                                mPosition = position;
+                            }
                             //按职位
-                            mPosition = position - 1;
                         } else {
                             //按部门
                             mDepartment = position - 1;
@@ -350,7 +354,7 @@ public class ReportXActivity extends FastTitleActivity implements View.OnClickLi
                     ulist = new ArrayList<>();
                     ulist.add("全部");
                     for (int i = 0; i < mUserList.size(); i++) {
-                        ulist.add(mUserList.get(i).getUser().getNickName());
+                        ulist.add(mUserList.get(i).getUser().getRealname());
                     }
                     showPop(mTvName, ulist);
                     Timber.i("---" + new Gson().toJson(ulist));
@@ -525,7 +529,6 @@ public class ReportXActivity extends FastTitleActivity implements View.OnClickLi
             //让水平的滚动视图按照执行的x的偏移量进行移动
             Timber.i("offset:" + offset);
             mHorizontalScrollView.smoothScrollTo(offset, 0);
-//            mHorizontalScrollView.scrollTo(mHorizontalScrollView.getMeasuredWidth() / 2 - DisplayUtil.dip2px(this, 3), 0);
             return;
         }
         mDataList = list;
@@ -536,6 +539,7 @@ public class ReportXActivity extends FastTitleActivity implements View.OnClickLi
      * 填充数据
      */
     private void fillData(double sum) {
+        mHorizontalScrollView.smoothScrollTo(0, 0);
         mEasyStatusView.content();
         mAdapter.setNewData(mDataList);
         footerView.setVisibility(View.VISIBLE);

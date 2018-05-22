@@ -62,7 +62,7 @@ public class ProcessAdapter extends BaseQuickAdapter<ProcessEntity, BaseViewHold
 
         String pointInfo;
         if (item.getPoint() == FastConstant.PROCESS_POINT_ONE) {
-            pointInfo = SpManager.getInstance().getUserInfo().getUser().getNickName() + "(我)";
+            pointInfo = SpManager.getInstance().getUserInfo().getUser().getRealname() + "(我)";
         } else {
             pointInfo = SpManager.getInstance().getPointInfo(item.getPoint(), item.getProcessType());
         }
@@ -75,7 +75,7 @@ public class ProcessAdapter extends BaseQuickAdapter<ProcessEntity, BaseViewHold
                     .append(item.getPointList().get(item.getPointList().size() - 2).getRemark())
                     .setForegroundColor(ContextCompat.getColor(mContext, R.color.colorRed)).create());
 
-            pointInfo = SpManager.getInstance().getUserInfo().getUser().getNickName() + "(我)";
+            pointInfo = SpManager.getInstance().getUserInfo().getUser().getRealname() + "(我)";
 
             sealImg.setImageResource(R.drawable.ic_process_reject);
         } else {
@@ -95,7 +95,7 @@ public class ProcessAdapter extends BaseQuickAdapter<ProcessEntity, BaseViewHold
         helper.addOnClickListener(R.id.item_process_reject_tv)
                 .addOnClickListener(R.id.item_process_approval_tv);
         helper.setText(R.id.process_title_tv, titleCs)
-                .setText(R.id.process_founder_tv, item.getCreatorName() + "(" + SpManager.getInstance().mPositionData.get(item
+                .setText(R.id.process_founder_tv, item.getCreatorName() + "(" + SpManager.getInstance().mPositionManager.get(item
                         .getPosition()) + ")")
                 .setText(R.id.process_accept_time_tv, TimeFormatUtil.string2Date2String(item.getCreatedAt()))
                 .setText(R.id.process_point_tv, pointInfo)
