@@ -1,5 +1,6 @@
 package com.example.xiaoqiang.baoxiao.common.ui.company;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -28,6 +30,7 @@ import com.example.xiaoqiang.baoxiao.common.fast.constant.widget.dialog.SelectLi
 import com.example.xiaoqiang.baoxiao.common.view.DelectView;
 import com.example.xiaoqiang.baoxiao.common.view.QueryView;
 import com.example.xiaoqiang.baoxiao.common.view.UpdataView;
+import com.google.gson.Gson;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
@@ -35,7 +38,11 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.UpdateListener;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class RequestActivity extends MyBaseActivity implements QueryView, DelectView {
@@ -239,6 +246,7 @@ public class RequestActivity extends MyBaseActivity implements QueryView, Delect
         CircleImageView head;
         TextView nickenake, realname;
         Button y, n;
+        LinearLayout item;
 
         public rViewHolder(View itemView) {
             super(itemView);
@@ -247,7 +255,7 @@ public class RequestActivity extends MyBaseActivity implements QueryView, Delect
             realname = itemView.findViewById(R.id.request_realname);
             y = itemView.findViewById(R.id.tongyi);
             n = itemView.findViewById(R.id.jujue);
-
+            item = itemView.findViewById(R.id.item_view);
         }
     }
 
@@ -282,10 +290,18 @@ public class RequestActivity extends MyBaseActivity implements QueryView, Delect
             holder.n.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    deleteId = datas.get(position).getObjectId();
-                    stateUser.setAppying(false);
-                    updataController.updataStateUser(stateUser, stateId);
 
+                    deleteId = datas.get(position).getObjectId();
+                    deletedObject(datas.get(position).getUser());
+                }
+            });
+
+            holder.item.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(RequestActivity.this, CheckUserActivity.class);
+                    intent.putExtra("user", new Gson().toJson(datas.get(position).getUser()));
+                    startActivity(intent);
                 }
             });
         }
@@ -296,5 +312,25 @@ public class RequestActivity extends MyBaseActivity implements QueryView, Delect
         }
     }
 
-
+    void deletedObject(MyUser user) {
+        BmobQuery<StateUser> bmobQuery = new BmobQuery<>();
+        bmobQuery.addWhereEqualTo("user", user);
+        bmobQuery.findObjects(new FindListener<StateUser>() {
+            @Override
+            public void done(List<StateUser> list, BmobException e) {
+                if (e == null) {
+                    StateUser stateUser = list.get(0);
+                    stateUser.setAppying(false);
+                    stateUser.update(new UpdateListener() {
+                        @Override
+                        public void done(BmobException e) {
+                            if (e == null) {
+                                delectController.delete(deleteId);
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
 }

@@ -20,6 +20,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
     <application
         android:name=".common.application.MyApplication"
         android:allowBackup="true"
@@ -66,8 +67,8 @@
         <activity
             android:name=".common.ui.info.BudgetActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan|stateHidden"
-            android:theme="@style/AppTheme.NoActionBarY" />
+            android:theme="@style/AppTheme.NoActionBarY"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
 
         <activity
             android:name=".common.ui.info.EditActivity"
@@ -94,6 +95,9 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".common.ui.TravelWayActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".common.ui.company.CheckUserActivity"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
