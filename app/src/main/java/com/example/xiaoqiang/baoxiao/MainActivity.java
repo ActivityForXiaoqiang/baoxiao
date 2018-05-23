@@ -467,7 +467,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 addData(array[i]);
             }
         }
-        if (stateUser.getPosition() == 5 || stateUser.getPosition() == 3) {
+        if (stateUser.getPosition() == 5 || stateUser.getPosition() == 3||stateUser.getPosition()==4) {
             for (MySection mySection : mainDatas) {
                 if (mySection.isHeader) {
                     for (Integer key : SpManager.mPositionManager.keySet()) {

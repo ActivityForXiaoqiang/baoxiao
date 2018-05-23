@@ -119,7 +119,7 @@ public class ProcessListController extends BaseController<IProcessListView> {
                 //自己的确认收款 待办
                 BmobQuery<ProcessEntity> eq2 = new BmobQuery<>();
                 eq2.addWhereEqualTo("processType", FastConstant.PROCESS_TYPE_TWO);
-                eq2.addWhereEqualTo("point", FastConstant.PROCESS_POINT_FOUR);
+                eq2.addWhereEqualTo("point", FastConstant.PROCESS_POINT_FIVE);
                 eq2.addWhereEqualTo("userId", SpManager.getInstance().getUserInfo().getObjectId());
                 List<BmobQuery<ProcessEntity>> queries = new ArrayList<BmobQuery<ProcessEntity>>();
                 queries.add(eq1);
