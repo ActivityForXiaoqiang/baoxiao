@@ -261,6 +261,8 @@ public class FastUtil {
         if (inputMethodManager == null) {
             return;
         }
-        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+        if (inputMethodManager.isActive()) {
+            inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+        }
     }
 }
