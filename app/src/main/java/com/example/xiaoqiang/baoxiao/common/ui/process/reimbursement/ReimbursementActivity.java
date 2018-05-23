@@ -448,6 +448,7 @@ public class ReimbursementActivity extends FastTitleActivity<ReimbursementContro
             PointEntity pointE = new PointEntity();
             pointE.setCreateTime(System.currentTimeMillis());
             pointE.setCreatorName(name);
+            pointE.setDealUser(user);
             pointE.setUserId(user.getObjectId());
             pointE.setCreatorHeadImg(user.getUser().getPhotoPath());
             pointE.setPointStatus(FastConstant.POINT_STATUS_TWO);

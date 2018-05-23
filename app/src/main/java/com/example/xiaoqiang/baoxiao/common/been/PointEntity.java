@@ -1,6 +1,7 @@
 package com.example.xiaoqiang.baoxiao.common.been;
 
 import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.FastConstant;
+import com.google.gson.Gson;
 
 /**
  * author : yhx
@@ -9,6 +10,7 @@ import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.FastConstant;
 
 public class PointEntity {
     private String userId;
+    private String dealUser;
     private String creatorName;
     private String creatorHeadImg;
     private String remark;//备注
@@ -70,5 +72,19 @@ public class PointEntity {
 
     public void setPoint(Integer point) {
         this.point = point;
+    }
+
+    public StateUser getDealUser() {
+        if (dealUser == null) {
+            return null;
+        }
+        return new Gson().fromJson(dealUser, StateUser.class);
+    }
+
+    public void setDealUser(StateUser dealUser) {
+        if (dealUser == null) {
+            return;
+        }
+        this.dealUser = new Gson().toJson(dealUser);
     }
 }

@@ -12,7 +12,9 @@ import com.example.xiaoqiang.baoxiao.R;
 import com.example.xiaoqiang.baoxiao.common.been.PointEntity;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.constant.FastConstant;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.manager.GlideManager;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.util.DisplayUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SpManager;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.util.SpanUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.util.TimeFormatUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.widget.dialog.timeline.TimelineView;
 
@@ -67,7 +69,19 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
         GlideManager.loadCircleImg(item.getCreatorHeadImg(), holder.mTimelineView, R.drawable.ic_marker);
 //        holder.mTimelineView.setMarker(ContextCompat.getDrawable(mContext, R.drawable.marker), ContextCompat.getColor(mContext, R.color
 // .colorPrimary));
-        holder.name.setText(item.getCreatorName());
+        CharSequence name = "";
+        if (!TextUtils.isEmpty(item.getCreatorName())) {
+            name = new SpanUtil()
+                    .append(item.getCreatorName())
+                    .append(" (真实姓名) ")
+                    .setFontSize(DisplayUtil.sp2px(mContext, 12)).create();
+        }
+        if (item.getDealUser() != null) {
+            name = new SpanUtil().append(name)
+                    .append("\n" + SpManager.getInstance().mPositionManager.get(item.getDealUser().getPosition()))
+                    .append(" (职务) ").setFontSize(DisplayUtil.sp2px(mContext, 12)).create();
+        }
+        holder.name.setText(name);
         String statusInfo = "";
         if (item.getPoint() == FastConstant.PROCESS_POINT_ONE) {
             if (position == 0) {
