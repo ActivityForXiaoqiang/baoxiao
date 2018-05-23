@@ -37,7 +37,7 @@ public class ProcessAdapter extends BaseQuickAdapter<ProcessEntity, BaseViewHold
         }
 
         if ((item.getProcessType() == FastConstant.PROCESS_TYPE_ONE && item.getPoint() == FastConstant.PROCESS_POINT_FIVE)
-                || (item.getProcessType() == FastConstant.PROCESS_TYPE_TWO && item.getPoint() == FastConstant.PROCESS_POINT_FOUR)
+                || (item.getProcessType() == FastConstant.PROCESS_TYPE_TWO && item.getPoint() == FastConstant.PROCESS_POINT_FIVE)
                 || (item.getProcessType() == FastConstant.PROCESS_TYPE_THREE && item.getPoint() == FastConstant.PROCESS_POINT_FOUR)) {
             helper.setText(R.id.item_process_approval_tv, "确认收款");
             helper.setVisible(R.id.item_process_reject_tv, false);

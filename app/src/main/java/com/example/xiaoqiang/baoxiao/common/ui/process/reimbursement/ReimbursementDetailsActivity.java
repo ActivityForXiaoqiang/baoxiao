@@ -117,7 +117,7 @@ public class ReimbursementDetailsActivity extends FastTitleActivity<Reimbursemen
 
         mTvPersonnel.setText(mProcessEntity.getCreatorName());
         mTvPosition.setText(SpManager.getInstance().mPositionManager.get(mProcessEntity.getPosition()));
-        mTvAccountType.setText(mProcessEntity.getAccountType() + "：");
+        mTvAccountType.setText(mProcessEntity.getAccount().split(" ")[1]);
         mTvAccount.setText(mProcessEntity.getAccount());
         mTvReason.setText(mProcessEntity.getReason());
         if (mProcessEntity.getAmount() != null) {
