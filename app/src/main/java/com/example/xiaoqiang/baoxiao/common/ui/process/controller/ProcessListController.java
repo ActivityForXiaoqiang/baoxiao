@@ -221,6 +221,7 @@ public class ProcessListController extends BaseController<IProcessListView> {
         plist.get(endPosition).setCreateTime(System.currentTimeMillis());
         plist.get(endPosition).setCreatorName(user.getUser().getRealname());
         plist.get(endPosition).setUserId(user.getObjectId());
+        plist.get(endPosition).setDealUser(user);
         plist.get(endPosition).setCreatorHeadImg(user.getUser().getPhotoPath());
         plist.get(endPosition).setPointStatus(FastConstant.POINT_STATUS_TWO);
 

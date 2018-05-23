@@ -185,7 +185,7 @@ public class BudgetActivity extends FastRefreshLoadActivity<BudgetEntity, Budget
                     public void run() {
                         FastUtil.hideSoftKeyboard(BudgetActivity.this);
                     }
-                },100);
+                }, 100);
             }
         });
         if (requestType == 1) {
@@ -242,6 +242,7 @@ public class BudgetActivity extends FastRefreshLoadActivity<BudgetEntity, Budget
         } else {
             mRefreshLayout.finishLoadmore();
         }
+        Timber.i(new Gson().toJson(list));
         mAdapter.loadMoreComplete();
         if (list == null || list.size() == 0) {
             if (DEFAULT_PAGE == 0) {

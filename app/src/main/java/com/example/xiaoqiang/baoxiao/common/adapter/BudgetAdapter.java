@@ -23,27 +23,16 @@ public class BudgetAdapter extends BaseQuickAdapter<BudgetEntity, BaseViewHolder
     @Override
     protected void convert(BaseViewHolder helper, BudgetEntity item) {
         helper.addOnClickListener(R.id.item_layout_budget_modify);
-        double budgetAmount;
-        if (item.getBudgetAmount() == null) {
-            budgetAmount = 0;
-        } else {
-            budgetAmount = item.getBudgetAmount();
-        }
+        double budgetAmount = item.getBudgetAmount();
         helper.setText(R.id.item_layout_budget_amount, NumberFormatterUtil.formatMoneyHideZero(budgetAmount + ""));
 
-        double sumAmountReimbursement;
-        if (item.getSumAmountProcess() == null) {
-            sumAmountReimbursement = 0;
-        } else {
-            sumAmountReimbursement = item.getSumAmountProcess();
-        }
-
+        double sumAmountReimbursement = item.getSumAmountProcess();
         //
         String percentageStr = "";
-        int percentageNum;
+        double percentageNum;
         if (budgetAmount > 0) {
-            percentageNum = (int) (NumberFormatterUtil.getPercentageNum(sumAmountReimbursement, budgetAmount, 0));
-            percentageStr = "\n已占预算(" + percentageNum + "%)";
+            percentageNum = NumberFormatterUtil.getPercentageNum(sumAmountReimbursement, budgetAmount, 8);
+            percentageStr = "\n已占预算(" + NumberFormatterUtil.formatPercentageNum(percentageNum + "") + "%)";
         }
         helper.setText(R.id.item_layout_budget_reimbursement_amount, NumberFormatterUtil.formatMoneyHideZero(sumAmountReimbursement + "") + percentageStr);
 

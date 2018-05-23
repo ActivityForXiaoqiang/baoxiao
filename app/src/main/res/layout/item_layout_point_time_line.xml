@@ -30,8 +30,8 @@
             android:id="@+id/item_layout_point_time_line_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxEms="8"
-            android:maxLines="1"
+            android:gravity="center_vertical"
+            android:maxLines="2"
             android:textColor="@color/txt_black"
             android:textSize="16sp" />
 

@@ -11,8 +11,8 @@ import cn.bmob.v3.BmobObject;
 public class BudgetEntity extends BmobObject {
     private String companyId;
     private long monthTime;
-    private Double budgetAmount;
-    private Double sumAmountProcess;
+    private double budgetAmount;
+    private double sumAmountProcess;
     private int cordon;
     private int department;//部门；
 
@@ -40,19 +40,19 @@ public class BudgetEntity extends BmobObject {
         this.monthTime = monthTime;
     }
 
-    public Double getBudgetAmount() {
+    public double getBudgetAmount() {
         return budgetAmount;
     }
 
-    public void setBudgetAmount(Double budgetAmount) {
+    public void setBudgetAmount(double budgetAmount) {
         this.budgetAmount = budgetAmount;
     }
 
-    public Double getSumAmountProcess() {
+    public double getSumAmountProcess() {
         return sumAmountProcess;
     }
 
-    public void setSumAmountProcess(Double sumAmountProcess) {
+    public void setSumAmountProcess(double sumAmountProcess) {
         this.sumAmountProcess = sumAmountProcess;
     }
 
