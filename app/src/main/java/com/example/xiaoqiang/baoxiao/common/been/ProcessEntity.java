@@ -19,7 +19,6 @@ public class ProcessEntity extends BmobObject {
     private String creatorName;//创建人姓名 M
     private Integer position;//创建人職位 M
     private String account;//账号
-    private String accountType;//账号类型 M
     private Double amount;//金额
     private String reason;//原因
     private Long startTime;
@@ -60,14 +59,6 @@ public class ProcessEntity extends BmobObject {
 
     public void setAccount(String account) {
         this.account = account;
-    }
-
-    public String getAccountType() {
-        return accountType;
-    }
-
-    public void setAccountType(String accountType) {
-        this.accountType = accountType;
     }
 
     public Double getAmount() {

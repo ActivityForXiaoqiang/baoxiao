@@ -439,8 +439,7 @@ public class ReimbursementActivity extends FastTitleActivity<ReimbursementContro
             pe.setPosition(myPosition);
             pe.setPoint(FastConstant.PROCESS_POINT_TWO);//去往下一个节点
             pe.setProcessType(processType);
-            pe.setAccount(account);
-            pe.setAccountType(accountType);
+            pe.setAccount(account+" "+accountType);
             pe.setAmount(NumberFormatterUtil.parseDouble(amount));
             pe.setReason(reason);
 

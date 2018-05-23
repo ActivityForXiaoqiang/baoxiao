@@ -48,10 +48,10 @@ public class ProcessListController extends BaseController<IProcessListView> {
             query.addWhereEqualTo("point", FastConstant.PROCESS_POINT_FIVE);
             query.addWhereEqualTo("userId", SpManager.getInstance().getUserInfo().getObjectId());
         } else if (position == 1 || position == 2) {
-            //流程类型2 节点3
+            //流程类型2 节点4
             BmobQuery<ProcessEntity> eq1 = new BmobQuery<>();
             eq1.addWhereEqualTo("processType", FastConstant.PROCESS_TYPE_TWO);
-            eq1.addWhereEqualTo("point", FastConstant.PROCESS_POINT_THREE);
+            eq1.addWhereEqualTo("point", FastConstant.PROCESS_POINT_FOUR);
             //流程类型1 节点4
             BmobQuery<ProcessEntity> eq2 = new BmobQuery<>();
             eq2.addWhereEqualTo("processType", FastConstant.PROCESS_TYPE_ONE);
@@ -77,11 +77,12 @@ public class ProcessListController extends BaseController<IProcessListView> {
         } else if (position == 3 || position == 4) {
             if (position == 4) {
                 //财务部门 普通员工批准
+                //流程类型为1 并且point为2级
                 BmobQuery<ProcessEntity> eq1 = new BmobQuery<>();
                 eq1.addWhereEqualTo("processType", FastConstant.PROCESS_TYPE_ONE);
                 eq1.addWhereEqualTo("point", FastConstant.PROCESS_POINT_TWO);
                 eq1.addWhereEqualTo("departmentId", SpManager.getInstance().getUserInfo().getDepartment());
-                //批准总经理
+                //批准总经理 流程类型为3 并且point为2级
                 BmobQuery<ProcessEntity> eq2 = new BmobQuery<>();
                 eq2.addWhereEqualTo("processType", FastConstant.PROCESS_TYPE_THREE);
                 eq2.addWhereEqualTo("point", FastConstant.PROCESS_POINT_TWO);
@@ -89,16 +90,28 @@ public class ProcessListController extends BaseController<IProcessListView> {
                 //自己的确认收款 待办
                 BmobQuery<ProcessEntity> eq3 = new BmobQuery<>();
                 eq3.addWhereEqualTo("processType", FastConstant.PROCESS_TYPE_TWO);
-                eq3.addWhereEqualTo("point", FastConstant.PROCESS_POINT_FOUR);
+                eq3.addWhereEqualTo("point", FastConstant.PROCESS_POINT_FIVE);
                 eq3.addWhereEqualTo("userId", SpManager.getInstance().getUserInfo().getObjectId());
+                //
+                // 可处理流程类型为1 并且point为三级
+                BmobQuery<ProcessEntity> eq4 = new BmobQuery<>();
+                eq4.addWhereEqualTo("processType", FastConstant.PROCESS_TYPE_ONE);
+                eq4.addWhereEqualTo("point", FastConstant.PROCESS_POINT_THREE);
+
+                // 可处理流程类型为2 并且point为三级
+                BmobQuery<ProcessEntity> eq5 = new BmobQuery<>();
+                eq5.addWhereEqualTo("processType", FastConstant.PROCESS_TYPE_TWO);
+                eq5.addWhereEqualTo("point", FastConstant.PROCESS_POINT_THREE);
                 List<BmobQuery<ProcessEntity>> queries = new ArrayList<BmobQuery<ProcessEntity>>();
                 queries.add(eq1);
                 queries.add(eq2);
                 queries.add(eq3);
+                queries.add(eq4);
+                queries.add(eq5);
                 //或条件处理集合
                 query.or(queries);
             } else {
-                //部門主管只能批准自己部門的
+                //部門主管只能批准自己部門的  流程类型为1 并且point为2级
                 BmobQuery<ProcessEntity> eq1 = new BmobQuery<>();
                 eq1.addWhereEqualTo("processType", FastConstant.PROCESS_TYPE_ONE);
                 eq1.addWhereEqualTo("point", FastConstant.PROCESS_POINT_TWO);
@@ -120,9 +133,9 @@ public class ProcessListController extends BaseController<IProcessListView> {
             }
         } else if (position == 5) {
             //可处理流程类型为1 并且point为三级
-            BmobQuery<ProcessEntity> query1 = new BmobQuery<ProcessEntity>();
-            query1.addWhereEqualTo("processType", FastConstant.PROCESS_TYPE_ONE);
-            query1.addWhereEqualTo("point", FastConstant.PROCESS_POINT_THREE);
+//            BmobQuery<ProcessEntity> query1 = new BmobQuery<ProcessEntity>();
+//            query1.addWhereEqualTo("processType", FastConstant.PROCESS_TYPE_ONE);
+//            query1.addWhereEqualTo("point", FastConstant.PROCESS_POINT_THREE);
             //或者  流程为2 point为二级的
             BmobQuery<ProcessEntity> query2 = new BmobQuery<ProcessEntity>();
             query2.addWhereEqualTo("processType", FastConstant.PROCESS_TYPE_TWO);
@@ -134,7 +147,7 @@ public class ProcessListController extends BaseController<IProcessListView> {
             query3.addWhereEqualTo("point", FastConstant.PROCESS_POINT_FOUR);
             query3.addWhereEqualTo("userId", SpManager.getInstance().getUserInfo().getObjectId());
             List<BmobQuery<ProcessEntity>> queries = new ArrayList<BmobQuery<ProcessEntity>>();
-            queries.add(query1);
+//            queries.add(query1);
             queries.add(query2);
             queries.add(query3);
             //或条件处理集合

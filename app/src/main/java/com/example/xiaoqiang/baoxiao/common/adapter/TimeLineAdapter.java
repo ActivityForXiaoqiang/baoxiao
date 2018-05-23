@@ -35,7 +35,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
     private Integer currentPoint;
     private Integer processType;
 
-    public TimeLineAdapter(List<PointEntity> plist, boolean withLinePadding, Integer currentPoint,Integer processType) {
+    public TimeLineAdapter(List<PointEntity> plist, boolean withLinePadding, Integer currentPoint, Integer processType) {
        /* //反序
         for (int i = plist.size() - 1; i >= 0; i--) {
             this.plist = new ArrayList<>();
@@ -108,14 +108,16 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
                 //节点在上级
 //                statusInfo = "等待审批";
                 statusInfo = SpManager.getInstance().getPointInfo(item.getPoint(), processType);
-                if (TextUtils.equals("部门主管", statusInfo) ) {
+                if (TextUtils.equals("部门主管", statusInfo)) {
                     statusInfo = "等待主管审批";
-                }else if(TextUtils.equals("财务主管", statusInfo)){
+                } else if (TextUtils.equals("财务主管", statusInfo)) {
                     statusInfo = "等待财务主管审批";
                 } else if (TextUtils.equals("总经理", statusInfo)) {
                     statusInfo = "等待总经理审批";
                 } else if (TextUtils.equals("财务结算", statusInfo)) {
                     statusInfo = "等待财务结算";
+                } else if (TextUtils.equals("申请人", statusInfo)) {
+                    statusInfo = "等待申请人确认收款";
                 }
             }
 
