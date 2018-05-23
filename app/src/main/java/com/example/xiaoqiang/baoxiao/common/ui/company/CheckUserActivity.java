@@ -57,8 +57,8 @@ public class CheckUserActivity extends MyBaseActivity {
         if (!TextUtils.isEmpty(user.getBirthday())) {
             tvs[4].setText("出生日期 :" + user.getBirthday());
         }
-        if (!TextUtils.isEmpty(user.getPhotoPath())) {
-            tvs[4].setText("手机号码 :" + user.getPhotoPath());
+        if (!TextUtils.isEmpty(user.getPhone())) {
+            tvs[5].setText("手机号码 :" + user.getPhone());
         }
     }
 }

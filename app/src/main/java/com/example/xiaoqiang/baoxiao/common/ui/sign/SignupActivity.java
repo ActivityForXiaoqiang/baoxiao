@@ -22,6 +22,7 @@ import com.example.xiaoqiang.baoxiao.common.been.MyUser;
 import com.example.xiaoqiang.baoxiao.common.been.StateUser;
 import com.example.xiaoqiang.baoxiao.common.controller.SaveController;
 import com.example.xiaoqiang.baoxiao.common.controller.SignupController;
+import com.example.xiaoqiang.baoxiao.common.fast.constant.util.ToastUtil;
 import com.example.xiaoqiang.baoxiao.common.fast.constant.widget.dialog.LoadingDialog;
 import com.example.xiaoqiang.baoxiao.common.view.SaveView;
 import com.example.xiaoqiang.baoxiao.common.view.SignupView;
@@ -206,7 +207,7 @@ public class SignupActivity extends MyBaseActivity implements SignupView, SaveVi
 
     @Override
     public void showError(Throwable throwable) {
-
+        ToastUtil.show(throwable.getMessage());
     }
 
     @Override
